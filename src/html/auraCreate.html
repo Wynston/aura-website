@@ -54,7 +54,7 @@
 				 		</ul>
 				 	</div>
 			 		<div class="container-fluid visible-xs text-center" id="mobileOrgMenu">
-			 			<div class="container-fluid" style="background-color: #62D9FF; color:white; border: 1px solid #54C5E9;">
+			 			<div class="container-fluid" style="background-color: #5AC8EB; color:white; border: 1px solid #54C5E9;">
 			 				<h4>Organizations</h4>
 			 			</div>
  						<!-- Carousel of organizations -->
@@ -285,7 +285,7 @@
 									          <h3 class="modal-title"><strong>{{modalHeader}}</strong></h3>
 									        </div>
 									        <div class="modal-body text-center">
-									          <img src="{{modalImgSrc}}"></img>
+									          <img src={{modalImgSrc}} alt="modalImgSrc"></img>
 									        </div>
 									        <div class="modal-footer">
 									        	<ul class="list-inline text-center">
@@ -376,14 +376,14 @@
 											  <!-- Media Content -->
 											  <div class="carousel-inner">
 											  	<div class="item active">
-											      <img src="{{assets[0].value}}" alt="{{assets[0].name}}" class="objectImage center-block">
+											      <img src={{assets[0].value}} alt="assets[0].name" class="objectImage center-block">
 											      <div class="carousel-caption">
 													<h3>{{assets[0].name}}</h3>
 												   </div>
 											    </div>
 
 											    <div class="item" ng-repeat="asset in assets" ng-if="$index > 0">
-											      <img src="{{assets[$index].value}}" alt="{{assets[$index].name}}" class="objectImage center-block">
+											      <img src={{assets[$index].value}} alt="assets[$index].name" class="objectImage center-block">
 											      <div class="carousel-caption">
 													<h3>{{assets[$index].name}}</h3>
 												   </div>

@@ -456,6 +456,27 @@ app.controller('myCtrl', function($scope, $http) {
     	}
     }
 
+
+    //changes the location of a beacon or object from google maps and uploads it to the database
+    //assures the user wishes to make the change to the beacon
+    $scope.changeLocation = function(pos, type){
+    	switch(type){
+    		case "beacon":
+    			var locationPrompt = confirm("Are you sure you want to change " + $scope.curBeacon.beacon_name + "'s location?");
+    			if(locationPromt){
+    				$scope.curBeacon.latitude = pos.lat;
+    				$scope.curBeacon.longitude = pos.lng;
+    			}
+    			break;
+    		case "object":
+    			var locationPrompt = confirm("Are you sure you want to change " + $scope.curObj.name + "'s location?");
+    			if(locationPrompt){
+	    			$scope.curObj.latitude = pos.lat;
+	    			$scope.curObj.longitude = pos.lng;
+	    		}
+    			break;
+        }
+    }
 });
 //--------------------------------------end of loader functions----------------------------------
 
@@ -524,8 +545,14 @@ function initMap(){
 	    });
 	    var marker = new google.maps.Marker({
 	      position: loc,
-	      map: map
+	      map: map,
+	      draggable:true,
+   		  animation: google.maps.Animation.DROP
 	    });
+	    google.maps.event.addListener(marker, 'dragend', function() 
+		{
+		    geocodePosition(marker.getPosition(), "beacon");
+		});
 	}
 	else if(sessionStorage.curView == "object"){
 		var curObj = JSON.parse(sessionStorage.curObj);
@@ -536,8 +563,14 @@ function initMap(){
 	    });
 	    var marker = new google.maps.Marker({
 	      position: loc,
-	      map: map
+	      map: map,
+	      draggable:true,
+    	  animation: google.maps.Animation.DROP
 	    });
+	    google.maps.event.addListener(marker, 'dragend', function() 
+		{
+		    geocodePosition(marker.getPosition(), "object");
+		});
 	}
 	else if(sessionStorage.curView == "beaconsList"){
 		map = new google.maps.Map(document.getElementById('googleMapsBeacons'), {
@@ -613,4 +646,28 @@ function findbeaconsDPCenter(){
 	}
 	var center = {lat: avgLat / beacons.length, lng: avgLong / beacons.length};
 	return center;
+}
+
+
+//updates the location of a marker when moved (by mouse)
+function geocodePosition(pos, type) {
+   geocoder = new google.maps.Geocoder();
+   geocoder.geocode
+    ({
+        latLng: pos
+    }, 
+        function(results, status) 
+        {
+            if (status == google.maps.GeocoderStatus.OK) 
+            {
+                $("#mapSearchInput").val(results[0].formatted_address);
+                $("#mapErrorMsg").hide(100);
+                angular.element(document.getElementById('MAIN')).scope().changeLocation(pos, type);
+            } 
+            else 
+            {
+                $("#mapErrorMsg").html('Cannot determine address at this location.'+ status).show(100);
+            }
+        }
+    );
 }

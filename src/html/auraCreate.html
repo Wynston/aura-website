@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Aura Create</title>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico" />
+		<link rel="stylesheet" type="text/css" href="../styling/auraCreate.css">
+		<link rel="stylesheet" type="text/css" href="../styling/toggleSwitch.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	</head>
+	<body>
+		<div class="container-fluid" ng-app="auraCreate" ng-controller="myCtrl" ng-init="init()" ng-cloak id="MAIN">
+			<div class="row page-header" id="banner">
+				<div class="col-xs-9 col-sm-6 col-md-6 col-lg-6" ng-click="changeView('dashboard', '')">
+					<img ng-src="../images/aura_logo.png" alt="Aura Logo" class="img-responsive pull-left logo"/>
+					<h1 id="pageTitle"><b>Create</b></h1>
+				</div>
+				<div class="col-xs-3 col-sm-6 col-md-6 col-lg-6">
+					<a ng-click="changeView('profileSettings', '' )" class="btn btn-info btn-sm pull-right" id="profileButton">
+						<span class="hidden-xs">{{userName}}</span>
+		          		<span class="glyphicon glyphicon-user"></span>
+		        	</a>	
+				</div>
+			</div> 
+			
+			<!-- Main Content -->
+			<div class="container-fluid row" id="mainContentContainer">
+				<!-- User Organizations Menu -->
+			 	<div class="col-xs-12 col-sm-3 col-md-3 col-lg-2" id="orgMenu">
+			 		<div class="hidden-xs">
+				 		<!-- Creates a navigation list for each organization the user is in control of -->
+				 		<ul ng-repeat="org in organizations | orderBy: org" class="list-unstyled text-left">
+				 			<li>
+				 				<h2 class="page-header"><strong>{{org}}</strong></h2>
+				 			</li>
+
+				 			<li ng-click="changeView('beaconsList', org)" class="menuItem">
+			 					<h2 class="menuName"><small>Beacons</small></h2>
+				 			</li>
+
+				 			<li ng-click="changeView('objectsList', org)" class="menuItem">
+				 				<h2 class="menuName"><small>Objects</small></h2>
+				 			</li>
+
+				 			<li ng-click="changeView('settings', org)" class="menuItem">
+				 				<h2 class="menuName"><small>Settings</small></h2>
+				 			</li>
+
+				 			<li ng-click="changeView('stats', org)" class="menuItem">
+				 				<h2 class="menuName"><small>Stats</small></h2>
+				 			</li>
+				 		</ul>
+				 	</div>
+			 		<div class="container-fluid visible-xs text-center" id="mobileOrgMenu">
+			 			<div class="container-fluid" style="background-color: #62D9FF; color:white; border: 1px solid #54C5E9;">
+			 				<h4>Organizations</h4>
+			 			</div>
+ 						<!-- Carousel of organizations -->
+		 				<div id="orgsCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+							 <!-- Indicators -->
+							  <ol class="carousel-indicators">
+							    <li data-target="#orgsCarousel" data-slide-to="0" class="active"></li>
+							    <li ng-repeat="org in organizations | orderBy: org" ng-if="$index > 0" data-target="#orgsCarousel" data-slide-to="$index"></li>
+							  </ol>
+
+							  <!-- Organization -->
+							  <div class="carousel-inner">
+							  	<div class="item active text-center text-info">
+									<h3>{{organizations[0]}}</h3>
+							    </div>
+
+							    <div class="item text-center text-info" ng-repeat="org in organizations | orderBy: org" ng-if="$index > 0">
+									<h3>{{org}}</h3>
+							    </div>
+							  </div>
+
+							  <!-- Left and right controls -->
+							  <a class="left carousel-control" href="#orgsCarousel" data-slide="prev" ng-click="carouselLeft()">
+							    <span class="glyphicon glyphicon-chevron-left"></span>
+							    <span class="sr-only">Previous</span>
+							  </a>
+							  <a class="right carousel-control" href="#orgsCarousel" data-slide="next" ng-click="carouselRight()">
+							    <span class="glyphicon glyphicon-chevron-right"></span>
+							    <span class="sr-only">Next</span>
+							  </a>
+						</div>
+						<div class="btn-group btn-group-justified" style="font-size: 10px;">
+							<a class="btn btn-info" ng-click="carouselViewController('beaconsList')" style="border-radius: 0;">Beacons</a>
+							<a class="btn btn-info" ng-click="carouselViewController('objectsList')" style="border-radius: 0;">Objects</a>
+							<a class="btn btn-info" ng-click="carouselViewController('settings')" style="border-radius: 0;">Settings</a>
+							<a class="btn btn-info" ng-click="carouselViewController('stats')" style="border-radius: 0;">Stats</a>
+						</div>
+					</div>
+			 	</div>
+
+			 	<!-- Dynamic Section -->
+			 	<div class="col-xs-12 col-sm-9 col-md-9 col-lg-10 container-fluid">
+			 		<!-- Dynamic Title -->
+			 		<div class="row text-center" id="liveTitle">
+			 			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
+			 				<h3><b>{{primTitle}}</b></h3>
+			 			</div>
+					    <div ng-switch="filterTitle" id="filterTitle" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 center-block text-center">
+					    	<!-- Objects View Filter -->
+						    <div ng-switch-when="beaconFilter" class="btn-group btn-group-vertical">
+					    		<div class="dropup btn-group">
+									 <button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" aria-labelledby="menu1">
+								    	View By: {{viewType}}
+								    	<span class="caret"></span>
+								    </button>
+								    <ul class="dropdown-menu">
+								    	<li class="menuItem" ng-click="changeViewType('List')">
+								    		<a><h5>List</h5></a>
+								    	</li>
+								    	<li class="menuItem" ng-click="changeViewType('Map')">
+								    		<a><h5>Map</h5></a>
+								    	</li>
+								    </ul>
+							    </div>
+					    		<div class="dropdown btn-group">
+							    	<button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" aria-labelledby="menu1">
+								    	Filter by Beacon: {{beaconsFilter}}
+								    	<span class="caret"></span>
+								    </button>
+								    <ul class="dropdown-menu">
+								    	<li class="menuItem" ng-click="changeBeaconFilter('All')">
+								    		<a><h5>Show All</h5></a>
+								    	</li>
+								    	<li class="divider"></li>
+								    	<li class="menuItem" ng-repeat="arObject in objectsArray | removeDuplicates: 'objectsArray'" ng-click="changeBeaconFilter(arObject.beacon_name)">
+								      		<a><h5>{{arObject.beacon_name}}</h5></a>
+								    	</li>
+								    </ul>
+								</div>
+						    </div>
+						    <!-- Object View Filter -->
+						    <div ng-switch-when="objectPrivacy" class="text-center">
+						    	<label class="switch">
+									<input type="checkbox">
+									<div class="slider round"></div>
+								</label>
+						    </div>
+
+						    <!-- Beacons View Filter -->
+						    <div ng-switch-when="beaconsView" class="dropdown text-center">
+							    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" aria-labelledby="menu1">
+							    	View By: {{viewType}}
+							    	<span class="caret"></span>
+							    </button>
+							    <ul class="dropdown-menu">
+							    	<li class="text-center menuItem" ng-click="changeViewType('List')">
+							    		<a><h5>List</h5></a>
+							    	</li>
+							    	<li class="text-center menuItem" ng-click="changeViewType('Map')">
+							    		<a><h5>Map</h5></a>
+							    	</li>
+							    </ul>
+							</div>
+						</div>
+
+						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
+					    	<h2><small>{{secTitle}}</small></h2>
+					    </div>
+			 		</div>
+
+			 		<!-- Live Display -->
+			 		<div ng-switch="curView" id="liveDisplay" class="container-fluid">
+			 			<!-- Dashboard -->
+			 			<div ng-switch-when="dashboard">
+			 				<div class="well well-lg">
+				 				<h3># Organizations: {{numOrganizations}}</h3>
+				 				<h3># Beacons: {{numBeacons}}</h3>
+				 				<h3># Objects: {{numObjects}}</h3>
+				 				<h3>Average Throughput: {{avgThroughput}}</h3>
+				 			</div>
+			 			</div>
+
+			 			<!-- Profile Settings -->
+			 			<div ng-switch-when="profileSettings">
+			 			</div>
+
+			 			<!-- Beacons List -->
+			 			<div ng-switch-when="beaconsList">
+			 				<div ng-switch="viewType">
+			 					<div ng-switch-when="List" class="well well-sm table-responsive">
+					 				<table class="table table-condensed">
+						 				<thead>
+						 					<tr>
+						 						<th>Name</th>
+						 						<th>Associated</th>
+						 						<th>Type</th>
+						 						<th class="hidden-sm hidden-xs">Altitude</th>
+						 						<th class="hidden-sm hidden-xs">Latitude</th>
+						 						<th class="hidden-sm hidden-xs">Longitude</th>
+						 					</tr>
+						 				</thead>
+						 				<tbody ng-repeat="beacon in beaconsArray | orderBy:'beacon_name'">
+						 					<tr>
+						 						<td ng-click="displayBeacon(beacon)" class="menuItem">{{beacon.beacon_name}}</td>
+						 						<td class="menuItem">{{beacon.associated}}</td>
+						 						<td class="menuItem">{{beacon.beacon_type}}</td>
+						 						<td class="menuItem hidden-sm hidden-xs">{{beacon.altitude | number: 3}}</td>
+						 						<td class="menuItem hidden-sm hidden-xs">{{beacon.latitude | number: 3}}</td>
+						 						<td class="menuItem hidden-sm hidden-xs">{{beacon.longitude | number: 3}}</td>
+						 					</tr>
+						 				</tbody>
+						 			</table>
+						 		</div>
+					 			<div ng-switch-when="Map">
+					 				<!-- Google Maps API -->
+					 				<div class="center-block panel">
+					 					<div id="googleMapsBeacons"></div>
+					 				</div>
+					 			</div>
+					 		</div>
+			 			</div>
+
+			 			<!-- Beacon (Singular) -->
+			 			<div ng-switch-when="beacon" class="container-fluid panel">
+			 				<div class="panel-heading center-block">
+		 						<div class="row text-primary">
+		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">
+		 								<h4>Type: {{curBeacon.beacon_type}}</h4>
+		 							</div>
+		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">
+		 								<h4>Associated: {{curBeacon.associated}}</h4>
+		 							</div>
+			 						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
+			 							<button class="btn btn-info" type="button" ng-click="displayBeaconObjects()" style="margin-top: 0.5em;">Objects Served</button>
+			 						</div>
+			 					</div>
+		 					</div>
+
+			 				<!-- Google Maps API -->
+			 				<div class="center-block" class="panel-info">
+			 					<div id="googleMapsBeacon"></div>
+			 					<div class="row">
+				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curBeacon.altitude | number: 3}}</h4>
+				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curBeacon.latitude | number: 3}}</h4>
+				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right text-primary">Longitude: {{curBeacon.longitude | number: 3}}</h4>
+			 					</div>
+			 				</div>
+			 			</div>
+
+			 			<!-- Objects List -->
+			 			<div ng-switch-when="objectsList">
+			 				<div ng-switch="viewType">
+				 				<div ng-switch-when="List" class="well well-lg">
+					 				<table class="table table-condensed table-responsive">
+						 				<thead>
+						 					<tr>
+						 						<th>Thumbnail</th>
+						 						<th>Name</th>
+						 						<th>Beacon Name</th>
+						 						<th class="hidden-xs hidden-sm">#Images</th>
+						 						<th class="hidden-xs hidden-sm">#Audio</th>
+						 						<th class="hidden-xs hidden-sm">#Video</th>
+						 						<th class="hidden-xs hidden-sm">#3D</th>
+						 					</tr>
+						 				</thead>
+						 				<tbody>
+						 					<tr ng-repeat="arObject in objectsArray | filterByBeacon: beaconsFilter | orderBy: 'beacon_name'">
+						 						<td class="menuItem" ng-click="displaythumbNailModal(arObject)">
+						 							<img ng-src="{{arObject.thumbnail}}" class="thumbnail" alt="{{arObject.name}}"></img>
+						 						</td>
+						 						<td ng-click="displayObject(arObject)" class="menuItem">{{arObject.name}}</td>
+						 						<td ng-click="loadBeacon(arObject.beacon_name)" class="menuItem">{{arObject.beacon_name}}</td>
+						 						<td class="menuItem hidden-xs hidden-sm">{{arObject.numImage}}</td>
+						 						<td class="menuItem hidden-xs hidden-sm">{{arObject.numAudio}}</td>
+						 						<td class="menuItem hidden-xs hidden-sm" >{{arObject.numVideo}}</td>
+						 						<td class="menuItem hidden-xs hidden-sm">{{arObject.num3D}}</td>
+						 					</tr>
+						 				</tbody>
+						 			</table>
+								 	<!-- Thumbnail Modal -->
+						 			<div class="modal fade" id="thumbnailModal" role="dialog" data-backdrop="true">
+									    <div class="modal-dialog">
+									    
+									      <!-- Thumbnail Modal content-->
+									      <div class="modal-content">
+									        <div class="modal-header">
+									          <button type="button" class="close" data-dismiss="modal">&times;</button>
+									          <h3 class="modal-title"><strong>{{modalHeader}}</strong></h3>
+									        </div>
+									        <div class="modal-body text-center">
+									          <img src="{{modalImgSrc}}"></img>
+									        </div>
+									        <div class="modal-footer">
+									        	<ul class="list-inline text-center">
+									        		<li>#Images: {{curObj.numImage}}</li>
+									        		<li>#Audio: {{curObj.numAudio}}</li>
+									        		<li>#Video: {{curObj.numVideo}}</li>
+									        		<li>#3D: {{curObj.num3D}}</h4></li>				
+									        	</ul>
+									          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									        </div>
+									      </div>  
+									    </div>
+									</div>
+								</div>
+								<!-- Google Maps API -->
+				 				<div ng-switch-when="Map" class="center-block panel">
+				 					<div id="googleMapsObjects"></div>
+				 				</div>
+							</div>
+			 			</div>
+
+			 			<!-- Object (Singular) -->
+			 			<div ng-switch-when="object" class="container-fluid panel">
+		 					<div class="panel-heading center-block">
+		 						<div class="row">
+		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
+		 								<button class="btn btn btn-info" type="button" ng-click="loadBeacon(curObj.beacon_name)">Beacon: {{curObj.beacon_name}}</button>
+		 							</div>
+		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
+		 								<button class="btn btn btn-info" type="button" ng-click="displayAssetsModal()">Media</button>
+		 							</div>
+			 						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
+			 							<button class="btn btn-info" type="button" ng-click="displayDescriptionModal()">Description</button>
+			 						</div>
+			 					</div>
+		 					</div>
+
+		 					<!-- Description Modal -->
+				 			<div class="modal fade" id="descriptionModal" role="dialog" data-backdrop="true">
+							    <div class="modal-dialog">
+							    
+							      <!-- Description Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h4 class="modal-title"><strong>{{curObj.name}}</strong></h4>
+							        </div>
+							        <div class="modal-body text-left">
+							          <p>{{curObj.description}}</p>
+							        </div>
+							        <div class="modal-footer">
+							          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							        </div>
+							      </div>
+							    </div>
+							</div>
+
+			 				<!-- Google Maps API -->
+			 				<div class="center-block panel-info">
+			 					<div id="googleMapsObject"></div>
+			 					<div class="row">
+				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curObj.altitude | number: 3}}</h4>
+				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curObj.latitude | number: 3}}</h4>
+				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right text-primary">Longitude: {{curObj.longitude | number: 3}}</h4>
+			 					</div>
+			 				</div>
+
+			 				<!-- Assets/Media Modal -->
+							<div class="modal fade" id="assetsModal" role="dialog" data-backdrop="true">
+								<div class="modal-dialog modal-lg">
+
+									<!-- Assets/Media Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+										  <button type="button" class="close" data-dismiss="modal">&times;</button>
+										  <h3 class="modal-title"><strong>{{curObj.name}}</strong></h3>
+										</div>
+										<div class="modal-body text-center">
+											<!-- Assets/Media Carousel -->
+											<div id="assetsCarousel" class="carousel slide" data-ride="carousel">
+
+											  <!-- Indicators -->
+											  <ol class="carousel-indicators">
+											    <li data-target="#assetsCarousel" data-slide-to="0" class="active"></li>
+											    <li ng-repeat="asset in assets" ng-if="$index > 0" data-target="#assetsCarousel" data-slide-to="$index"></li>
+											  </ol>
+
+											  <!-- Media Content -->
+											  <div class="carousel-inner">
+											  	<div class="item active">
+											      <img src="{{assets[0].value}}" alt="{{assets[0].name}}" class="objectImage center-block">
+											      <div class="carousel-caption">
+													<h3>{{assets[0].name}}</h3>
+												   </div>
+											    </div>
+
+											    <div class="item" ng-repeat="asset in assets" ng-if="$index > 0">
+											      <img src="{{assets[$index].value}}" alt="{{assets[$index].name}}" class="objectImage center-block">
+											      <div class="carousel-caption">
+													<h3>{{assets[$index].name}}</h3>
+												   </div>
+											    </div>
+											  </div>
+
+											  <!-- Left and right controls -->
+											  <a class="left carousel-control" href="#assetsCarousel" data-slide="prev">
+											    <span class="glyphicon glyphicon-chevron-left"></span>
+											    <span class="sr-only">Previous</span>
+											  </a>
+											  <a class="right carousel-control" href="#assetsCarousel" data-slide="next">
+											    <span class="glyphicon glyphicon-chevron-right"></span>
+											    <span class="sr-only">Next</span>
+											  </a>
+											</div>
+										</div>
+										<div class="modal-footer">
+										  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										</div>
+								   	</div>
+							    </div>
+							</div>
+			 			</div>
+
+			 			<!-- Settings -->
+			 			<div ng-switch-when="settings">
+			 			</div>
+
+			 			<!-- Stats -->
+			 			<div ng-switch-when="stats">
+			 			</div>
+			 		</div>
+			 	</div>
+			</div>
+			<footer class="text-center footer text-muted"><h6>© 2017 Aura Technologies Inc.</h6></footer>
+		</div>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src="../scripts/controller.js"></script>
+	</body>
+</html>

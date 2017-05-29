@@ -1,0 +1,21 @@
+[0509/153531.656:ERROR:crash_report_database_win.cc(426)] unexpected header
+[0509/163656.290:ERROR:crash_report_database_win.cc(426)] unexpected header
+[0509/172057.137:ERROR:crash_report_database_win.cc(426)] unexpected header
+[0509/172123.327:ERROR:crash_report_database_win.cc(426)] unexpected header
+[0510/101331.705:ERROR:crash_report_database_win.cc(426)] unexpected header
+[0510/101411.443:ERROR:crash_report_database_win.cc(426)] unexpected header
+[0510/104321.917:ERROR:crash_report_database_win.cc(426)] unexpected header
+[0510/125511.233:ERROR:crash_report_database_win.cc(426)] unexpected header
+[0510/131936.807:ERROR:crash_report_database_win.cc(426)] unexpected header
+[0510/134133.378:ERROR:crash_report_database_win.cc(426)] unexpected header
+[0511/111752.634:ERROR:crash_report_database_win.cc(426)] unexpected header
+[0511/133602.002:ERROR:crash_report_database_win.cc(426)] unexpected header
+[0512/141015.198:ERROR:process_info.cc(625)] range at 0xd2ef309200000000, size 0x2be fully unreadable
+[0512/141015.198:ERROR:process_info.cc(625)] range at 0xd2ef30f800000000, size 0x2be fully unreadable
+[0512/141015.198:ERROR:process_info.cc(625)] range at 0x0, size 0x2be fully unreadable
+[0524/172044.679:ERROR:process_info.cc(625)] range at 0xafda276e00000000, size 0x216 fully unreadable
+[0524/172044.679:ERROR:process_info.cc(625)] range at 0xafda278e00000000, size 0x216 fully unreadable
+[0524/172044.679:ERROR:process_info.cc(625)] range at 0x0, size 0x216 fully unreadable
+[0525/163651.212:ERROR:process_info.cc(625)] range at 0x46df277000000000, size 0x1ad fully unreadable
+[0525/163651.212:ERROR:process_info.cc(625)] range at 0x46df279000000000, size 0x1ad fully unreadable
+[0525/163651.212:ERROR:process_info.cc(625)] range at 0x0, size 0x1ad fully unreadable

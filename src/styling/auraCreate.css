@@ -36,51 +36,6 @@ h6{
   font-size: 75%;
 }
 
-
-/* ------------------------Landscape tablets and medium desktops--------------------------------- */
-@media (min-width: 992px) and (max-width: 1199px) {
-	body{
-		font-size: 14px;
-	}
-
-}
-
-/* --------------------------Portrait tablets and small desktops--------------------------------- */
-@media (min-width: 768px) and (max-width: 991px) {
-	body{
-		font-size: 12px;
-	}
-}	
-
-/* --------------------------------Landscape phones and portrait tablets------------------------- */
-@media (max-width: 767px) {
-	body{
-		font-size: 10px;
-	}
-}	
-
-/* ---------------------------------Portrait phones and smaller--------------------------------- */
-@media (max-width: 480px) {
-	html, body{
-		font-size: 10px;
-	}
-
-    #liveTitle, #liveDisplay, #MAIN, #mainContentContainer, #mobileOrgMenu, #orgMenu{
-		padding-left: 0;
-		padding-right: 0;
-	}
-
-	#googleMapsBeacon, #googleMapsObject{
-		height: 75px;
-		width: 50px;
-	}
-
-	#googleMapsObjects, #googleMapsBeacons{
-		height: 75px;
-		width: 50px;
-	}
-}	
-
 /* ----------------------------Large desktops and laptops (DEFAULT)----------------------------- */
 	/*--------------------------------------------Classes--------------------------------------------*/
 	.btn{
@@ -170,15 +125,10 @@ h6{
 		border-color: #FFFFFF;
 	}
 
-	#orgsCarousel{
-		height: 80px;
-	}
-
 	#liveDisplay{
 		max-height: 60vh;
 		overflow: auto;
 		width: 100%;
-		position:relative;
 		padding-left: 0;
 		padding-right: 0;
 	}
@@ -188,6 +138,10 @@ h6{
 		margin-bottom: 0.5em;
 		height: 5em;
 		line-height: 5em;
+	}
+
+	#orgsCarousel{
+		height: 80px;
 	}
 
 	#orgMenu{
@@ -207,6 +161,47 @@ h6{
 		margin-top: 2em;
 		font-size: 1em;
 	}
+
+
+
+/* ------------------------Landscape tablets and medium desktops--------------------------------- */
+@media (min-width: 992px) and (max-width: 1199px) {
+	body{
+		font-size: 14px;
+	}
+}
+
+/* --------------------------Portrait tablets and small desktops--------------------------------- */
+@media (min-width: 768px) and (max-width: 991px) {
+	body{
+		font-size: 12px;
+	}
+}	
+
+/* --------------------------------Landscape phones and portrait tablets------------------------- */
+@media (max-width: 767px) {
+	body{
+		font-size: 10px;
+	}
+}	
+
+/* ---------------------------------Portrait phones and smaller--------------------------------- */
+@media (max-width: 480px) {
+	html, body{
+		font-size: 10px;
+	}
+
+	#liveDisplay{
+		max-height: 10000000px;
+		overflow: hidden;
+	}
+
+    #liveTitle, #liveDisplay, #MAIN, #mainContentContainer, #mobileOrgMenu, #orgMenu{
+		padding-left: 0;
+		padding-right: 0;
+	}
+}	
+
 
 
 

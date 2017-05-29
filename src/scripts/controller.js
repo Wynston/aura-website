@@ -168,25 +168,52 @@ app.controller('myCtrl', function($scope, $http) {
 	// 		user_id: ,
 	// 		role: }
 
+	//load in a specific user from the database
+	// $scope.loadUser = function(){
+	// 	$http({
+	// 	    method : "GET",
+	// 	    url : "https://website-155919.appspot.com/api/v1.0/user",
+	// 	    headers: {
+ //        		'Accept': 'application/json',
+ //        		"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+	// 	    }
+	// 	  }).then(function mySucces(response) {
+	// 	  	//stores the user in session storage and angular binding
+	// 	  	var jsonArray = response.data;
+	//   		$scope.user = {
+	//   			name: jsonArray[0].name,
+	//   			email: jsonArray[0].email,
+	//   			user_id: jsonArray[0].user_id,
+	//   			role: jsonArray[0].role
+	//   		};
+	// 	  	sessionStorage.user = JSON.stringify($scope.user);
+	// 	    }, function myError(response) {
+	// 	      alert(response.statusText);
+	// 	  });
+	// }
+
+	//loads in the organizations of a user
 	// $scope.loadOrganizations = function(){
 	// 	$http({
 	// 	    method : "GET",
-	// 	    url : "https://website-155919.appspot.com/api/v1.0/organization"
-	// 	  }).then(function mySucces(response) {
-	// 	  	//loops over every organization in the response and adds it to session storage
-	// 	  	//stores the organizations in an array that is stored as JSON
+	// 	    url : "https://website-155919.appspot.com/api/v1.0/organization",
+	// 	    headers: {
+ //        		'Accept': 'application/json',
+ //        		"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+	// 	    }
+	// 	  }).then(function mySuccess(response) {
+	// 	  	//loops over every beacon object in the response and adds it to session storage
+	// 	  	//stores the objects as beacons objects in an array that is stored as JSON
 	// 	  	var jsonArray = response.data;
+	// 	  	alert(JSON.stringify(jsonArray));
 	// 	  	$scope.organizationsArray = [];
 	// 	  	for(var i = 0; i < jsonArray.length; i++){
 	// 	  		$scope.organization = {
-	// 	  			desc: jsonArray[i].desc,
-	// 	  			name: jsonArray[i].name,
-	// 	  			organization_id: jsonArray[i].organization_id
+		  			
 	// 	  		};
-	// 	  		$scope.organizationsArray[i] = $scope.beacon;
-	// 	  		}
+	// 	  		$scope.organizationsArray[i] = $scope.organization;
 	// 	  	}
-	// 	  	sessionStorage.organizationsList = JSON.stringify($scope.organizationsArray);
+	// 	  	sessionStorage.organizationsArray = JSON.stringify($scope.organizationsArray);
 
 	// 	    }, function myError(response) {
 	// 	      alert(response.statusText);
@@ -202,7 +229,7 @@ app.controller('myCtrl', function($scope, $http) {
         		'Accept': 'application/json',
         		"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		    }
-		  }).then(function mySucces(response) {
+		  }).then(function mySuccess(response) {
 		  	//loops over every beacon object in the response and adds it to session storage
 		  	//stores the objects as beacons objects in an array that is stored as JSON
 		  	var jsonArray = response.data;

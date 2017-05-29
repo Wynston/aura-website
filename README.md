@@ -1,12 +1,12 @@
 ------------------------ What this is? -----------------------------------------
 
-	A website for Core Systems Incorporated labeled as "Create" that is to serve 
+	A website for Aura Incorporated labeled as "Create" that is to serve 
 as an administrator page for the user and his/her organizations. It is to display 
 information on beacons and objects in a highly interactable way. 
 
 ----------------------- How to Run? --------------------------------------------
 
-	Run the coresyCreate.html file to open the website.
+	Run the auraCreate.html file to open the website.
 
 ----------------------- Frameworks and Libraries -------------------------------
 

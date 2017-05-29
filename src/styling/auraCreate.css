@@ -65,7 +65,9 @@ h6{
 	}
 
 	.footer {
-		margin-top: 1.5em;
+		margin-top: 1.0em;
+		font-size: 0.75em;
+		line-height: 0.5em;
 	} 
 
 	.logo{
@@ -183,6 +185,16 @@ h6{
 	body{
 		font-size: 10px;
 	}
+
+	#liveDisplay{
+		max-height: 10000000px;
+		overflow: hidden;
+	}
+
+    #liveTitle, #liveDisplay, #MAIN, #mainContentContainer, #mobileOrgMenu, #orgMenu{
+		padding-left: 0;
+		padding-right: 0;
+	}
 }	
 
 /* ---------------------------------Portrait phones and smaller--------------------------------- */
@@ -192,7 +204,7 @@ h6{
 	}
 
 	#liveDisplay{
-		max-height: 10000000px;
+		max-height: 10000000000px;
 		overflow: hidden;
 	}
 

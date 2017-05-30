@@ -31,24 +31,24 @@
 			 	<div class="col-xs-12 col-sm-3 col-md-3 col-lg-2" id="orgMenu">
 			 		<div class="hidden-xs">
 				 		<!-- Creates a navigation list for each organization the user is in control of -->
-				 		<ul ng-repeat="org in organizations | orderBy: org" class="list-unstyled text-left">
-				 			<li>
-				 				<h2 class="page-header"><strong>{{org}}</strong></h2>
+				 		<ul ng-repeat="organization in organizationsArray | orderBy: organization" class="list-group">
+				 			<li class="list-group-item list-group-item-success list-group-item-heading">
+				 				<h2><strong>{{organization.name}}</strong></h2>
 				 			</li>
 
-				 			<li ng-click="changeView('beaconsList', org)" class="menuItem">
+				 			<li ng-click="changeView('beaconsList', organization.name)" class="menuItem list-group-item list-group-item-info">
 			 					<h2 class="menuName"><small>Beacons</small></h2>
 				 			</li>
 
-				 			<li ng-click="changeView('objectsList', org)" class="menuItem">
+				 			<li ng-click="changeView('objectsList', organization.name)" class="menuItem list-group-item list-group-item-info" >
 				 				<h2 class="menuName"><small>Objects</small></h2>
 				 			</li>
 
-				 			<li ng-click="changeView('settings', org)" class="menuItem">
+				 			<li ng-click="changeView('settings', organization.name)" class="menuItem list-group-item list-group-item-info">
 				 				<h2 class="menuName"><small>Settings</small></h2>
 				 			</li>
 
-				 			<li ng-click="changeView('stats', org)" class="menuItem">
+				 			<li ng-click="changeView('stats', organization.name)" class="menuItem list-group-item list-group-item-info">
 				 				<h2 class="menuName"><small>Stats</small></h2>
 				 			</li>
 				 		</ul>
@@ -62,17 +62,17 @@
 							 <!-- Indicators -->
 							  <ol class="carousel-indicators">
 							    <li data-target="#orgsCarousel" data-slide-to="0" class="active"></li>
-							    <li ng-repeat="org in organizations | orderBy: org" ng-if="$index > 0" data-target="#orgsCarousel" data-slide-to="$index"></li>
+							    <li ng-repeat="organization in organizationsArray | orderBy: organization" ng-if="$index > 0" data-target="#orgsCarousel" data-slide-to="$index"></li>
 							  </ol>
 
 							  <!-- Organization -->
 							  <div class="carousel-inner">
 							  	<div class="item active text-center text-info">
-									<h3>{{organizations[0]}}</h3>
+									<h3>{{organizationsArray[0].name}}</h3>
 							    </div>
 
-							    <div class="item text-center text-info" ng-repeat="org in organizations | orderBy: org" ng-if="$index > 0">
-									<h3>{{org}}</h3>
+							    <div class="item text-center text-info" ng-repeat="organization in organizationsArray | orderBy: organization" ng-if="$index > 0">
+									<h3>{{organization.name}}</h3>
 							    </div>
 							  </div>
 

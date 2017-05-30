@@ -4,8 +4,7 @@ app.controller('myCtrl', function($scope, $http) {
 	//initializer function when the window is loaded
 	$scope.init = function(){
 		$scope.userName = "Wynston Ramsay";
-		$scope.organizations = ['Apple', 'Google', 'Microsoft'];
-		//$scope.loadOrganizations();
+		$scope.loadOrganizations();
 		// $scope.loadBeacons();
 		// $scope.loadObjects();
 		// $scope.loadDashboard();
@@ -77,28 +76,28 @@ app.controller('myCtrl', function($scope, $http) {
 	//helps the carousel notify the controller what the current organization is
 	$scope.carouselViewController = function(view){
 		var index = $('div.active').index();
-		$scope.changeView(view, $scope.organizations[index]);
+		$scope.changeView(view, $scope.organizationsArray[index].name);
 	}
 
 	//when a new organization is selected reload the current view of that organization
 	$scope.carouselLeft = function(){
 		var index = $('div.active').index() - 1;
 		if(index >= 0){
-			$scope.changeView($scope.curView, $scope.organizations[index]);
+			$scope.changeView($scope.curView, $scope.organizationsArray[index].name);
 		}
 		else{
-			$scope.changeView($scope.curView, $scope.organizations[$scope.organizations.length - 1]);
+			$scope.changeView($scope.curView, $scope.organizationsArray[$scope.organizationsArray.length - 1].name);
 		}
 	}
 
 	//when a new organization is selected reload the current view of that organization
 	$scope.carouselRight = function(){
 		var index = $('div.active').index() + 1;
-		if(index < $scope.organizations.length){
-			$scope.changeView($scope.curView, $scope.organizations[index]);
+		if(index < $scope.organizationsArray.length){
+			$scope.changeView($scope.curView, $scope.organizationsArray[index].name);
 		}
 		else{
-			$scope.changeView($scope.curView, $scope.organizations[0]);
+			$scope.changeView($scope.curView, $scope.organizationsArray[0].name);
 		}
 	}
 
@@ -141,8 +140,13 @@ app.controller('myCtrl', function($scope, $http) {
 
 	//display an objects assets in a modal
 	$scope.displayAssetsModal = function(){
-		$scope.assets = $scope.curObj.assets;
-		$("#assetsModal").modal();
+		if($scope.curObj.assets.length > 0){
+			$scope.assets = $scope.curObj.assets;
+			$("#assetsModal").modal();
+		}
+		else{
+			alert("Error: " + $scope.curObj.name + " has no media.");
+		}
 	}
 
 	//display an objects assets in a modal
@@ -193,32 +197,33 @@ app.controller('myCtrl', function($scope, $http) {
 	// }
 
 	//loads in the organizations of a user
-	// $scope.loadOrganizations = function(){
-	// 	$http({
-	// 	    method : "GET",
-	// 	    url : "https://website-155919.appspot.com/api/v1.0/organization",
-	// 	    headers: {
- //        		'Accept': 'application/json',
- //        		"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-	// 	    }
-	// 	  }).then(function mySuccess(response) {
-	// 	  	//loops over every beacon object in the response and adds it to session storage
-	// 	  	//stores the objects as beacons objects in an array that is stored as JSON
-	// 	  	var jsonArray = response.data;
-	// 	  	alert(JSON.stringify(jsonArray));
-	// 	  	$scope.organizationsArray = [];
-	// 	  	for(var i = 0; i < jsonArray.length; i++){
-	// 	  		$scope.organization = {
-		  			
-	// 	  		};
-	// 	  		$scope.organizationsArray[i] = $scope.organization;
-	// 	  	}
-	// 	  	sessionStorage.organizationsArray = JSON.stringify($scope.organizationsArray);
+	$scope.loadOrganizations = function(){
+		$http({
+		    method : "GET",
+		    url : "https://website-155919.appspot.com/api/v1.0/organization",
+		    headers: {
+        		'Accept': 'application/json',
+        		"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		    }
+		  }).then(function mySuccess(response) {
+		  	//loops over every organization in the response and adds it to session storage and binding
+		  	var jsonArray = response.data.data;
+		  	$scope.numOrganizations = jsonArray.length;
+		  	$scope.organizationsArray = [];
+		  	for(var i = 0; i < jsonArray.length; i++){
+		  		$scope.organization = {
+		  			name: jsonArray[i].attributes.name,
+		  			id: jsonArray[i].attributes.organization_id,
+		  			description: jsonArray[i].attributes.desc
+		  		};
+		  		$scope.organizationsArray[i] = $scope.organization;
+		  	}
+		  	sessionStorage.organizationsArray = JSON.stringify($scope.organizationsArray);
 
-	// 	    }, function myError(response) {
-	// 	      alert(response.statusText);
-	// 	  });
-	// }
+		    }, function myError(response) {
+		      alert(response.statusText);
+		  });
+	}
 
 	//retrieves all the beacons from the database for the organization
     $scope.loadBeacons = function(){

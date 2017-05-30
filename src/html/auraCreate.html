@@ -53,8 +53,8 @@
 				 			</li>
 				 		</ul>
 				 	</div>
-			 		<div class="container-fluid visible-xs text-center" id="mobileOrgMenu">
-			 			<div class="container-fluid" style="background-color: #5AC8EB; color:white; border: 1px solid #54C5E9;">
+			 		<div class="container-fluid visible-xs text-center">
+			 			<div class="container-fluid" id="mobileOrgMenu">
 			 				<h4>Organizations</h4>
 			 			</div>
  						<!-- Carousel of organizations -->
@@ -104,7 +104,7 @@
 			 			</div>
 					    <div ng-switch="filterTitle" id="filterTitle" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 center-block text-center">
 					    	<!-- Objects View Filter -->
-						    <div ng-switch-when="beaconFilter" class="btn-group btn-group-vertical">
+						    <div ng-switch-when="objectsView" class="btn-group btn-group-vertical">
 					    		<div class="dropup btn-group">
 									 <button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" aria-labelledby="menu1">
 								    	View By: {{viewType}}
@@ -125,16 +125,17 @@
 								    	<span class="caret"></span>
 								    </button>
 								    <ul class="dropdown-menu">
-								    	<li class="menuItem" ng-click="changeBeaconFilter('All')">
+								    	<li class="menuItem text-center" ng-click="changeBeaconFilter('All')">
 								    		<a><h5>Show All</h5></a>
 								    	</li>
 								    	<li class="divider"></li>
-								    	<li class="menuItem" ng-repeat="arObject in objectsArray | removeDuplicates: 'objectsArray'" ng-click="changeBeaconFilter(arObject.beacon_name)">
+								    	<li class="menuItem text-center" ng-repeat="arObject in objectsArray | removeDuplicates: 'objectsArray'" ng-click="changeBeaconFilter(arObject.beacon_name)">
 								      		<a><h5>{{arObject.beacon_name}}</h5></a>
 								    	</li>
 								    </ul>
 								</div>
 						    </div>
+
 						    <!-- Object View Filter -->
 						    <div ng-switch-when="objectPrivacy" class="text-center">
 						    	<label class="switch">
@@ -144,7 +145,7 @@
 						    </div>
 
 						    <!-- Beacons View Filter -->
-						    <div ng-switch-when="beaconsView" class="dropdown text-center">
+						    <div ng-switch-when="beaconsView" class="dropdown btn-group">
 							    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" aria-labelledby="menu1">
 							    	View By: {{viewType}}
 							    	<span class="caret"></span>

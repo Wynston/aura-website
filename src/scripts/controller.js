@@ -39,7 +39,7 @@ app.controller('myCtrl', function($scope, $http) {
 				break;
 			case "objectsList":
 				$scope.changeLiveTitle("Objects", secondTitle, true);
-				$scope.filterTitle = "beaconFilter";
+				$scope.filterTitle = "objectsView";
 				$scope.changeViewType('List');
 				$scope.changeBeaconFilter('All');
 				$scope.loadObjects();

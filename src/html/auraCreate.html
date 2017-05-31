@@ -32,7 +32,7 @@
 			 		<div class="hidden-xs panel-group" id="accordion">
 				 		<!-- Creates a navigation list for each organization the user is in control of -->
 				 		<div ng-repeat="organization in organizationsArray| orderBy: name" class="panel panel-success">
-						    <div class="panel-heading">
+						    <div class="panel-heading menuItem">
 						      <h4 class="panel-title">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#{{$index}}">
 						        	<h2><strong>{{organization.name}}</strong></h2>
@@ -186,10 +186,8 @@
 			 			</div>
 
 			 			<!-- Profile Settings -->
-			 			<div ng-switch-when="profileSettings" class="text-center">
+			 			<div ng-switch-when="profileSettings" class="text-center panel">
 			 				<!-- Organization Management -->
-
-
 			 				<!-- Creating an organization -->
 			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addOrgModal">Add Organization</button>
 			 				<!-- Modal for creating an organization-->
@@ -261,8 +259,9 @@
 			 			</div>
 
 			 			<!-- Beacon (Singular) -->
-			 			<div ng-switch-when="beacon" class="container-fluid panel">
-			 				<div class="panel-heading center-block">
+		 				<!-- Google Maps API -->
+		 				<div  ng-switch-when="beacon" class="center-block text-center panel panel-default">
+		 					<div class="panel-heading center-block">
 		 						<div class="row text-primary">
 		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">
 		 								<h4>Type: {{curBeacon.beacon_type}}</h4>
@@ -275,17 +274,15 @@
 			 						</div>
 			 					</div>
 		 					</div>
-
-			 				<!-- Google Maps API -->
-			 				<div class="center-block text-center panel-info">
-			 					<div id="googleMapsBeacon"></div>
-			 					<div class="row">
-				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curBeacon.altitude | number: 3}}</h4>
+		 					<div class="panel-body" id="googleMapsBeacon"></div>
+		 					<div class="panel-footer">
+		 						<div class="row">
+		 							<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curBeacon.altitude | number: 3}}</h4>
 				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curBeacon.latitude | number: 3}}</h4>
 				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right text-primary">Longitude: {{curBeacon.longitude | number: 3}}</h4>
-			 					</div>
-			 				</div>
-			 			</div>
+		 						</div>
+		 					</div>
+		 				</div>
 
 			 			<!-- Objects List -->
 			 			<div ng-switch-when="objectsList">
@@ -351,7 +348,8 @@
 			 			</div>
 
 			 			<!-- Object (Singular) -->
-			 			<div ng-switch-when="object" class="container-fluid panel">
+			 			<!-- Google Maps API -->
+		 				<div ng-switch-when="object" class="center-block panel panel-default text-center">
 		 					<div class="panel-heading center-block">
 		 						<div class="row">
 		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
@@ -365,6 +363,15 @@
 			 						</div>
 			 					</div>
 		 					</div>
+		 					<div class="panel-body" id="googleMapsObject"></div>
+		 					<div class="panel-footer">
+		 						<div class="row">
+				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curObj.altitude | number: 3}}</h4>
+				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curObj.latitude | number: 3}}</h4>
+				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right text-primary">Longitude: {{curObj.longitude | number: 3}}</h4>
+				 				</div>
+		 					</div>
+			 				
 
 		 					<!-- Description Modal -->
 				 			<div class="modal fade" id="descriptionModal" role="dialog" data-backdrop="true">
@@ -385,16 +392,6 @@
 							      </div>
 							    </div>
 							</div>
-
-			 				<!-- Google Maps API -->
-			 				<div class="center-block panel-info text-center">
-			 					<div id="googleMapsObject"></div>
-			 					<div class="row">
-				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curObj.altitude | number: 3}}</h4>
-				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curObj.latitude | number: 3}}</h4>
-				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right text-primary">Longitude: {{curObj.longitude | number: 3}}</h4>
-			 					</div>
-			 				</div>
 
 			 				<!-- Assets/Media Modal -->
 							<div class="modal fade" id="assetsModal" role="dialog" data-backdrop="true">
@@ -457,7 +454,8 @@
 			 			</div>
 
 			 			<!-- Stats -->
-			 			<div ng-switch-when="stats">
+			 			<div ng-switch-when="stats" class="container-fluid panel">
+			 				<div id="googleMapsStats"></div>
 			 			</div>
 			 		</div>
 			 	</div>

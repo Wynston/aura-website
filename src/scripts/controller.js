@@ -54,6 +54,8 @@ app.controller('myCtrl', function($scope, $http) {
 				$scope.changeLiveTitle("Stats", secondTitle, false);
 				sessionStorage.curView = view;
 				$scope.curView = view;
+				//$scope.loadStats();
+				// $scope.loadGoogleScript();
 				break;
 		}
 	}
@@ -171,10 +173,10 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.loadOrganizations();
 	}
 
-	//------------------------------------------end of display functions-----------------------------------
+	//-------------------------------end of display functions-----------------------------------
 
 
-	//------------------------------loader functions begin---------------------------------
+	//------------------------------loader functions begin--------------------------------------
 	// loader functions retrieve any needed data from the database and then proceeds to display that view
 	//Queries:
 	//KEY: dGhpc2lzYWRldmVsb3BlcmFwcA==
@@ -276,41 +278,6 @@ app.controller('myCtrl', function($scope, $http) {
 		  });
     }
 
-    //transforms the beacon type from the database to be more readable
-    $scope.parseBeaconType = function (beaconType){
-    	var type = "";
-		switch(beaconType) {
-			case "restaurant":
-				type = "Restaurant";
-				break;
-			case "coffee-shop":
-				type = "Coffee Shop";
-				break;
-			case "museum":
-				type = "Museum";
-				break;
-			case "gallery":
-				type = "Gallery";
-				break;
-			case "zoo":
-				type = "Zoo";
-				break;
-			case "art":
-				type = "Art";
-				break;
-			case "office":
-				type = "Office";
-				break;
-			case "manufacturing":
-				type = "Manufacturing";
-				break;
-			case "other":
-				type = "Other";
-				break;
-		}
-		return type;
-    }
-
     //loads in a beacon from the objects list, given its name
     $scope.loadBeacon = function(beacName){
     	var beaconsArray = JSON.parse(sessionStorage.beaconsArray);
@@ -371,6 +338,88 @@ app.controller('myCtrl', function($scope, $http) {
 		  });
     }
 
+    //loads in stats about an organization to be displayed
+    $scope.loadStats = function(){
+    	$http({
+		    method : "GET",
+		    url : "https://website-155919.appspot.com/api/v1.0/stats",
+		    headers: {
+		    	'Accept': 'application/json',
+        		"X-Aura-API-Key": 'dGhpc2lzYWRldmVsb3BlcmFwcA=='
+        	}
+		  }).then(function mySuccess(response) {
+		  	//retrieves stats on an organization 
+		  	var jsonArray = response.data;
+		  	$scope.statsArray = [];
+		  	for(var i = 0; i < jsonArray.length; i++){
+		  		$scope.stat = {
+		  			latitude: jsonArray[i].lat ,
+		  			longitude: jsonArray[i].long,
+		  			time: jsonArray[i].time 
+		  		};
+		  		$scope.statsArray[i] = $scope.stat;
+		  	}
+		  	sessionStorage.statsArray = JSON.stringify($scope.statsArray);
+		    }, function myError(response) {
+		      alert(response.statusText);
+		  });
+    }
+
+    //must load in script when the object view is first loaded in html
+    $scope.loadGoogleScript = function(){
+    	if(document.getElementById("googleScript")){
+    		document.getElementById("googleScript").remove();
+    		var googleMapsScript = document.createElement('script');
+			googleMapsScript.id = "googleScript";
+			googleMapsScript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCq80g8ye8MQaNGW3BOVaj0VY3m7jpomoY&callback=initMap&libraries=visualization";
+			document.getElementById("MAIN").appendChild(googleMapsScript);
+		}
+		else{
+			var googleMapsScript = document.createElement('script');
+			googleMapsScript.id = "googleScript";
+			googleMapsScript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCq80g8ye8MQaNGW3BOVaj0VY3m7jpomoY&callback=initMap&libraries=visualization";
+			document.getElementById("MAIN").appendChild(googleMapsScript);
+		}
+	}
+//--------------------------------------end of loader functions----------------------------------
+
+
+//--------------------------------------helper functions begin-----------------------------------------
+	//transforms the beacon type from the database to be more readable
+    $scope.parseBeaconType = function (beaconType){
+    	var type = "";
+		switch(beaconType) {
+			case "restaurant":
+				type = "Restaurant";
+				break;
+			case "coffee-shop":
+				type = "Coffee Shop";
+				break;
+			case "museum":
+				type = "Museum";
+				break;
+			case "gallery":
+				type = "Gallery";
+				break;
+			case "zoo":
+				type = "Zoo";
+				break;
+			case "art":
+				type = "Art";
+				break;
+			case "office":
+				type = "Office";
+				break;
+			case "manufacturing":
+				type = "Manufacturing";
+				break;
+			case "other":
+				type = "Other";
+				break;
+		}
+		return type;
+    }
+
     //tally's the amount of each media type for an object
     $scope.tallyAssets = function(mediaArray){
     	var tally = {numImage: 0, numAudio: 0, numVideo: 0, num3D: 0}
@@ -403,14 +452,6 @@ app.controller('myCtrl', function($scope, $http) {
 		}
     }
 
-    $scope.loadSettings = function(){
-
-    }
-
-    $scope.loadStats = function(){
-
-    }
-
     //provides generic info about the users profile
     // $scope.loadDashboard = function(){
     // 	$scope.numOrganizations = $scope.organizations.length;
@@ -422,27 +463,6 @@ app.controller('myCtrl', function($scope, $http) {
     // 	}
     // 	$scope.avgThroughput = 0; 	 
     // }
-
-    $scope.loadProfileSettings = function(){
-  
-    } 
-
-    //must load in script when the object view is first loaded in html
-    $scope.loadGoogleScript = function(){
-    	if(document.getElementById("googleScript")){
-    		document.getElementById("googleScript").remove();
-    		var googleMapsScript = document.createElement('script');
-			googleMapsScript.id = "googleScript";
-			googleMapsScript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCq80g8ye8MQaNGW3BOVaj0VY3m7jpomoY&callback=initMap&libraries=visualization";
-			document.getElementById("MAIN").appendChild(googleMapsScript);
-		}
-		else{
-			var googleMapsScript = document.createElement('script');
-			googleMapsScript.id = "googleScript";
-			googleMapsScript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCq80g8ye8MQaNGW3BOVaj0VY3m7jpomoY&callback=initMap&libraries=visualization";
-			document.getElementById("MAIN").appendChild(googleMapsScript);
-		}
-	}
 
 	//alters the objects list to view by a specific beacon or by all beacons
     $scope.changeBeaconFilter = function(filter){
@@ -500,7 +520,8 @@ app.controller('myCtrl', function($scope, $http) {
         }
     }
 });
-//--------------------------------------end of loader functions----------------------------------
+
+//-------------------------------------end of helper functions-----------------------------------
 
 
 //-------------------------------------custom filters begins-------------------------------------
@@ -556,6 +577,7 @@ app.filter('removeDuplicates', function() {
 
 //-------------------------------------end of custom filters-------------------------------------
 
+//-------------------------------------google maps handling begins-------------------------------
 //initMap function for google maps api
 function initMap(){
 	if(sessionStorage.curView == "beacon"){
@@ -597,11 +619,11 @@ function initMap(){
 	else if(sessionStorage.curView == "beaconsList"){
 		map = new google.maps.Map(document.getElementById('googleMapsBeacons'), {
           zoom: 11,
-          center: findbeaconsDPCenter(),
+          center: findDPCenter(JSON.parse(sessionStorage.beaconsArray)),
         });
 
         heatmap = new google.maps.visualization.HeatmapLayer({
-          data: getBeaconsDataPoints(),
+          data: getDataPoints(JSON.parse(sessionStorage.beaconsArray)),
           map: map
         });
         heatmap.setOptions({radius: heatmap.get('50')});
@@ -610,10 +632,22 @@ function initMap(){
 	else if(sessionStorage.curView == "objectsList"){
 		map = new google.maps.Map(document.getElementById('googleMapsObjects'), {
           zoom: 11,
-          center: findObjectsDPCenter(),
+          center: findDPCenter(JSON.parse(sessionStorage.arObjectsList)),
         });
         heatmap = new google.maps.visualization.HeatmapLayer({
-          data: getObjectsDataPoints(),
+          data: getDataPoints(JSON.parse(sessionStorage.beaconsArray)),
+          map: map
+        });
+        heatmap.setOptions({radius: heatmap.get('50')});
+		heatmap.setMap(map);
+	}
+	else if(sessionStorage.curView == "stats"){
+		map = new google.maps.Map(document.getElementById('googleMapsStats'), {
+          zoom: 11,
+          center: findDPCenter(JSON.parse(sessionStorage.stats)),
+        });
+        heatmap = new google.maps.visualization.HeatmapLayer({
+          data: getDataPoints(JSON.parse(sessionStorage.stats)),
           map: map
         });
         heatmap.setOptions({radius: heatmap.get('50')});
@@ -624,49 +658,24 @@ function initMap(){
 	}
 }
 
-//gathers the co-ordinates of all the objects to display in a heat map
-function getObjectsDataPoints(){
-	var dataPoints = [];
-	var objects = JSON.parse(sessionStorage.arObjectsList);
-	for(var i = 0; i < objects.length; i++){
-		dataPoints[i] = new google.maps.LatLng(objects[i].latitude, objects[i].longitude);
+//gathers the co-ordinates of all the elements of an array to display in a heat map
+function getDataPoints(dataArray){
+	var dataPoints = []
+	for(var i = 0; i < dataArray.length; i++){
+		dataPoints[i] = new google.maps.LatLng(dataArray[i].latitude, dataArray[i].longitude);
 	}
 	return dataPoints;
 }
 
-//finds the center of all the objects of an organization
-function findObjectsDPCenter(){
-	var objects = JSON.parse(sessionStorage.arObjectsList);
+//finds the center of given datapoints
+function findDPCenter(dataArray){
 	var avgLat = 0;
 	var avgLong = 0;
-	for(var i = 0; i < objects.length; i++){
-		avgLat += objects[i].latitude;
-		avgLong += objects[i].longitude;
+	for(var i = 0; i < dataArray.length; i++){
+		avgLat += dataArray[i].latitude;
+		avgLong += dataArray[i].longitude;
 	}
-	var center = {lat: avgLat / objects.length, lng: avgLong / objects.length};
-	return center;
-}
-
-//gathers the co-ordinates of all the beacons to display in a heat map
-function getBeaconsDataPoints(){
-	var dataPoints = [];
-	var beacons = JSON.parse(sessionStorage.beaconsArray);
-	for(var i = 0; i < beacons.length; i++){
-		dataPoints[i] = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-	}
-	return dataPoints;
-}
-
-//finds the center of all the beacons of an organization
-function findbeaconsDPCenter(){
-	var beacons = JSON.parse(sessionStorage.beaconsArray);
-	var avgLat = 0;
-	var avgLong = 0;
-	for(var i = 0; i < beacons.length; i++){
-		avgLat += beacons[i].latitude;
-		avgLong += beacons[i].longitude;
-	}
-	var center = {lat: avgLat / beacons.length, lng: avgLong / beacons.length};
+	var center = {lat: avgLat / dataArray.length, lng: avgLong / dataArray.length};
 	return center;
 }
 
@@ -693,3 +702,4 @@ function geocodePosition(pos, type) {
         }
     );
 }
+//-------------------------------------end of google maps handling-------------------------------

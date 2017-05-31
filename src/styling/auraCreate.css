@@ -85,7 +85,7 @@ h6{
 	}
 
 	.menuItem:hover{
-		background-color: #FEFFEB;
+		background-color: #FEFFF1;
 		cursor: pointer;
 	}
 
@@ -118,7 +118,7 @@ h6{
 		width: 100%;
 	}
 
-	#googleMapsObjects, #googleMapsBeacons{
+	#googleMapsObjects, #googleMapsBeacons, #googleMapsStats{
 		height: 57vh;
 		width: 100%;
 	}

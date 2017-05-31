@@ -62,7 +62,7 @@
 							 <!-- Indicators -->
 							  <ol class="carousel-indicators">
 							    <li data-target="#orgsCarousel" data-slide-to="0" class="active"></li>
-							    <li ng-repeat="organization in organizationsArray | orderBy: organization" ng-if="$index > 0" data-target="#orgsCarousel" data-slide-to="$index"></li>
+							    <li ng-repeat="organization in organizationsArray | orderBy: organization" ng-if="$index > 0" data-target="#orgsCarousel" data-slide-to="{{$index}}"></li>
 							  </ol>
 
 							  <!-- Organization -->
@@ -179,7 +179,42 @@
 			 			</div>
 
 			 			<!-- Profile Settings -->
-			 			<div ng-switch-when="profileSettings">
+			 			<div ng-switch-when="profileSettings" class="text-center">
+			 				<!-- Organization Management -->
+
+
+			 				<!-- Creating an organization -->
+			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addOrgModal">Add Organization</button>
+			 				<!-- Modal for creating an organization-->
+							  <div class="modal fade" id="addOrgModal" role="dialog">
+							    <div class="modal-dialog">
+							    
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header" style="padding:2em 3em;">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h3><b>Organization Creation</b></h3>
+							        </div>
+							        <div class="modal-body" style="padding:2em 3em;">
+							          <form role="form">
+							            <div class="form-group">
+							              <label>Name</label>
+							              <input type="text" class="form-control" placeholder="Enter organization's name" ng-model="addOrgName">
+							            </div>
+							            <div class="form-group">
+							              <label>Description</label>
+							              <input type="text" class="form-control" placeholder="Enter organization's description" ng-model="addOrgDesc">
+							            </div>
+							            <button type="submit" class="btn btn-success btn-block" ng-click="addOrganization(addOrgName, addOrgDesc)" data-dismiss="modal">Create</button>
+							          </form>
+							        </div>
+							        <div class="modal-footer">
+							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+							        </div>
+							      </div>
+							      
+							    </div>
+							  </div> 
 			 			</div>
 
 			 			<!-- Beacons List -->
@@ -371,7 +406,7 @@
 											  <!-- Indicators -->
 											  <ol class="carousel-indicators">
 											    <li data-target="#assetsCarousel" data-slide-to="0" class="active"></li>
-											    <li ng-repeat="asset in assets" ng-if="$index > 0" data-target="#assetsCarousel" data-slide-to="$index"></li>
+											    <li ng-repeat="asset in assets" ng-if="$index > 0" data-target="#assetsCarousel" data-slide-to="{{$index}}"></li>
 											  </ol>
 
 											  <!-- Media Content -->

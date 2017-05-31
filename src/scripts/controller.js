@@ -154,6 +154,23 @@ app.controller('myCtrl', function($scope, $http) {
 		$("#descriptionModal").modal();
 	}
 
+	//adds an organization to the database for a user
+	$scope.addOrganization = function(name, desc){
+		$http({
+        method: 'PUT',
+        url: 'https://website-155919.appspot.com/api/v1.0/organization',
+        data: {name: name, desc: desc},
+        headers: {
+        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		}
+		}).then(function mySuccess(response) {
+			alert(name + " has been successfully added!");
+		}, function myError(response) {
+		    alert(response.statusText);
+		});
+		$scope.loadOrganizations();
+	}
+
 	//------------------------------------------end of display functions-----------------------------------
 
 

@@ -26,12 +26,12 @@
 			</div> 
 			
 			<!-- Main Content -->
-			<div class="container-fluid row" id="mainContentContainer">
+			<div class="container-fluid row well well-lg" id="mainContentContainer">
 				<!-- User Organizations Menu -->
 			 	<div class="col-xs-12 col-sm-3 col-md-3 col-lg-2" id="orgMenu">
 			 		<div class="hidden-xs panel-group" id="accordion">
 				 		<!-- Creates a navigation list for each organization the user is in control of -->
-				 		<div ng-repeat="organization in organizationsArray | orderBy: organization" class="panel panel-success">
+				 		<div ng-repeat="organization in organizationsArray| orderBy: name" class="panel panel-success">
 						    <div class="panel-heading">
 						      <h4 class="panel-title">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#{{$index}}">
@@ -69,7 +69,7 @@
 							 <!-- Indicators -->
 							  <ol class="carousel-indicators">
 							    <li data-target="#orgsCarousel" data-slide-to="0" class="active"></li>
-							    <li ng-repeat="organization in organizationsArray | orderBy: organization" ng-if="$index > 0" data-target="#orgsCarousel" data-slide-to="{{$index}}"></li>
+							    <li ng-repeat="organization in organizationsArray | orderBy: name" ng-if="$index > 0" data-target="#orgsCarousel" data-slide-to="{{$index}}"></li>
 							  </ol>
 
 							  <!-- Organization -->
@@ -78,7 +78,7 @@
 									<h3>{{organizationsArray[0].name}}</h3>
 							    </div>
 
-							    <div class="item text-center text-info" ng-repeat="organization in organizationsArray | orderBy: organization" ng-if="$index > 0">
+							    <div class="item text-center text-info" ng-repeat="organization in organizationsArray | orderBy: name" ng-if="$index > 0">
 									<h3>{{organization.name}}</h3>
 							    </div>
 							  </div>
@@ -105,7 +105,7 @@
 			 	<!-- Dynamic Section -->
 			 	<div class="col-xs-12 col-sm-9 col-md-9 col-lg-10 container-fluid">
 			 		<!-- Dynamic Title -->
-			 		<div class="row text-center" id="liveTitle">
+			 		<div class="row text-center panel panel-heading" id="liveTitle">
 			 			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
 			 				<h3><b>{{primTitle}}</b></h3>
 			 			</div>
@@ -152,7 +152,7 @@
 						    </div>
 
 						    <!-- Beacons View Filter -->
-						    <div ng-switch-when="beaconsView" class="dropdown btn-group">
+						    <div ng-switch-when="beaconsView" class="dropdown btn-group" style="margin-top: 1em;">
 							    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" aria-labelledby="menu1">
 							    	View By: {{viewType}}
 							    	<span class="caret"></span>
@@ -174,10 +174,10 @@
 			 		</div>
 
 			 		<!-- Live Display -->
-			 		<div ng-switch="curView" id="liveDisplay" class="container-fluid">
+			 		<div ng-switch="curView" id="liveDisplay" class="container-fluid panel-body">
 			 			<!-- Dashboard -->
 			 			<div ng-switch-when="dashboard">
-			 				<div class="well well-lg">
+			 				<div class="panel panel-body">
 				 				<h3># Organizations: {{numOrganizations}}</h3>
 				 				<h3># Beacons: {{numBeacons}}</h3>
 				 				<h3># Objects: {{numObjects}}</h3>
@@ -227,7 +227,7 @@
 			 			<!-- Beacons List -->
 			 			<div ng-switch-when="beaconsList">
 			 				<div ng-switch="viewType">
-			 					<div ng-switch-when="List" class="well well-sm table-responsive">
+			 					<div ng-switch-when="List" class="panel panel-body table-responsive">
 					 				<table class="table table-condensed">
 						 				<thead>
 						 					<tr>
@@ -253,7 +253,7 @@
 						 		</div>
 					 			<div ng-switch-when="Map">
 					 				<!-- Google Maps API -->
-					 				<div class="center-block panel">
+					 				<div class="center-block panel text-center">
 					 					<div id="googleMapsBeacons"></div>
 					 				</div>
 					 			</div>
@@ -277,7 +277,7 @@
 		 					</div>
 
 			 				<!-- Google Maps API -->
-			 				<div class="center-block" class="panel-info">
+			 				<div class="center-block text-center panel-info">
 			 					<div id="googleMapsBeacon"></div>
 			 					<div class="row">
 				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curBeacon.altitude | number: 3}}</h4>
@@ -290,7 +290,7 @@
 			 			<!-- Objects List -->
 			 			<div ng-switch-when="objectsList">
 			 				<div ng-switch="viewType">
-				 				<div ng-switch-when="List" class="well well-lg">
+				 				<div ng-switch-when="List" class="panel panel-body">
 					 				<table class="table table-condensed table-responsive">
 						 				<thead>
 						 					<tr>
@@ -344,7 +344,7 @@
 									</div>
 								</div>
 								<!-- Google Maps API -->
-				 				<div ng-switch-when="Map" class="center-block panel">
+				 				<div ng-switch-when="Map" class="center-block panel text-center">
 				 					<div id="googleMapsObjects"></div>
 				 				</div>
 							</div>
@@ -387,7 +387,7 @@
 							</div>
 
 			 				<!-- Google Maps API -->
-			 				<div class="center-block panel-info">
+			 				<div class="center-block panel-info text-center">
 			 					<div id="googleMapsObject"></div>
 			 					<div class="row">
 				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curObj.altitude | number: 3}}</h4>

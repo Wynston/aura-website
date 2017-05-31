@@ -29,29 +29,36 @@
 			<div class="container-fluid row" id="mainContentContainer">
 				<!-- User Organizations Menu -->
 			 	<div class="col-xs-12 col-sm-3 col-md-3 col-lg-2" id="orgMenu">
-			 		<div class="hidden-xs">
+			 		<div class="hidden-xs panel-group" id="accordion">
 				 		<!-- Creates a navigation list for each organization the user is in control of -->
-				 		<ul ng-repeat="organization in organizationsArray | orderBy: organization" class="list-group">
-				 			<li class="list-group-item list-group-item-success list-group-item-heading">
-				 				<h2><strong>{{organization.name}}</strong></h2>
-				 			</li>
+				 		<div ng-repeat="organization in organizationsArray | orderBy: organization" class="panel panel-success">
+						    <div class="panel-heading">
+						      <h4 class="panel-title">
+						        <a data-toggle="collapse" data-parent="#accordion" href="#{{$index}}">
+						        	<h2><strong>{{organization.name}}</strong></h2>
+						        </a>
+						      </h4>
+						    </div>
+						    <div id="{{$index}}" class="panel-collapse collapse container-fluid zeroPadding">
+						      <div class="panel-body list-group zeroPadding">
+						      		<li ng-click="changeView('beaconsList', organization.name)" class="menuItem list-group-item list-group-item-info">
+					 					<h2 class="menuName"><small>Beacons</small></h2>
+						 			</li>
 
-				 			<li ng-click="changeView('beaconsList', organization.name)" class="menuItem list-group-item list-group-item-info">
-			 					<h2 class="menuName"><small>Beacons</small></h2>
-				 			</li>
+						 			<li ng-click="changeView('objectsList', organization.name)" class="menuItem list-group-item list-group-item-info" >
+						 				<h2 class="menuName"><small>Objects</small></h2>
+						 			</li>
 
-				 			<li ng-click="changeView('objectsList', organization.name)" class="menuItem list-group-item list-group-item-info" >
-				 				<h2 class="menuName"><small>Objects</small></h2>
-				 			</li>
+						 			<li ng-click="changeView('settings', organization.name)" class="menuItem list-group-item list-group-item-info">
+						 				<h2 class="menuName"><small>Settings</small></h2>
+						 			</li>
 
-				 			<li ng-click="changeView('settings', organization.name)" class="menuItem list-group-item list-group-item-info">
-				 				<h2 class="menuName"><small>Settings</small></h2>
-				 			</li>
-
-				 			<li ng-click="changeView('stats', organization.name)" class="menuItem list-group-item list-group-item-info">
-				 				<h2 class="menuName"><small>Stats</small></h2>
-				 			</li>
-				 		</ul>
+						 			<li ng-click="changeView('stats', organization.name)" class="menuItem list-group-item list-group-item-info">
+						 				<h2 class="menuName"><small>Stats</small></h2>
+						 			</li>
+						 		</div>
+						 	</div>
+				 		</div>
 				 	</div>
 			 		<div class="container-fluid visible-xs text-center">
 			 			<div class="container-fluid" id="mobileOrgMenu">

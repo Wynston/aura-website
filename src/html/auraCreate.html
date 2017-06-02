@@ -187,6 +187,8 @@
 
 			 			<!-- Profile Settings -->
 			 			<div ng-switch-when="profileSettings" class="text-center panel">
+			 				<!-- Webcam -->
+			 				<button class="btn btn-info" ng-click="changeView('webcam', userName)">Webcam</button>
 			 				<!-- Organization Management -->
 			 				<!-- Creating an organization -->
 			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addOrgModal">Add Organization</button>
@@ -538,6 +540,13 @@
 			 			<div ng-switch-when="stats" class="panel panel-default">
 			 				<div id="googleMapsStats" class="panel-body"></div>
 			 			</div>
+
+			 			<!-- Webcam -->
+			 			<div ng-switch-when="webcam" class="panel panel-default text-center center-block">
+			 				<iframe src="http://10.0.1.1:8009?action=stream" style="height: 60vh; width: 100%">
+			 				</iframe>
+			 			</div>
+
 			 		</div>
 			 	</div>
 			</div>

@@ -58,6 +58,10 @@ app.controller('myCtrl', function($scope, $http) {
 				$scope.loadStats();
 				$scope.loadGoogleScript();
 				break;
+			case "webcam":
+				$scope.changeLiveTitle("Webcam", $scope.userName, false);
+				sessionStorage.curView = view;
+				$scope.curView = view;
 		}
 	}
 
@@ -1198,7 +1202,7 @@ function initMap(){
 	}
 	else if(sessionStorage.curView == "settings"){
 		$('#addBeaconModal').on('shown.bs.modal', function (){
-			var beacons = JSON.parse(sessionStorage.beaconsArray;
+			var beacons = JSON.parse(sessionStorage.beaconsArray);
 		    var map = new google.maps.Map(document.getElementById('googleMapsAddBeacon'), {
 		      zoom: 11,
 		      center: findDPCenter(beacons)
@@ -1213,7 +1217,7 @@ function initMap(){
 	            fillColor: '#4DF3E1',
 	            fillOpacity: 0.35,
 	            map: map,
-	            center: {beacon[i].latitude, ,
+	            center: "",
 	            radius: 100
 	          });
 	        }

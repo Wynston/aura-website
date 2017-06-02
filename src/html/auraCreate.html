@@ -32,7 +32,7 @@
 			 		<div class="hidden-xs panel-group" id="accordion">
 				 		<!-- Creates a navigation list for each organization the user is in control of -->
 				 		<div ng-repeat="organization in organizationsArray| orderBy: name" class="panel panel-success">
-						    <div class="panel-heading menuItem">
+						    <div class="panel-heading">
 						      <h4 class="panel-title">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#{{$index}}">
 						        	<h2><strong>{{organization.name}}</strong></h2>
@@ -41,19 +41,19 @@
 						    </div>
 						    <div id="{{$index}}" class="panel-collapse collapse container-fluid zeroPadding">
 						      <div class="panel-body list-group zeroPadding">
-						      		<li ng-click="changeView('beaconsList', organization.name)" class="menuItem list-group-item list-group-item-info">
+						      		<li ng-click="changeView('beaconsList', organization)" class="menuItem list-group-item list-group-item-info">
 					 					<h2 class="menuName"><small>Beacons</small></h2>
 						 			</li>
 
-						 			<li ng-click="changeView('objectsList', organization.name)" class="menuItem list-group-item list-group-item-info" >
+						 			<li ng-click="changeView('objectsList', organization)" class="menuItem list-group-item list-group-item-info" >
 						 				<h2 class="menuName"><small>Objects</small></h2>
 						 			</li>
 
-						 			<li ng-click="changeView('settings', organization.name)" class="menuItem list-group-item list-group-item-info">
+						 			<li ng-click="changeView('settings', organization)" class="menuItem list-group-item list-group-item-info">
 						 				<h2 class="menuName"><small>Settings</small></h2>
 						 			</li>
 
-						 			<li ng-click="changeView('stats', organization.name)" class="menuItem list-group-item list-group-item-info">
+						 			<li ng-click="changeView('stats', organization)" class="menuItem list-group-item list-group-item-info">
 						 				<h2 class="menuName"><small>Stats</small></h2>
 						 			</li>
 						 		</div>
@@ -198,7 +198,7 @@
 							      <div class="modal-content">
 							        <div class="modal-header" style="padding:2em 3em;">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
-							          <h3><b>Organization Creation</b></h3>
+							          <h3><b>Organization creation for {{userName}}</b></h3>
 							        </div>
 							        <div class="modal-body" style="padding:2em 3em;">
 							          <form role="form">
@@ -450,12 +450,93 @@
 			 			</div>
 
 			 			<!-- Settings -->
-			 			<div ng-switch-when="settings">
+			 			<div ng-switch-when="settings" class="container-fluid panel text-center">
+			 				<!-- Beacon Management -->
+			 				<!-- Creating a beacon -->
+			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addBeaconModal">Add Beacon</button>
+			 				<!-- Modal for creating an beacon-->
+							  <div class="modal fade" id="addBeaconModal" role="dialog">
+							    <div class="modal-dialog">
+							    
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header" style="padding:2em 3em;">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h3><b>Beacon creation for {{curOrg.name}}</b></h3>
+							        </div>
+							        <div class="modal-body" style="padding:2em 3em;">
+							          <form role="form">
+							            <div class="form-group">
+							              <label>Name</label>
+							              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconName">
+							            </div>
+							            <div class="form-group">
+							            	<label>Select a beacon type:</label>
+										    <select ng-model="addBeaconType" class="form-control">
+											    <option value="art">Art</option>
+											    <option value="coffee-shop">Coffee-shop</option>
+											    <option value="gallery">Gallery</option>
+											    <option value="manufacturing">Manufacturing</option>
+											    <option value="museum">Museum</option>
+											    <option value="office">Office</option>
+											    <option value="other">Other</option>
+											    <option value="restaurant">Restaurant</option>
+											    <option value="zoo">Zoo</option>
+										    </select>
+							            </div> 
+							            <div class="form-group" class="panel panel-default text-center">
+							            	<label class="panel-heading">Move the marker the determine the beacon'	s location:</label>
+							            	<div id="googleMapsAddBeacon" class="panel-body">
+							            	</div>
+							            </div>
+							            <button type="submit" class="btn btn-success btn-block" ng-click="addBeacon(addBeaconName, addBeaconType)" data-dismiss="modal">Create</button>
+							          </form>
+							        </div>
+							        <div class="modal-footer">
+							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+							        </div>
+							      </div>
+							    </div>
+							</div>
+
+							<!-- Object Management -->
+			 				<!-- Creating a object -->
+			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addObjectModal">Add Object</button>
+			 				<!-- Modal for creating an object-->
+							  <div class="modal fade" id="addObjectModal" role="dialog">
+							    <div class="modal-dialog">
+							    
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header" style="padding:2em 3em;">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h3><b>Object creation for {{curOrg.name}}</b></h3>
+							        </div>
+							        <div class="modal-body" style="padding:2em 3em;">
+							          <form role="form">
+							            <div class="form-group">
+							              <label>Name</label>
+							              <input type="text" class="form-control" placeholder="Enter object's name" ng-model="addObjectName">
+							            </div>
+							            <div class="form-group" class="panel panel-default text-center">
+							            	<label class="panel-heading">Move the marker the determine the object's location:</label>
+							            	<div id="googleMapsAddObject" class="panel-body">
+							            	</div>
+							            </div>
+							            <button type="submit" class="btn btn-success btn-block" ng-click="addObject(addBeaconName)" data-dismiss="modal">Create</button>
+							          </form>
+							        </div>
+							        <div class="modal-footer">
+							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+							        </div>
+							      </div>
+							    </div>
+							</div>
 			 			</div>
 
 			 			<!-- Stats -->
-			 			<div ng-switch-when="stats" class="container-fluid panel">
-			 				<div id="googleMapsStats"></div>
+			 			<div ng-switch-when="stats" class="panel panel-default">
+			 				<div id="googleMapsStats" class="panel-body"></div>
 			 			</div>
 			 		</div>
 			 	</div>

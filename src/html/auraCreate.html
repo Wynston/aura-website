@@ -204,11 +204,11 @@
 							          <form role="form">
 							            <div class="form-group">
 							              <label>Name</label>
-							              <input type="text" class="form-control" placeholder="Enter organization's name" ng-model="addOrgName">
+							              <input type="text" class="form-control" placeholder="Enter organization's name" ng-model="addOrgName" required>
 							            </div>
 							            <div class="form-group">
 							              <label>Description</label>
-							              <input type="text" class="form-control" placeholder="Enter organization's description" ng-model="addOrgDesc">
+							              <input type="text" class="form-control" placeholder="Enter organization's description" ng-model="addOrgDesc" required>
 							            </div>
 							            <button type="submit" class="btn btn-success btn-block" ng-click="addOrganization(addOrgName, addOrgDesc)" data-dismiss="modal">Create</button>
 							          </form>
@@ -453,7 +453,7 @@
 			 			<div ng-switch-when="settings" class="container-fluid panel text-center">
 			 				<!-- Beacon Management -->
 			 				<!-- Creating a beacon -->
-			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addBeaconModal">Add Beacon</button>
+			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addBeaconModal" ng-click="loadGoogleScript()">Add Beacon</button>
 			 				<!-- Modal for creating an beacon-->
 							  <div class="modal fade" id="addBeaconModal" role="dialog">
 							    <div class="modal-dialog">
@@ -468,11 +468,11 @@
 							          <form role="form">
 							            <div class="form-group">
 							              <label>Name</label>
-							              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconName">
+							              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconName" required>
 							            </div>
 							            <div class="form-group">
 							            	<label>Select a beacon type:</label>
-										    <select ng-model="addBeaconType" class="form-control">
+										    <select ng-model="addBeaconType" class="form-control" required>
 											    <option value="art">Art</option>
 											    <option value="coffee-shop">Coffee-shop</option>
 											    <option value="gallery">Gallery</option>
@@ -485,7 +485,7 @@
 										    </select>
 							            </div> 
 							            <div class="form-group" class="panel panel-default text-center">
-							            	<label class="panel-heading">Move the marker the determine the beacon'	s location:</label>
+							            	<label class="panel-heading">Click a position on the map to the determine the beacon's location:</label>
 							            	<div id="googleMapsAddBeacon" class="panel-body">
 							            	</div>
 							            </div>
@@ -501,7 +501,7 @@
 
 							<!-- Object Management -->
 			 				<!-- Creating a object -->
-			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addObjectModal">Add Object</button>
+			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addObjectModal" ng-click="loadGoogleScript()">Add Object</button>
 			 				<!-- Modal for creating an object-->
 							  <div class="modal fade" id="addObjectModal" role="dialog">
 							    <div class="modal-dialog">
@@ -516,10 +516,10 @@
 							          <form role="form">
 							            <div class="form-group">
 							              <label>Name</label>
-							              <input type="text" class="form-control" placeholder="Enter object's name" ng-model="addObjectName">
+							              <input type="text" class="form-control" placeholder="Enter object's name" ng-model="addObjectName" required>
 							            </div>
 							            <div class="form-group" class="panel panel-default text-center">
-							            	<label class="panel-heading">Move the marker the determine the object's location:</label>
+							            	<label class="panel-heading">Click a position on the map to the determine the object's location:</label>
 							            	<div id="googleMapsAddObject" class="panel-body">
 							            	</div>
 							            </div>

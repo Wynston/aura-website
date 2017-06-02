@@ -97,6 +97,10 @@ h6{
 		max-height: 70vh;
 	}
 
+	.panel-default > .panel-heading, .panel-footer{
+	  background-color: white !important;
+	 }
+
 	.thumbnail{
 		height: 3em;
 		width: 4em;

@@ -5,9 +5,6 @@ app.controller('myCtrl', function($scope, $http) {
 	$scope.init = function(){
 		$scope.userName = "Wynston Ramsay";
 		$scope.loadOrganizations();
-		// $scope.loadBeacons();
-		// $scope.loadObjects();
-		// $scope.loadDashboard();
 		$scope.changeView("dashboard");
 		$scope.curOrg = "";
 	}
@@ -52,7 +49,6 @@ app.controller('myCtrl', function($scope, $http) {
 				$scope.changeLiveTitle("Settings", org.name, false);
 				sessionStorage.curView = view;
 				$scope.curView = view;
-				$scope.loadGoogleScript();
 				break;
 			case "stats":
 				$scope.curOrg = org;
@@ -83,17 +79,17 @@ app.controller('myCtrl', function($scope, $http) {
 	//helps the carousel notify the controller what the current organization is
 	$scope.carouselViewController = function(view){
 		var index = $('div.active').index();
-		$scope.changeView(view, $scope.organizationsArray[index].name);
+		$scope.changeView(view, $scope.organizationsArray[index]);
 	}
 
 	//when a new organization is selected reload the current view of that organization
 	$scope.carouselLeft = function(){
 		var index = $('div.active').index() - 1;
 		if(index >= 0){
-			$scope.changeView($scope.curView, $scope.organizationsArray[index].name);
+			$scope.changeView($scope.curView, $scope.organizationsArray[index]);
 		}
 		else{
-			$scope.changeView($scope.curView, $scope.organizationsArray[$scope.organizationsArray.length - 1].name);
+			$scope.changeView($scope.curView, $scope.organizationsArray[$scope.organizationsArray.length - 1]);
 		}
 	}
 
@@ -101,10 +97,10 @@ app.controller('myCtrl', function($scope, $http) {
 	$scope.carouselRight = function(){
 		var index = $('div.active').index() + 1;
 		if(index < $scope.organizationsArray.length){
-			$scope.changeView($scope.curView, $scope.organizationsArray[index].name);
+			$scope.changeView($scope.curView, $scope.organizationsArray[index]);
 		}
 		else{
-			$scope.changeView($scope.curView, $scope.organizationsArray[0].name);
+			$scope.changeView($scope.curView, $scope.organizationsArray[0]);
 		}
 	}
 
@@ -194,7 +190,8 @@ app.controller('myCtrl', function($scope, $http) {
         	altitude: $scope.newAlt, 
         	latitude: $scope.newLat, 
         	longitude: $scope.newLng,
-        	organization_id: $scope.curOrg.id
+        	organization_id: $scope.curOrg.id,
+        	associated: null
         },
         headers: {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
@@ -207,12 +204,20 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.loadBeacons();
 	}
 
-	//adds a object to an organization onto the database
+	//adds a object for an organization onto the database
 	$scope.addObject = function(name, type){
+		$scope.findClosestBeacon()
 		$http({
         method: 'PUT',
         url: 'https://website-155919.appspot.com/api/v1.0/arobj',
-        data: {name: name, beacon_id: $scope.randID(), beacon_type: type, altitude: $scope.newAlt, latitude: $scope.newLat, longitude: $scope.newLng},
+        data: {
+        	name: name, 
+        	beacon_id: $scope.closestBeacon.beacon_id, 
+        	beacon_type: type, 
+        	altitude: $scope.newAlt, 
+        	latitude: $scope.newLat, 
+        	longitude: $scope.newLng
+        },
         headers: {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
@@ -294,7 +299,7 @@ app.controller('myCtrl', function($scope, $http) {
     $scope.loadBeacons = function(){
 		$http({
 		    method : "GET",
-		    url : "https://website-155919.appspot.com/api/v1.0/beacon",
+		    url : "https://website-155919.appspot.com/api/v1.0/newbeacon",
 		    headers: {
         		'Accept': 'application/json',
         		"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
@@ -302,18 +307,18 @@ app.controller('myCtrl', function($scope, $http) {
 		  }).then(function mySuccess(response) {
 		  	//loops over every beacon object in the response and adds it to session storage
 		  	//stores the objects as beacons objects in an array that is stored as JSON
-		  	var jsonArray = response.data;
+		  	var jsonArray = response.data.data;
 		  	$scope.beaconsArray = [];
 		  	for(var i = 0; i < jsonArray.length; i++){
 		  		$scope.beacon = {
-		  			beacon_name: jsonArray[i].name, 
-		  			beacon_id: jsonArray[i].beacon_id, 
-		  			organization_id: jsonArray[i].organization_id, 
-		  			beacon_type: $scope.parseBeaconType(jsonArray[i].beacon_type), 
-		  			altitude:  jsonArray[i].altitude, 
-		  			latitude: jsonArray[i].latitude, 
-		  			longitude: jsonArray[i].longitude, 
-		  			associated: "Software"
+		  			beacon_name: jsonArray[i].attributes.name, 
+		  			beacon_id: jsonArray[i].attributes.beacon_id, 
+		  			organization_id: jsonArray[i].attributes.organization_id, 
+		  			beacon_type: $scope.parseBeaconType(jsonArray[i].attributes.beacon_type), 
+		  			altitude:  jsonArray[i].attributes.altitude, 
+		  			latitude: jsonArray[i].attributes.latitude, 
+		  			longitude: jsonArray[i].attributes.longitude, 
+		  			associated: $scope.getAssociatedType(jsonArray[i].attributes.associated)
 		  		};
 		  		$scope.beaconsArray[i] = $scope.beacon;
 		  	}
@@ -898,6 +903,15 @@ app.controller('myCtrl', function($scope, $http) {
 		return type;
     }
 
+    $scope.getAssociatedType = function(assoc){
+    	if(assoc == null){
+    		return "Software";
+    	}
+    	else{
+    		return "Hardware";
+    	}
+    }
+
     //tally's the amount of each media type for an object
     $scope.tallyAssets = function(mediaArray){
     	var tally = {numImage: 0, numAudio: 0, numVideo: 0, num3D: 0}
@@ -930,17 +944,67 @@ app.controller('myCtrl', function($scope, $http) {
 		}
     }
 
-    //provides generic info about the users profile
-    // $scope.loadDashboard = function(){
-    // 	$scope.numOrganizations = $scope.organizations.length;
-    // 	$scope.numBeacons = 0;
-    // 	$scope.numObjects = 0;
-    // 	for(var i = 0; i < $scope.organizations.length; i++){
-    // 		$scope.numBeacons += $scope.organization[i].beaconsArray.length;
-    // 		$scope.numObjects += $scope.organization[i].objectsArray.length;
-    // 	}
-    // 	$scope.avgThroughput = 0; 	 
-    // }
+    //finds the nearest beacon for a newly created object
+    $scope.findClosestBeacon = function(){
+    	$http({
+		    method : "GET",
+		    url : "http://website-155919.appspot.com/api/v1.0/newbeacon?latitude=" + $scope.newLat + "&longitude=" + $scope.newLng + "&radius=100",
+		    headers: {
+        		'Accept': 'application/json',
+        		"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		    }
+		  }).then(function mySuccess(response) {
+			  	//finds the closest beacons to a new objects location in a 100m radius
+			  	var jsonArray = response.data.data;
+			  	$scope.closestBeaconsArray = [];
+			  	if(jsonArray.length < 1){
+			  		//prompt for new beacon
+			  		alert("No nearby beacons");
+			  	}
+			  	else{
+			  		for(var i = 0; i < jsonArray.length; i++){
+				  		$scope.nearByBeacon = {
+				  			beacon_name: jsonArray[i].attributes.name, 
+				  			beacon_id: jsonArray[i].attributes.beacon_id, 
+				  			organization_id: jsonArray[i].attributes.organization_id, 
+				  			beacon_type: $scope.parseBeaconType(jsonArray[i].attributes.beacon_type), 
+				  			altitude:  jsonArray[i].attributes.altitude, 
+				  			latitude: jsonArray[i].attributes.latitude, 
+				  			longitude: jsonArray[i].attributes.longitude, 
+				  			associated: $scope.getAssociatedType(jsonArray[i].attributes.associated)
+				  		};
+				  		$scope.closestBeaconsArray[i] = $scope.nearByBeacon;
+			  		}
+			  		sessionStorage.closestBeaconsArray = JSON.stringify($scope.closestBeaconsArray);
+
+			  		 //return the only beacon in the 100m radius
+					  if($scope.closestBeaconsArray.length == 1){
+					  	$scope.closestBeacon = $scope.closestBeaconsArray[0];
+					  }
+					  //find the closest beacon in the 100m radius
+					  else{
+					  	var closestBeacon = null;
+					  	var closest;
+					  	for(var i = 0; i < $scope.closestBeaconsArray.length; i++){
+					  		var distance = Math.sqrt( ($scope.newLat - $scope.closestBeaconsArray[i].latitude)*($scope.newLat - $scope.closestBeaconsArray[i].latitude) + ($scope.newLng - $scope.closestBeaconsArray[i].longitude)*($scope.newLng - $scope.closestBeaconsArray[i].longitude) );
+					  		if(i == 0){
+					  			closestBeacon = $scope.closestBeaconsArray[i];
+					  			closest = distance;
+					  		}
+					  		else{
+					  			if(distance < closest){
+					  				closestBeacon = $scope.closestBeaconsArray[i];
+					  				closest = distance;
+					  			}
+					  		}
+					  	}
+					  	$scope.closestBeacon = closestBeacon;
+					  }
+			  	}
+		    }, function myError(response) {
+		      alert(response.statusText);
+		  });
+    }
 
 	//alters the objects list to view by a specific beacon or by all beacons
     $scope.changeBeaconFilter = function(filter){
@@ -1126,7 +1190,7 @@ function initMap(){
           center: findDPCenter(JSON.parse(sessionStorage.arObjectsList))
         });
         heatmap = new google.maps.visualization.HeatmapLayer({
-          data: getDataPoints(JSON.parse(sessionStorage.beaconsArray)),
+          data: getDataPoints(JSON.parse(sessionStorage.arObjectsList)),
           map: map,
           radius: 30
         });
@@ -1134,37 +1198,69 @@ function initMap(){
 	}
 	else if(sessionStorage.curView == "settings"){
 		$('#addBeaconModal').on('shown.bs.modal', function (){
-			var loc = {lat: 52.125471, lng: -106.655811 };
+			var beacons = JSON.parse(sessionStorage.beaconsArray;
 		    var map = new google.maps.Map(document.getElementById('googleMapsAddBeacon'), {
 		      zoom: 11,
-		      center: loc
+		      center: findDPCenter(beacons)
 		    });
-		    var marker = new google.maps.Marker({
-		      position: loc,
-		      map: map,
-		      draggable:true,
-	    	  animation: google.maps.Animation.DROP
-		    });
-		    google.maps.event.addListener(marker, 'dragend', function() 
-			{
-			    geocodePosition(JSON.stringify(marker.getPosition()), "addBeacon");
+		    for (var i = 0; i < beacons.length; i++ ) {
+		      dataPoints[i] = new google.maps.LatLng(dataArray[i].latitude, dataArray[i].longitude);
+	          // Adds a 100m radius circle around each beacon
+	          var cityCircle = new google.maps.Circle({
+	            strokeColor: '#4DF3E1',
+	            strokeOpacity: 0.8,
+	            strokeWeight: 2,
+	            fillColor: '#4DF3E1',
+	            fillOpacity: 0.35,
+	            map: map,
+	            center: {beacon[i].latitude, ,
+	            radius: 100
+	          });
+	        }
+		    google.maps.event.addListener(map, 'click', function(event) {
+			   placeMarker(event.latLng);
+			   //places a marker at a given location, used for onclick triggers
+				//places a marker at a given location, used for onclick triggers
+				function placeMarker(location) {
+					if ( marker ) {
+				    	marker.setPosition(location);
+				  	} 
+				  	else{
+				    	marker = new google.maps.Marker({
+				    	position: location,
+				    	map: map
+				    });
+				  	}
+				  	var pos = (JSON.parse(JSON.stringify(location)));
+				  	getElevation(location);
+				  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
+                	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
+				}
 			});
 		});
 		$('#addObjectModal').on('shown.bs.modal', function () {
-			var loc = {lat: 52.125471, lng: -106.655811 };
 		    var map = new google.maps.Map(document.getElementById('googleMapsAddObject'), {
 		      zoom: 11,
-		      center: loc
+		      center: findDPCenter(JSON.parse(sessionStorage.beaconsArray))
 		    });
-		    var marker = new google.maps.Marker({
-		      position: loc,
-		      map: map,
-		      draggable:true,
-	    	  animation: google.maps.Animation.DROP
-		    });
-		    google.maps.event.addListener(marker, 'dragend', function() 
-			{
-			    geocodePosition(JSON.stringify(marker.getPosition()), "addObject");
+		    google.maps.event.addListener(map, 'click', function(event) {
+			   placeMarker(event.latLng);
+			   //places a marker at a given location, used for onclick triggers
+				function placeMarker(location) {
+					if ( marker ) {
+				    	marker.setPosition(location);
+				  	} 
+				  	else{
+				    	marker = new google.maps.Marker({
+				    	position: location,
+				    	map: map
+				    });
+				  	}
+				  	var pos = (JSON.parse(JSON.stringify(location)));
+				  	getElevation(location);
+				  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
+                	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
+				}
 			});
 		});
 	}
@@ -1220,7 +1316,6 @@ function findDPCenter(dataArray){
 //updates the location of a marker when moved (by mouse)
 function geocodePosition(loc, type) {
    var pos = JSON.parse(loc);
-   var alt = getElevation(pos);
    geocoder = new google.maps.Geocoder();
    geocoder.geocode({
         latLng: pos
@@ -1231,13 +1326,8 @@ function geocodePosition(loc, type) {
             {
                 $("#mapSearchInput").val(results[0].formatted_address);
                 $("#mapErrorMsg").hide(100);
-                if(type == "addBeacon" || type == "addObject"){
-                	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
-                	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
-                }
-                if(type == "object" || type == "beacon"){
-               		angular.element(document.getElementById('MAIN')).scope().changeLocation(pos, type);
-               	}
+               	angular.element(document.getElementById('MAIN')).scope().changeLocation(pos, type);
+
             } 
             else 
             {

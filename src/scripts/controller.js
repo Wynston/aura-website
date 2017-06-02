@@ -968,8 +968,18 @@ app.controller('myCtrl', function($scope, $http) {
 	  	}
 	  	if(closest > 100){
 	  		//prompt user to make a new beacon within range
-	  		alert("No beacons within range, please add a new beacon.");
-	  		$('#addBeaconModal').modal('show');
+		    if (confirm("No beacons within range, would you like to create one at this location?") == true) {
+		        var txt;
+			    var person = prompt("Please enter your name:", "Harry Potter");
+			    if (person == null || person == "") {
+			        txt = "User cancelled the prompt.";
+			    } else {
+			        txt = "Hello " + person + "! How are you today?";
+			    }
+		    } else {
+		        //do nothing
+		        $('#addObjectModal').modal('hide');
+		    }
 	  	}
 	  	else{
 	  		$scope.closestBeacon = closestBeacon;

@@ -950,65 +950,50 @@ app.controller('myCtrl', function($scope, $http) {
 
     //finds the nearest beacon for a newly created object
     $scope.findClosestBeacon = function(){
-    	$http({
-		    method : "GET",
-		    url : "http://website-155919.appspot.com/api/v1.0/newbeacon?latitude=" + $scope.newLat + "&longitude=" + $scope.newLng + "&radius=100",
-		    headers: {
-        		'Accept': 'application/json',
-        		"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-		    }
-		  }).then(function mySuccess(response) {
-			  	//finds the closest beacons to a new objects location in a 100m radius
-			  	var jsonArray = response.data.data;
-			  	$scope.closestBeaconsArray = [];
-			  	if(jsonArray.length < 1){
-			  		//prompt for new beacon
-			  		alert("No nearby beacons");
-			  	}
-			  	else{
-			  		for(var i = 0; i < jsonArray.length; i++){
-				  		$scope.nearByBeacon = {
-				  			beacon_name: jsonArray[i].attributes.name, 
-				  			beacon_id: jsonArray[i].attributes.beacon_id, 
-				  			organization_id: jsonArray[i].attributes.organization_id, 
-				  			beacon_type: $scope.parseBeaconType(jsonArray[i].attributes.beacon_type), 
-				  			altitude:  jsonArray[i].attributes.altitude, 
-				  			latitude: jsonArray[i].attributes.latitude, 
-				  			longitude: jsonArray[i].attributes.longitude, 
-				  			associated: $scope.getAssociatedType(jsonArray[i].attributes.associated)
-				  		};
-				  		$scope.closestBeaconsArray[i] = $scope.nearByBeacon;
-			  		}
-			  		sessionStorage.closestBeaconsArray = JSON.stringify($scope.closestBeaconsArray);
-
-			  		 //return the only beacon in the 100m radius
-					  if($scope.closestBeaconsArray.length == 1){
-					  	$scope.closestBeacon = $scope.closestBeaconsArray[0];
-					  }
-					  //find the closest beacon in the 100m radius
-					  else{
-					  	var closestBeacon = null;
-					  	var closest;
-					  	for(var i = 0; i < $scope.closestBeaconsArray.length; i++){
-					  		var distance = Math.sqrt( ($scope.newLat - $scope.closestBeaconsArray[i].latitude)*($scope.newLat - $scope.closestBeaconsArray[i].latitude) + ($scope.newLng - $scope.closestBeaconsArray[i].longitude)*($scope.newLng - $scope.closestBeaconsArray[i].longitude) );
-					  		if(i == 0){
-					  			closestBeacon = $scope.closestBeaconsArray[i];
-					  			closest = distance;
-					  		}
-					  		else{
-					  			if(distance < closest){
-					  				closestBeacon = $scope.closestBeaconsArray[i];
-					  				closest = distance;
-					  			}
-					  		}
-					  	}
-					  	$scope.closestBeacon = closestBeacon;
-					  }
-			  	}
-		    }, function myError(response) {
-		      alert(response.statusText);
-		  });
+		$scope.loadBeacons();
+	  	var closestBeacon = null;
+	  	var closest;
+	  	for(var i = 0; i < $scope.beaconsArray.length; i++){
+	  		var distance = $scope.findDistanceBetweenLatLng($scope.newLat, $scope.newLng, $scope.beaconsArray[i].latitude, $scope.beaconsArray[i].longitude);
+	  		if(i == 0){
+	  			closestBeacon = $scope.beaconsArray[i];
+	  			closest = distance;
+	  		}
+	  		else{
+	  			if(distance < closest){
+	  				closestBeacon = $scope.beaconsArray[i];
+	  				closest = distance;
+	  			}
+	  		}
+	  	}
+	  	if(closest > 100){
+	  		//prompt user to make a new beacon within range
+	  		alert("No beacons within range, please add a new beacon.");
+	  		$('#addBeaconModal').modal('show');
+	  	}
+	  	else{
+	  		$scope.closestBeacon = closestBeacon;
+	  	}
     }
+
+    //finds the distance between two latlng points in meters
+    $scope.findDistanceBetweenLatLng = function(lat1,lon1,lat2,lon2) {
+	  var R = 6371000; // Radius of the earth in mm
+	  var dLat = $scope.deg2rad(lat2-lat1);  // deg2rad below
+	  var dLon = $scope.deg2rad(lon2-lon1); 
+	  var a = 
+	    Math.sin(dLat/2) * Math.sin(dLat/2) +
+	    Math.cos($scope.deg2rad(lat1)) * Math.cos($scope.deg2rad(lat2)) * 
+	    Math.sin(dLon/2) * Math.sin(dLon/2)
+	    ; 
+	  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	  var d = R * c; // Distance in km
+	  return d;
+	}
+	//helper function for findDistanceBetweenLatLng
+	$scope.deg2rad = function(deg) {
+	  return deg * (Math.PI/180)
+	}
 
 	//alters the objects list to view by a specific beacon or by all beacons
     $scope.changeBeaconFilter = function(filter){
@@ -1208,17 +1193,18 @@ function initMap(){
 		      center: findDPCenter(beacons)
 		    });
 		    for (var i = 0; i < beacons.length; i++ ) {
-		      dataPoints[i] = new google.maps.LatLng(dataArray[i].latitude, dataArray[i].longitude);
+		      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
 	          // Adds a 100m radius circle around each beacon
 	          var cityCircle = new google.maps.Circle({
-	            strokeColor: '#4DF3E1',
+	            strokeColor: '#00FFE4',
 	            strokeOpacity: 0.8,
-	            strokeWeight: 2,
-	            fillColor: '#4DF3E1',
+	            strokeWeight: 4,
+	            fillColor: '#00FFE4',
 	            fillOpacity: 0.35,
 	            map: map,
-	            center: "",
-	            radius: 100
+	            center: beaconCenter,
+	            radius: 100,
+	            clickable: false
 	          });
 	        }
 		    google.maps.event.addListener(map, 'click', function(event) {
@@ -1231,9 +1217,9 @@ function initMap(){
 				  	} 
 				  	else{
 				    	marker = new google.maps.Marker({
-				    	position: location,
-				    	map: map
-				    });
+					    	position: location,
+					    	map: map
+				    	});
 				  	}
 				  	var pos = (JSON.parse(JSON.stringify(location)));
 				  	getElevation(location);
@@ -1243,27 +1229,44 @@ function initMap(){
 			});
 		});
 		$('#addObjectModal').on('shown.bs.modal', function () {
+			var beacons = JSON.parse(sessionStorage.beaconsArray);
 		    var map = new google.maps.Map(document.getElementById('googleMapsAddObject'), {
 		      zoom: 11,
-		      center: findDPCenter(JSON.parse(sessionStorage.beaconsArray))
+		      center: findDPCenter(beacons)
 		    });
+		    for (var i = 0; i < beacons.length; i++ ) {
+		      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
+	          // Adds a 100m radius circle around each beacon
+	          var cityCircle = new google.maps.Circle({
+	            strokeColor: '#00FFE4',
+	            strokeOpacity: 0.8,
+	            strokeWeight: 4,
+	            fillColor: '#00FFE4',
+	            fillOpacity: 0.35,
+	            map: map,
+	            center: beaconCenter,
+	            radius: 100,
+	            clickable: false
+	          });
+	        }
 		    google.maps.event.addListener(map, 'click', function(event) {
 			   placeMarker(event.latLng);
 			   //places a marker at a given location, used for onclick triggers
 				function placeMarker(location) {
 					if ( marker ) {
-				    	marker.setPosition(location);
+				    	marker.setPosition(location);;
 				  	} 
 				  	else{
 				    	marker = new google.maps.Marker({
 				    	position: location,
 				    	map: map
-				    });
+				    	});
 				  	}
 				  	var pos = (JSON.parse(JSON.stringify(location)));
 				  	getElevation(location);
 				  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
                 	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
+                	angular.element(document.getElementById('MAIN')).scope().findClosestBeacon();
 				}
 			});
 		});

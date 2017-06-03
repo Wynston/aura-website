@@ -34,7 +34,7 @@
 				 		<div ng-repeat="organization in organizationsArray| orderBy: name" class="panel panel-success">
 						    <div class="panel-heading">
 						      <h4 class="panel-title">
-						        <a data-toggle="collapse" data-parent="#accordion" href="#{{$index}}">
+						        <a data-toggle="collapse" data-parent="#accordion" href="#{{$index}}" ng-click="cacheOrgData(organization)">
 						        	<h2><strong>{{organization.name}}</strong></h2>
 						        </a>
 						      </h4>
@@ -505,7 +505,7 @@
 			 				<!-- Creating a object -->
 			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addObjectModal" ng-click="loadGoogleScript()">Add Object</button>
 			 				<!-- Modal for creating an object-->
-							  <div class="modal fade" id="addObjectModal" role="dialog">
+							<div class="modal fade" id="addObjectModal" role="dialog">
 							    <div class="modal-dialog">
 							    
 							      <!-- Modal content-->
@@ -520,12 +520,19 @@
 							              <label>Name</label>
 							              <input type="text" class="form-control" placeholder="Enter object's name" ng-model="addObjectName" required>
 							            </div>
+							            <div class="form-group">
+							            	<label class="btn btn-info" for="my-file-selector">
+									    		<input id="my-file-selector" type="file" style="display:none;" ng-model="newObjectThumbnail">
+									    		Browse for thumbnail</input>
+											</label>
+											<span class='label label-info' id="upload-file-info"></span>
+							            </div>
 							            <div class="form-group" class="panel panel-default text-center">
 							            	<label class="panel-heading">Click a position on the map to the determine the object's location:</label>
 							            	<div id="googleMapsAddObject" class="panel-body">
 							            	</div>
 							            </div>
-							            <button type="submit" class="btn btn-success btn-block" ng-click="addObject(addBeaconName)" data-dismiss="modal">Create</button>
+							            <button type="submit" class="btn btn-success btn-block" ng-click="addObject(addObjectName, newObjectThumbnail)" data-dismiss="modal">Create</button>
 							          </form>
 							        </div>
 							        <div class="modal-footer">
@@ -534,6 +541,48 @@
 							      </div>
 							    </div>
 							</div>
+
+							<!-- Modal for creating a beacon for an object out of range of others -->
+							  <div class="modal fade" id="beaconForObjectModal" role="dialog">
+							    <div class="modal-dialog">
+							    
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header" style="padding:2em 3em;">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h3><b>Beacon creation for {{curOrg.name}}</b></h3>
+							        </div>
+							        <div class="modal-body" style="padding:2em 3em;">
+							          <form role="form">
+							            <div class="form-group">
+							              <label>Name</label>
+							              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconForObjectName" required>
+							            </div>
+							            <div class="form-group">
+							            	<label>Select a beacon type:</label>
+										    <select ng-model="addBeaconForObjectType" class="form-control" required>
+											    <option value="art">Art</option>
+											    <option value="coffee-shop">Coffee-shop</option>
+											    <option value="gallery">Gallery</option>
+											    <option value="manufacturing">Manufacturing</option>
+											    <option value="museum">Museum</option>
+											    <option value="office">Office</option>
+											    <option value="other">Other</option>
+											    <option value="restaurant">Restaurant</option>
+											    <option value="zoo">Zoo</option>
+										    </select>
+							            </div> 
+							            <label>Location pre-determined from the new object's location.</label>
+							            <button type="submit" class="btn btn-success btn-block" ng-click="addBeaconForObject(addBeaconForObjectName, addBeaconForObjectType)" data-dismiss="modal">Create</button>
+							          </form>
+							        </div>
+							        <div class="modal-footer">
+							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+							        </div>
+							      </div>
+							    </div>
+							</div>
+
 			 			</div>
 
 			 			<!-- Stats -->

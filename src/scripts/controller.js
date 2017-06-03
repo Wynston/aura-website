@@ -80,6 +80,12 @@ app.controller('myCtrl', function($scope, $http) {
     	}
 	}
 
+	$scope.cacheOrgData = function(org){
+		$scope.curOrg = org;
+		$scope.loadBeacons();
+		$scope.loadObjects();
+	}
+
 	//helps the carousel notify the controller what the current organization is
 	$scope.carouselViewController = function(view){
 		var index = $('div.active').index();
@@ -177,17 +183,14 @@ app.controller('myCtrl', function($scope, $http) {
 		}).then(function mySuccess(response) {
 			alert(name + " has been successfully added!");
 		}, function myError(response) {
-		    alert(response.statusText);
+		    
 		});
 		$scope.loadOrganizations();
 	}
 
 	//adds a beacon to an organization onto the database
 	$scope.addBeacon = function(name, type){
-		$http({
-        method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
-        data: {
+		$scope.newBeacon = {
         	name: name, 
         	beacon_id: $scope.randID(), 
         	beacon_type: type, 
@@ -196,31 +199,39 @@ app.controller('myCtrl', function($scope, $http) {
         	longitude: $scope.newLng,
         	organization_id: $scope.curOrg.id,
         	associated: null
-        },
+        }
+        $scope.closestBeacon = $scope.newBeacon;
+
+		$http({
+        method: 'PUT',
+        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
+        data: $scope.newBeacon,
         headers: {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
 			alert(name + " has been successfully added!");
 		}, function myError(response) {
-		    alert(response.statusText);
+		    
 		});
 		$scope.loadBeacons();
 	}
 
 	//adds a object for an organization onto the database
-	$scope.addObject = function(name, type){
-		$scope.findClosestBeacon()
+	$scope.addObject = function(name, newThumbnail){
+		$scope.findClosestBeacon();
 		$http({
         method: 'PUT',
         url: 'https://website-155919.appspot.com/api/v1.0/arobj',
         data: {
         	name: name, 
-        	beacon_id: $scope.closestBeacon.beacon_id, 
-        	beacon_type: type, 
+        	beacon_id: $scope.closestBeaconID, 
+        	arobj_id: $scope.randID(), 
+        	organization_id: $scope.curOrg.id,
         	altitude: $scope.newAlt, 
         	latitude: $scope.newLat, 
-        	longitude: $scope.newLng
+        	longitude: $scope.newLng,
+        	thumbnail: newThumbnail
         },
         headers: {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
@@ -228,9 +239,37 @@ app.controller('myCtrl', function($scope, $http) {
 		}).then(function mySuccess(response) {
 			alert(name + " has been successfully added!");
 		}, function myError(response) {
-		    alert(response.statusText);
 		});
 		$scope.loadObjects();
+	}
+
+	//adding a beacon at an objects location 
+	$scope.addBeaconForObject = function(name, type){
+		$scope.newBeacon = {
+        	name: name, 
+        	beacon_id: $scope.closestBeaconID, 
+        	beacon_type: type, 
+        	altitude: $scope.newAlt, 
+        	latitude: $scope.newLat, 
+        	longitude: $scope.newLng,
+        	organization_id: $scope.curOrg.id,
+        	associated: null
+        }
+        $scope.closestBeacon = $scope.newBeacon;
+
+		$http({
+        method: 'PUT',
+        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
+        data: $scope.newBeacon,
+        headers: {
+        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		}
+		}).then(function mySuccess(response) {
+			alert(name + " has been successfully added!");
+		}, function myError(response) {
+		});
+		$scope.loadBeacons();
+
 	}
 //---------------------------------------end of upload functions----------------------------------------
 
@@ -266,7 +305,6 @@ app.controller('myCtrl', function($scope, $http) {
 	//   		};
 	// 	  	sessionStorage.user = JSON.stringify($scope.user);
 	// 	    }, function myError(response) {
-	// 	      alert(response.statusText);
 	// 	  });
 	// }
 
@@ -295,7 +333,6 @@ app.controller('myCtrl', function($scope, $http) {
 		  	sessionStorage.organizationsArray = JSON.stringify($scope.organizationsArray);
 
 		    }, function myError(response) {
-		      alert(response.statusText);
 		  });
 	}
 
@@ -329,7 +366,6 @@ app.controller('myCtrl', function($scope, $http) {
 		  	sessionStorage.beaconsArray = JSON.stringify($scope.beaconsArray);
 
 		    }, function myError(response) {
-		      alert(response.statusText);
 		  });
     }
 
@@ -389,7 +425,6 @@ app.controller('myCtrl', function($scope, $http) {
 		  	}
 		  	sessionStorage.arObjectsList = JSON.stringify($scope.objectsArray);
 		    }, function myError(response) {
-		      alert(response.statusText);
 		  });
     }
 
@@ -848,7 +883,6 @@ app.controller('myCtrl', function($scope, $http) {
 		  // 	}
 		  // 	sessionStorage.statsArray = JSON.stringify($scope.statsArray);
 		  //   }, function myError(response) {
-		  //     alert(response.statusText);
 		  // });
     }
 
@@ -950,7 +984,6 @@ app.controller('myCtrl', function($scope, $http) {
 
     //finds the nearest beacon for a newly created object
     $scope.findClosestBeacon = function(){
-		$scope.loadBeacons();
 	  	var closestBeacon = null;
 	  	var closest;
 	  	for(var i = 0; i < $scope.beaconsArray.length; i++){
@@ -967,22 +1000,18 @@ app.controller('myCtrl', function($scope, $http) {
 	  		}
 	  	}
 	  	if(closest > 100){
+	  		$('#addObjectModal').modal('hide');
 	  		//prompt user to make a new beacon within range
-		    if (confirm("No beacons within range, would you like to create one at this location?") == true) {
-		        var txt;
-			    var person = prompt("Please enter your name:", "Harry Potter");
-			    if (person == null || person == "") {
-			        txt = "User cancelled the prompt.";
-			    } else {
-			        txt = "Hello " + person + "! How are you today?";
-			    }
-		    } else {
-		        //do nothing
-		        $('#addObjectModal').modal('hide');
+		    if (confirm("No beacons within range. Create a new one at this location?") == true) {
+			   $('#beaconForObjectModal').modal('show'); 
+			   $scope.closestBeaconID = $scope.randID();
+		    }
+		    else{
+		    	$scope.closestBeaconID = null;
 		    }
 	  	}
 	  	else{
-	  		$scope.closestBeacon = closestBeacon;
+	  		$scope.closestBeaconID = closestBeacon.beacon_id;
 	  	}
     }
 
@@ -1276,7 +1305,6 @@ function initMap(){
 				  	getElevation(location);
 				  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
                 	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
-                	angular.element(document.getElementById('MAIN')).scope().findClosestBeacon();
 				}
 			});
 		});

@@ -218,13 +218,14 @@ app.controller('myCtrl', function($scope, $http) {
 	}
 
 	//adds a object for an organization onto the database
-	$scope.addObject = function(name, newThumbnail){
+	$scope.addObject = function(name, objDesc, newThumbnail){
 		$scope.findClosestBeacon();
 		$http({
         method: 'PUT',
         url: 'https://website-155919.appspot.com/api/v1.0/arobj',
         data: {
         	name: name, 
+        	desc: objDesc,
         	beacon_id: $scope.closestBeaconID, 
         	arobj_id: $scope.randID(), 
         	organization_id: $scope.curOrg.id,

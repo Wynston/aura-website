@@ -64,10 +64,21 @@ h6{
 		text-align: center;
 		font-size: 1em;
 		padding: 0;
+		overflow: auto;
 	}
 
 	.dropdown-menu > li{
-		max-height: 3em;
+		height: auto;
+		position: relative;
+		cursor: pointer;
+		overflow: auto;
+	}
+
+	.dropdown-menu li a {
+	    white-space: normal;
+	    display: block;
+	    overflow: auto;
+	    width: 100%;
 	}
 
 	.footer {

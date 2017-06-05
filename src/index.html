@@ -132,11 +132,11 @@
 								    	<span class="caret"></span>
 								    </button>
 								    <ul class="dropdown-menu">
-								    	<li class="menuItem text-center" ng-click="changeBeaconFilter('All')">
+								    	<li class="text-center" ng-click="changeBeaconFilter('All')">
 								    		<a><h5>Show All</h5></a>
 								    	</li>
 								    	<li class="divider"></li>
-								    	<li class="menuItem text-center" ng-repeat="arObject in objectsArray | removeDuplicates: 'objectsArray'" ng-click="changeBeaconFilter(arObject.beacon_name)">
+								    	<li class="text-center" ng-repeat="arObject in objectsArray | removeDuplicates: 'objectsArray'" ng-click="changeBeaconFilter(arObject.beacon_name)">
 								      		<a><h5>{{arObject.beacon_name}}</h5></a>
 								    	</li>
 								    </ul>
@@ -486,8 +486,8 @@
 											    <option value="zoo">Zoo</option>
 										    </select>
 							            </div> 
-							            <div class="form-group" class="panel panel-default text-center">
-							            	<label class="panel-heading">Click a position on the map to the determine the beacon's location:</label>
+							            <div class="form-group panel panel-default text-center">
+							            	<label><h5>Click a position on the map to the determine the beacon's location:</h5></label>
 							            	<div id="googleMapsAddBeacon" class="panel-body">
 							            	</div>
 							            </div>
@@ -521,18 +521,22 @@
 							              <input type="text" class="form-control" placeholder="Enter object's name" ng-model="addObjectName" required>
 							            </div>
 							            <div class="form-group">
-							            	<label class="btn btn-info" for="my-file-selector">
-									    		<input id="my-file-selector" type="file" style="display:none;" ng-model="newObjectThumbnail">
-									    		Browse for thumbnail</input>
-											</label>
-											<span class='label label-info' id="upload-file-info"></span>
+							              <label>Description</label>
+							              <input type="text" class="form-control" placeholder="Enter object's description" ng-model="addObjectDesc" required>
 							            </div>
-							            <div class="form-group" class="panel panel-default text-center">
-							            	<label class="panel-heading">Click a position on the map to the determine the object's location:</label>
+							            <div class="form-group">
+					            			<label class="btn btn-info" for="thumbnailSelect">
+											    <input id="thumbnailSelect" type="file" style="display:none;" onchange="$('#thumbnailUpload').html($(this).val());">
+											    Upload thumbnail:
+											</label>
+											<span class='label label-warning' id="thumbnailUpload">No file chosen.</span>
+							            </div>
+							            <div class="form-group panel panel-default text-center">
+							            	<label><h5>Click a position on the map to the determine the object's location:</h5></label>
 							            	<div id="googleMapsAddObject" class="panel-body">
 							            	</div>
 							            </div>
-							            <button type="submit" class="btn btn-success btn-block" ng-click="addObject(addObjectName, newObjectThumbnail)" data-dismiss="modal">Create</button>
+							            <button type="submit" class="btn btn-success btn-block" ng-click="addObject(addObjectName, addObjectDesc, newObjectThumbnail)" data-dismiss="modal">Create</button>
 							          </form>
 							        </div>
 							        <div class="modal-footer">

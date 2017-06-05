@@ -1258,7 +1258,11 @@ app.filter('removeDuplicates', function() {
 	    		filteredItems.push(obj);
 	    	}
 	    });
-	    return filteredItems;
+	    return filteredItems.sort(function(a, b){
+		    if(a.beacon_name < b.beacon_name) return -1;
+		    if(a.beacon_name > b.beacon_name) return 1;
+		    return 0;
+		});
   	}
 });
 

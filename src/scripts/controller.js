@@ -200,7 +200,6 @@ app.controller('myCtrl', function($scope, $http) {
         	organization_id: $scope.curOrg.id,
         	associated: null
         }
-        $scope.closestBeacon = $scope.newBeacon;
 
 		$http({
         method: 'PUT',
@@ -357,10 +356,12 @@ app.controller('myCtrl', function($scope, $http) {
 		  			beacon_id: jsonArray[i].attributes.beacon_id, 
 		  			organization_id: jsonArray[i].attributes.organization_id, 
 		  			beacon_type: $scope.parseBeaconType(jsonArray[i].attributes.beacon_type), 
+		  			beacon_rawType: jsonArray[i].attributes.beacon_type,
 		  			altitude:  jsonArray[i].attributes.altitude, 
 		  			latitude: jsonArray[i].attributes.latitude, 
 		  			longitude: jsonArray[i].attributes.longitude, 
-		  			associated: $scope.getAssociatedType(jsonArray[i].attributes.associated)
+		  			associated: $scope.getAssociatedType(jsonArray[i].attributes.associated),
+		  			associated_id: jsonArray[i].attributes.associated
 		  		};
 		  		$scope.beaconsArray[i] = $scope.beacon;
 		  	}
@@ -903,8 +904,67 @@ app.controller('myCtrl', function($scope, $http) {
 			document.getElementById("MAIN").appendChild(googleMapsScript);
 		}
 	}
-//--------------------------------------end of loader functions----------------------------------
+//--------------------------------------end of loader functions----------------------------------------
 
+
+//-------------------------------------- Update functions begin-----------------------------------------
+	
+	//updates a beacons location on the server side
+	$scope.updateBeaconLocation = function(){
+		$scope.updatedBeacon = {
+			name: $scope.curBeacon.beacon_name,
+			beacon_type: $scope.curBeacon.beacon_rawType,
+        	beacon_id: $scope.curBeacon.beacon_id, 
+        	altitude: $scope.curBeacon.altitude, 
+        	latitude: $scope.curBeacon.latitude, 
+        	longitude: $scope.curBeacon.longitude,
+        	organization_id: $scope.curBeacon.organization_id,
+        	associated: $scope.curBeacon.associated_id
+        }
+
+		$http({
+        method: 'PUT',
+        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
+        data: $scope.updatedBeacon,
+        headers: {
+        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		}
+		}).then(function mySuccess(response) {
+			alert($scope.curBeacon.beacon_name + " has been successfully updated!");
+		}, function myError(response) {
+		    
+		});
+		$scope.displayBeacon($scope.curBeacon);
+	}
+
+	//updates the location of an object on the server side
+	$scope.updateObjectLocation = function(){
+		$http({
+        method: 'PUT',
+        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
+        data: {
+        	name: $scope.curObj.name, 
+        	desc: $scope.curObj.description,
+        	beacon_id: $scope.curObj.beacon_id, 
+        	arobj_id: $scope.curObj.arobj_id, 
+        	organization_id: $scope.curObj.organization_id,
+        	altitude: $scope.curObj.altitude, 
+        	latitude: $scope.curObj.latitude, 
+        	longitude: $scope.curObj.longitude,
+        	thumbnail: $scope.curObj.thumbnail,
+        	contents: $scope.curObj.assets
+        },
+        headers: {
+        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		}
+		}).then(function mySuccess(response) {
+			alert($scope.curObj.name + " has been successfully updated!");
+		}, function myError(response) {
+		});
+		//reload the object 
+		$scope.displayObject($scope.curObj);
+	}
+//-------------------------------------- End of update functions----------------------------------------
 
 //--------------------------------------helper functions begin-----------------------------------------
 	//transforms the beacon type from the database to be more readable
@@ -942,6 +1002,7 @@ app.controller('myCtrl', function($scope, $http) {
 		return type;
     }
 
+    //helper function to determine the associated field when pulling from the database
     $scope.getAssociatedType = function(assoc){
     	if(assoc == null){
     		return "Software";
@@ -1081,6 +1142,8 @@ app.controller('myCtrl', function($scope, $http) {
     			if(locationPrompt){
     				$scope.curBeacon.latitude = pos.lat;
     				$scope.curBeacon.longitude = pos.lng;
+    				$scope.calcAltitude(pos, type);
+
     			}
     			break;
     		case "object":
@@ -1088,10 +1151,49 @@ app.controller('myCtrl', function($scope, $http) {
     			if(locationPrompt){
 	    			$scope.curObj.latitude = pos.lat;
 	    			$scope.curObj.longitude = pos.lng;
+	    			$scope.calcAltitude(pos, type);
 	    		}
     			break;
         }
     }
+
+    //updates a beacon's or objects altitude and requests to be uploaded to the server
+    $scope.calcAltitude = function(latLng, type) {
+		var locations = [];
+			
+		locations.push(latLng);
+		
+		// Create a LocationElevationRequest object using the array's one value
+		var positionalRequest = {'locations': locations};
+		
+		elevator = new google.maps.ElevationService();
+		// Initiate the location request
+		elevator.getElevationForLocations(positionalRequest, function(results, status){
+			if (status == google.maps.ElevationStatus.OK) 
+			{
+				// Retrieve the first result
+				if (results[0]) 
+				{
+					if(type == "beacon"){
+						$scope.curBeacon.altitude = results[0].elevation.toFixed(3);
+						$scope.updateBeaconLocation();
+					}
+					if(type == "object"){
+						$scope.curObj.altitude = results[0].elevation.toFixed(3);
+						$scope.updateObjectLocation();
+					}
+				} 
+				else 
+				{
+					alert("No results found");
+				}
+		  	} 
+		  	else 
+		  	{
+				alert("Elevation service failed due to: " + status);
+			}
+		});
+	}
 
     //creates a random id for a new beacon/object/organization/etc
     $scope.randID = function(){
@@ -1103,6 +1205,7 @@ app.controller('myCtrl', function($scope, $http) {
 	    });
 	    return uuid;
 	}
+
 });
 
 //-------------------------------------end of helper functions-----------------------------------

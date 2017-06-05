@@ -181,7 +181,6 @@ h6{
 
 	#pageTitle{
 		color: #A8A8A8;
-		cursor:pointer;
 		font-size: 3em;
 		text-shadow: 0 0 0.33em #1BC9F4;
 	}
@@ -252,6 +251,8 @@ h6{
 		padding-left: 0;
 		padding-right: 0;
 	}
+
+
 }	
 
 

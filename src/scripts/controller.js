@@ -971,6 +971,27 @@ app.controller('myCtrl', function($scope, $http) {
     $scope.parseBeaconType = function (beaconType){
     	var type = "";
 		switch(beaconType) {
+			case "parking":
+				type = "Parking";
+				break;
+			case "airport":
+				type = "Airport";
+				break;
+			case "security":
+				type = "Security";
+				break;
+			case "park":
+				type = "Park";
+				break;
+			case "retail":
+				type = "Retail";
+				break;
+			case "landmark":
+				type = "Landmark";
+				break;
+			case "trail":
+				type = "Trail";
+				break;
 			case "restaurant":
 				type = "Restaurant";
 				break;

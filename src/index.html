@@ -13,9 +13,9 @@
 	<body>
 		<div class="container-fluid" ng-app="auraCreate" ng-controller="myCtrl" ng-init="init()" ng-cloak id="MAIN">
 			<div class="row page-header" id="banner">
-				<div class="col-xs-9 col-sm-6 col-md-6 col-lg-6" ng-click="changeView('dashboard', '')">
-					<img ng-src="images/aura_logo.png" alt="Aura Logo" class="img-responsive pull-left logo"/>
-					<h1 id="pageTitle"><b>Create</b></h1>
+				<div class="col-xs-9 col-sm-6 col-md-6 col-lg-6">
+					<img ng-src="images/aura_logo.png" alt="Aura Logo" class="img-responsive pull-left logo" ng-click="changeView('dashboard', '')"/>
+					<h1 id="pageTitle"><b style="cursor: pointer;" ng-click="changeView('dashboard', '')">Create</b></h1>
 				</div>
 				<div class="col-xs-3 col-sm-6 col-md-6 col-lg-6">
 					<a ng-click="changeView('profileSettings', '' )" class="btn btn-info btn-sm pull-right" id="profileButton">
@@ -263,9 +263,9 @@
 			 			<!-- Beacon (Singular) -->
 		 				<!-- Google Maps API -->
 		 				<div  ng-switch-when="beacon" class="center-block text-center panel panel-default">
-		 					<div class="panel-heading center-block container-fluid">
+		 					<div class="panel-heading container-fluid">
 		 						<div class="row">
-		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left form-group">
+		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
 						            	<h4 class="text-primary pull-left">Type: {{curBeacon.beacon_type}}</h4>
 		 							</div>
 		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-info">
@@ -490,14 +490,21 @@
 							            	<label>Type:</label>
 										    <select ng-model="addBeaconType" class="form-control" required>
 										    	<option value="" disabled selected hidden>Select beacon type</option>
+											    <option value="airport">Airport</option>
 											    <option value="art">Art</option>
 											    <option value="coffee-shop">Coffee-shop</option>
 											    <option value="gallery">Gallery</option>
+											    <option value="landmark">Landmark</option>
 											    <option value="manufacturing">Manufacturing</option>
 											    <option value="museum">Museum</option>
 											    <option value="office">Office</option>
 											    <option value="other">Other</option>
+											    <option value="park">Park</option>
+											    <option value="parking">Parking</option>
+											    <option value="retail">Retail</option>
 											    <option value="restaurant">Restaurant</option>
+											    <option value="security">Security</option>
+											    <option value="trail">Trail</option>
 											    <option value="zoo">Zoo</option>
 										    </select>
 							            </div> 
@@ -541,7 +548,7 @@
 							            </div>
 							            <div class="form-group">
 					            			<label class="btn btn-info" for="thumbnailSelect">
-											    <input id="thumbnailSelect" type="file" style="display:none;" onchange="$('#thumbnailUpload').html($(this).val());">
+											    <input id="thumbnailSelect" type="file" style="display:none;" onchange="$('#thumbnailUpload').html($(this).val());" accept="image/*">
 											    Upload thumbnail:
 											</label>
 											<span class='label label-warning' id="thumbnailUpload">No file chosen.</span>
@@ -581,14 +588,21 @@
 							            	<label>Type:</label>
 										    <select ng-model="addBeaconForObjectType" class="form-control" required>
 										    	<option value="" disabled selected hidden>Select beacon type</option>
+										    	<option value="airport">Airport</option>
 											    <option value="art">Art</option>
 											    <option value="coffee-shop">Coffee-shop</option>
 											    <option value="gallery">Gallery</option>
+											    <option value="landmark">Landmark</option>
 											    <option value="manufacturing">Manufacturing</option>
 											    <option value="museum">Museum</option>
 											    <option value="office">Office</option>
 											    <option value="other">Other</option>
+											    <option value="park">Park</option>
+											    <option value="parking">Parking</option>
+											    <option value="retail">Retail</option>
 											    <option value="restaurant">Restaurant</option>
+											    <option value="security">Security</option>
+											    <option value="trail">Trail</option>
 											    <option value="zoo">Zoo</option>
 										    </select>
 							            </div> 
@@ -602,7 +616,6 @@
 							      </div>
 							    </div>
 							</div>
-
 			 			</div>
 
 			 			<!-- Stats -->

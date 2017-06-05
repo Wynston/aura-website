@@ -418,15 +418,29 @@
 											  <!-- Media Content -->
 											  <div class="carousel-inner">
 											  	<div class="item active">
-											      <img ng-src={{assets[0].value}} alt={{assets[0].name}} class="objectImage center-block">
-											      <div class="carousel-caption">
+											      <img ng-if="assets[0].content_type == 'image'" ng-src={{assets[0].value}} alt={{assets[0].name}} class="objectMedia center-block">
+
+											      <audio ng-if="assets[0].content_type == 'audio'" class="objectMedia center-block" src="" autobuffer autoloop loop controls></audio>
+
+											      <video ng-if="assets[0].content_type == 'video'" class="objectMedia center-block" src="" autobuffer autoloop loop controls poster=""></video>
+
+											      <!-- 3D Placeholder -->
+
+											       <div class="carousel-caption">
 													<h3>{{assets[0].name}}</h3>
 												   </div>
 											    </div>
 
 											    <div class="item" ng-repeat="asset in assets" ng-if="$index > 0">
-											      <img ng-src={{assets[$index].value}} alt={{assets[$index].name}} class="objectImage center-block">
-											      <div class="carousel-caption">
+											      <img ng-if="assets[$index].content_type == 'image'" ng-src={{assets[$index].value}} alt={{assets[$index].name}} class="objectMedia center-block">
+
+											      <audio ng-if="assets[$index].content_type == 'audio'" class="objectMedia center-block" src="" autobuffer autoloop loop controls></audio>
+
+											      <video ng-if="assets[$index].content_type == 'video'" class="objectMedia center-block" src="" autobuffer autoloop loop controls poster=""></video>
+
+											      <!-- 3D Placeholder -->
+
+											       <div class="carousel-caption">
 													<h3>{{assets[$index].name}}</h3>
 												   </div>
 											    </div>
@@ -444,7 +458,7 @@
 											</div>
 										</div>
 										<div class="modal-footer">
-										  <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+										   <button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 										</div>
 								   	</div>
 							    </div>

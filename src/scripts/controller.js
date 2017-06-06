@@ -7,11 +7,66 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.loadOrganizations();
 		$scope.changeView("dashboard");
 		$scope.curOrg = "";
+
+		//-------------------------------------- Initialize Firebase ------------------------------------------
+		var config = {
+			storageBucket: "https://firebasestorage.googleapis.com/v0/b/auraalert-21339.appspot.com"
+		};
+		$scope.firebaseApp = firebase.initializeApp(config);
+		// Root reference to the storage
+		$scope.storage = $scope.firebaseApp.storage("gs://auraalert-21339.appspot.com/");
+		$scope.storageRef = $scope.storage.ref();
 	}
 
-	//---------------------------------display functions begin----------------------------------------
+//---------------------------------------Firebase functions begin---------------------------------------
+	
+	//uploads a thumbnail to the firebase and retrieves a url of it to be stored in the AR object
+	$scope.uploadThumbnail = function(thumbnailFile){
+		// thumbnail metadata
+		var metadata = {
+			"AuraAPIKey": 'dGhpc2lzYWRldmVsb3BlcmFwcA=='
+		};
 
+		// Upload file and metadata to the object 
+		var uploadTask = $scope.storageRef.child('images/' + thumbnailFile.name).put(thumbnailFile, metadata);
 
+		// Listen for state changes, errors, and completion of the upload.
+		uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
+		  function(snapshot) {
+		    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+		    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+		    console.log('Upload is ' + progress + '% done');
+		    switch (snapshot.state) {
+		      case firebase.storage.TaskState.PAUSED:
+		        console.log('Upload is paused');
+		        break;
+		      case firebase.storage.TaskState.RUNNING:
+		        console.log('Upload is running');
+		        break;
+		    }
+		  }, function(error) {
+
+		  switch (error.code) {
+		    case 'storage/unauthorized':
+		      // User doesn't have permission to access the object
+		      break;
+
+		    case 'storage/canceled':
+		      // User canceled the upload
+		      break;
+
+		    case 'storage/unknown':
+		      // Unknown error occurred, inspect error.serverResponse
+		      break;
+		  }
+		}, function() {
+		 // Upload completed successfully, now we can get the download URL
+		  $scope.thumbnailURL = snapshot.downloadURL;
+		});
+	}
+//---------------------------------------End of Firebase functions--------------------------------------
+
+//---------------------------------display functions begin----------------------------------------
 	//controls which view is to be displayed as well as the title
 	$scope.changeView = function(view , org){;
 		switch(view){
@@ -218,6 +273,7 @@ app.controller('myCtrl', function($scope, $http) {
 
 	//adds a object for an organization onto the database
 	$scope.addObject = function(name, objDesc, newThumbnail){
+		$scope.uploadThumbnail(newThumbnail);
 		$scope.findClosestBeacon();
 		$http({
         method: 'PUT',
@@ -231,7 +287,7 @@ app.controller('myCtrl', function($scope, $http) {
         	altitude: $scope.newAlt, 
         	latitude: $scope.newLat, 
         	longitude: $scope.newLng,
-        	thumbnail: newThumbnail
+        	thumbnail: $scope.thumbnailURL
         },
         headers: {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
@@ -1288,6 +1344,25 @@ app.filter('removeDuplicates', function() {
 });
 
 //-------------------------------------end of custom filters-------------------------------------
+
+//-------------------------------------Custom Directives begin-----------------------------------
+
+//for getting files from a users local computer in angular
+app.directive("fileread", [function () {
+    return {
+        scope: {
+            fileread: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                scope.$apply(function () {
+                    scope.fileread = changeEvent.target.files[0];
+                });
+            });
+        }
+    }
+}]);
+//-------------------------------------End of Custom Directives-----------------------------------
 
 //-------------------------------------google maps handling begins-------------------------------
 //initMap function for google maps api

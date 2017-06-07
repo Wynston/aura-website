@@ -266,8 +266,8 @@
 		 					<div class="text-center center-block panel panel-default">
 			 					<div class="panel-heading container-fluid">
 			 						<div class="row">
-			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary"> 	
-			 								<h4>Type: {{curBeacon.beacon_type}}</h4>						
+			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary"> 
+			 								<label class="btn btn-info" type="button" data-toggle="modal" data-target="#typeEditModal" style="margin-top: 0.5em;">Type: {{curBeacon.beacon_type}}</label>						
 			 							</div>
 			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">
 			 								<h4 class="text-primary">Associated: {{curBeacon.associated}}</h4>
@@ -286,6 +286,34 @@
 			 						</div>
 			 					</div>
 			 				</div>
+
+			 				  <!-- Modal for editing a beacon's type-->
+							<div class="modal fade" id="typeEditModal" role="dialog">
+							    <div class="modal-dialog">
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header" style="padding:2em 3em;">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h3><b>Type Editing for {{curBeacon.beacon_name}}</b></h3>
+							        </div>
+							        <div class="modal-body" style="padding:2em 3em;">
+							          <form role="form">
+							          	<div class="form-group form-group-sm">
+							            	<label>Type:</label>
+										    <select ng-model="newBeaconType" class="form-control" required>
+										    	<option value="" disabled selected hidden>{{curBeacon.beacon_type}}</option>
+										    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
+										    </select>
+							            </div> 
+							            <button type="submit" class="btn btn-success btn-block" ng-click="updateBeaconType(newBeaconType)" data-dismiss="modal">Create</button>
+							          </form>
+							        </div>
+							        <div class="modal-footer">
+							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+							        </div>
+							      </div>
+							    </div>
+							</div>
 		 				</div>
 
 			 			<!-- Objects List -->

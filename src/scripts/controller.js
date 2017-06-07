@@ -1011,6 +1011,34 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.displayBeacon($scope.curBeacon);
 	}
 
+	//updates a beacons type on the server side
+	$scope.updateBeaconType = function(updatedType){
+		$scope.updatedBeacon = {
+			name: $scope.curBeacon.beacon_name,
+			beacon_type: updatedType.toLowerCase(),
+        	beacon_id: $scope.curBeacon.beacon_id, 
+        	altitude: $scope.curBeacon.altitude, 
+        	latitude: $scope.curBeacon.latitude, 
+        	longitude: $scope.curBeacon.longitude,
+        	organization_id: $scope.curBeacon.organization_id,
+        	associated: $scope.curBeacon.associated_id
+        }
+
+		$http({
+        method: 'PUT',
+        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
+        data: $scope.updatedBeacon,
+        headers: {
+        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		}
+		}).then(function mySuccess(response) {
+			alert($scope.curBeacon.beacon_name + " has been successfully updated!");
+		}, function myError(response) {
+		    
+		});
+		$scope.displayBeacon($scope.curBeacon);
+	}
+
 	//updates the location of an object on the server side
 	$scope.updateObjectLocation = function(){
 		$http({

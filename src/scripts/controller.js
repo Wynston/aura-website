@@ -1,3 +1,5 @@
+//jpeg: scale to a width of 750px
+
 //-------------------------------Angular Controller---------------------------------------
 var app = angular.module('auraCreate', []);
 app.controller('myCtrl', function($scope, $http) {
@@ -24,7 +26,7 @@ app.controller('myCtrl', function($scope, $http) {
 			"Security",
 			"Trail",
 			"Zoo"
-		]
+		];
 
 		//-------------------------------------- Initialize Firebase ------------------------------------------
 		var config = {
@@ -37,20 +39,25 @@ app.controller('myCtrl', function($scope, $http) {
 	}
 
 //---------------------------------------Firebase functions begin---------------------------------------
-	
 	//uploads a thumbnail to the firebase and retrieves a url of it to be stored in the AR object
-	$scope.uploadThumbnail = function(thumbnailFile){
+	$scope.uploadThumbnail = function(name, desc, thumbnailFile){
+		//default thumbnail size is 150px by 150px
+		var thumbnailURL = $scope.thumbnailResize(thumbnailFile);
+		thumbnailURL = thumbnailURL.split(',')[1];
+
 		// thumbnail metadata
 		var metadata = {
-			AuraAPIKey: 'dGhpc2lzYWRldmVsb3BlcmFwcA=='
+			customMetadata: {
+				'AuraAPIKey': 'dGhpc2lzYWRldmVsb3BlcmFwcA=='
+			}
 		};
 
 		// Upload file and metadata to the object 
-		var uploadTask = $scope.storageRef.child('images/' + thumbnailFile.name).put(thumbnailFile, metadata);
+		var uploadTask = $scope.storageRef.child('images/' + thumbnailFile.name).putString(thumbnailURL, 'base64', metadata);
 
 		// Listen for state changes, errors, and completion of the upload.
 		uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
-		  function(snapshot) {
+		  function(snapshot){
 		    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
 		    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 		    console.log('Upload is ' + progress + '% done');
@@ -79,8 +86,45 @@ app.controller('myCtrl', function($scope, $http) {
 		  }
 		}, function() {
 		 // Upload completed successfully, now we can get the download URL
-		  $scope.thumbnailURL = snapshot.downloadURL;
+		  $scope.thumbnailURL = uploadTask.snapshot.downloadURL;
+		  $scope.addObject(name, desc);
 		});
+	}
+
+	//scales a thumbnail to about 150px by 150px to be easily stored in firebase
+	$scope.thumbnailResize = function(thumbnailFile){
+		var img = new Image();
+		img.onload = function(){
+		}
+		img.src = thumbnailFile;
+
+		var canvas = document.getElementById("thumbnailCanvas");
+
+		var ctx = canvas.getContext("2d");
+		ctx.drawImage(img, 0, 0);
+
+		var MAX_WIDTH = 150;
+		var MAX_HEIGHT = 150;
+		var width = img.width;
+		var height = img.height;
+
+		if (width > height) {
+		  if (width > MAX_WIDTH) {
+		    height *= MAX_WIDTH / width;
+		    width = MAX_WIDTH;
+		  }
+		} else {
+		  if (height > MAX_HEIGHT) {
+		    width *= MAX_HEIGHT / height;
+		    height = MAX_HEIGHT;
+		  }
+		}
+		canvas.width = width;
+		canvas.height = height;
+		var ctx = canvas.getContext("2d");
+		ctx.drawImage(img, 0, 0, width, height);
+
+		return canvas.toDataURL("image/png");
 	}
 //---------------------------------------End of Firebase functions--------------------------------------
 
@@ -290,8 +334,7 @@ app.controller('myCtrl', function($scope, $http) {
 	}
 
 	//adds a object for an organization onto the database
-	$scope.addObject = function(name, objDesc, newThumbnail){
-		$scope.uploadThumbnail(newThumbnail);
+	$scope.addObject = function(name, objDesc){
 		$scope.findClosestBeacon();
 		$http({
         method: 'PUT',

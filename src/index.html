@@ -262,28 +262,30 @@
 
 			 			<!-- Beacon (Singular) -->
 		 				<!-- Google Maps API -->
-		 				<div  ng-switch-when="beacon" class="center-block text-center panel panel-default">
-		 					<div class="panel-heading container-fluid">
-		 						<div class="row">
-		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
-						            	<h4 class="text-primary pull-left">Type: {{curBeacon.beacon_type}}</h4>
-		 							</div>
-		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-info">
-		 								<h4 class="text-primary">Associated: {{curBeacon.associated}}</h4>
-		 							</div>
-			 						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
-			 							<label class="btn btn-info" type="button" ng-click="displayBeaconObjects()" style="margin-top: 0.5em;">Objects Served</label>
+		 				<div ng-switch-when="beacon">
+		 					<div class="text-center center-block panel panel-default">
+			 					<div class="panel-heading container-fluid">
+			 						<div class="row">
+			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary"> 	
+			 								<h4>Type: {{curBeacon.beacon_type}}</h4>						
+			 							</div>
+			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">
+			 								<h4 class="text-primary">Associated: {{curBeacon.associated}}</h4>
+			 							</div>
+				 						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
+				 							<label class="btn btn-info" type="button" ng-click="displayBeaconObjects()" style="margin-top: 0.5em;">Objects Served</label>
+				 						</div>
+				 					</div>
+			 					</div>
+			 					<div class="panel-body" id="googleMapsBeacon"></div>
+			 					<div class="panel-footer">
+			 						<div class="row">
+			 							<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curBeacon.altitude | number: 3}}</h4>
+					 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curBeacon.latitude | number: 3}}</h4>
+					 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right text-primary">Longitude: {{curBeacon.longitude | number: 3}}</h4>
 			 						</div>
 			 					</div>
-		 					</div>
-		 					<div class="panel-body" id="googleMapsBeacon"></div>
-		 					<div class="panel-footer">
-		 						<div class="row">
-		 							<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curBeacon.altitude | number: 3}}</h4>
-				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curBeacon.latitude | number: 3}}</h4>
-				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right text-primary">Longitude: {{curBeacon.longitude | number: 3}}</h4>
-		 						</div>
-		 					</div>
+			 				</div>
 		 				</div>
 
 			 			<!-- Objects List -->
@@ -486,26 +488,11 @@
 							              <label>Name</label>
 							              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconName" required>
 							            </div>
-							            <div class="form-group">
+							            <div class="form-group form-group-sm">
 							            	<label>Type:</label>
 										    <select ng-model="addBeaconType" class="form-control" required>
 										    	<option value="" disabled selected hidden>Select beacon type</option>
-											    <option value="airport">Airport</option>
-											    <option value="art">Art</option>
-											    <option value="coffee-shop">Coffee-shop</option>
-											    <option value="gallery">Gallery</option>
-											    <option value="landmark">Landmark</option>
-											    <option value="manufacturing">Manufacturing</option>
-											    <option value="museum">Museum</option>
-											    <option value="office">Office</option>
-											    <option value="other">Other</option>
-											    <option value="park">Park</option>
-											    <option value="parking">Parking</option>
-											    <option value="retail">Retail</option>
-											    <option value="restaurant">Restaurant</option>
-											    <option value="security">Security</option>
-											    <option value="trail">Trail</option>
-											    <option value="zoo">Zoo</option>
+										    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
 										    </select>
 							            </div> 
 							            <div class="form-group panel panel-default text-center">
@@ -584,26 +571,11 @@
 							              <label>Name</label>
 							              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconForObjectName" required>
 							            </div>
-							            <div class="form-group">
+							            <div class="form-group form-group-sm">
 							            	<label>Type:</label>
 										    <select ng-model="addBeaconForObjectType" class="form-control" required>
 										    	<option value="" disabled selected hidden>Select beacon type</option>
-										    	<option value="airport">Airport</option>
-											    <option value="art">Art</option>
-											    <option value="coffee-shop">Coffee-shop</option>
-											    <option value="gallery">Gallery</option>
-											    <option value="landmark">Landmark</option>
-											    <option value="manufacturing">Manufacturing</option>
-											    <option value="museum">Museum</option>
-											    <option value="office">Office</option>
-											    <option value="other">Other</option>
-											    <option value="park">Park</option>
-											    <option value="parking">Parking</option>
-											    <option value="retail">Retail</option>
-											    <option value="restaurant">Restaurant</option>
-											    <option value="security">Security</option>
-											    <option value="trail">Trail</option>
-											    <option value="zoo">Zoo</option>
+										    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
 										    </select>
 							            </div> 
 							            <label>Location pre-determined from the new object's location.</label>

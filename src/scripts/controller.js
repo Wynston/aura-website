@@ -7,6 +7,24 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.loadOrganizations();
 		$scope.changeView("dashboard");
 		$scope.curOrg = "";
+		$scope.beaconTypes = [
+			"Airport",
+			"Art",
+			"Coffee-shop",
+			"Gallery",
+			"Landmark",
+			"Manufacturing",
+			"Museum",
+			"Office",
+			"Other",
+			"Park",
+			"Parking",
+			"Retail",
+			"Restaurant",
+			"Security",
+			"Trail",
+			"Zoo"
+		]
 
 		//-------------------------------------- Initialize Firebase ------------------------------------------
 		var config = {
@@ -24,7 +42,7 @@ app.controller('myCtrl', function($scope, $http) {
 	$scope.uploadThumbnail = function(thumbnailFile){
 		// thumbnail metadata
 		var metadata = {
-			"AuraAPIKey": 'dGhpc2lzYWRldmVsb3BlcmFwcA=='
+			AuraAPIKey: 'dGhpc2lzYWRldmVsb3BlcmFwcA=='
 		};
 
 		// Upload file and metadata to the object 
@@ -248,7 +266,7 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.newBeacon = {
         	name: name, 
         	beacon_id: $scope.randID(), 
-        	beacon_type: type, 
+        	beacon_type: type.toLowerCase(), 
         	altitude: $scope.newAlt, 
         	latitude: $scope.newLat, 
         	longitude: $scope.newLng,
@@ -304,7 +322,7 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.newBeacon = {
         	name: name, 
         	beacon_id: $scope.closestBeaconID, 
-        	beacon_type: type, 
+        	beacon_type: type.toLowerCase(), 
         	altitude: $scope.newAlt, 
         	latitude: $scope.newLat, 
         	longitude: $scope.newLng,
@@ -1220,7 +1238,6 @@ app.controller('myCtrl', function($scope, $http) {
     				$scope.curBeacon.latitude = pos.lat;
     				$scope.curBeacon.longitude = pos.lng;
     				$scope.calcAltitude(pos, type);
-
     			}
     			break;
     		case "object":

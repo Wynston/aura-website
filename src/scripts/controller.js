@@ -1,7 +1,3 @@
-//jpeg: scale to a width of 750px
-// Object Thumbnail Naming: `<object_id>_thumb.jpg`
-// Image Full Size Naming: `<asset_id>_img.jpg`
-
 //-------------------------------Angular Controller---------------------------------------
 var app = angular.module('auraCreate', []);
 app.controller('myCtrl', function($scope, $http) {
@@ -148,6 +144,203 @@ app.controller('myCtrl', function($scope, $http) {
 	    }
 	    // Load files into file reader
 	    reader.readAsDataURL(file);
+	}
+
+	//resize an asset to be 750px and creates a 150px thumbnail version of itself
+	$scope.resizeAsset = function(assetName){
+		var filesToUpload = document.getElementById('assetFiles').files;
+	    var file = filesToUpload[0];
+
+	    // Create an image and a thumbnail copy
+	    var imgAsset = document.createElement("img");
+	    var assetThumbnail = document.createElement("img");
+	    // Create a file reader
+	    var reader = new FileReader();
+	    // Set the image once loaded into file reader
+	    reader.onload = function(e)
+	    {
+	        imgAsset.src = e.target.result;
+	        assetThumbnail.src = e.target.result;
+	        imgAsset.onload = function(){
+	        	assetThumbnail.onload = function(){
+	        		//canvas for the main asset
+	        		var canvas1 = document.createElement("canvas");
+			        var ctx1 = canvas1.getContext("2d");
+			        ctx1.drawImage(imgAsset, 0, 0);
+
+			        //canvas for the asset thumbnail
+			        var canvas2 = document.createElement("canvas");
+			        var ctx2 = canvas2.getContext("2d");
+			        ctx2.drawImage(assetThumbnail, 0, 0);
+
+			        //width and height for the main asset
+			        var MAX_WIDTH1 = 750;
+			        var MAX_HEIGHT1 = 750;
+			        var width1 = imgAsset.width;
+			        var height1 = imgAsset.height;
+
+			        //width and height for the asset thumbnail
+			        var MAX_WIDTH2 = 150;
+			        var MAX_HEIGHT2 = 150;
+			        var width2 = assetThumbnail.width;
+			        var height2 = assetThumbnail.height;
+
+			        //scaling for the main asset
+			        if (width1 > height1) {
+			          if (width1 > MAX_WIDTH1) {
+			            height1 *= MAX_WIDTH1 / width1;
+			            width1 = MAX_WIDTH1;
+			          }
+			        } else {
+			          if (height1 > MAX_HEIGHT1) {
+			            width1 *= MAX_HEIGHT1 / height1;
+			            height1 = MAX_HEIGHT1;
+			          }
+			        }
+
+			        //scaling for the asset thumbnail
+			        if (width2 > height2) {
+			          if (width2 > MAX_WIDTH2) {
+			            height2 *= MAX_WIDTH2 / width2;
+			            width2 = MAX_WIDTH2;
+			          }
+			        } else {
+			          if (height2 > MAX_HEIGHT2) {
+			            width2 *= MAX_HEIGHT2 / height2;
+			            height2 = MAX_HEIGHT2;
+			          }
+			        }
+
+			        //draws the scaled asset on the canvas
+			        canvas1.width = width1;
+			        canvas1.height = height1;
+			        var ctx1 = canvas1.getContext("2d");
+			        ctx1.drawImage(imgAsset, 0, 0, width1, height1);
+
+			        //draws the scaled asset on the canvas
+			        canvas2.width = width2;
+			        canvas2.height = height2;
+			        var ctx2 = canvas2.getContext("2d");
+			        ctx2.drawImage(assetThumbnail, 0, 0, width2, height2);
+
+			        //taking the base64 url for the asset and its thumbnail
+			        var dataurl1 = canvas1.toDataURL("image/jpeg"); 
+			        var dataurl2 = canvas2.toDataURL("image/jpeg");
+
+			        $scope.uploadAsset(assetName, dataurl1, dataurl2);
+	        	}
+	        }
+	    }
+	    // Load files into file reader
+	    reader.readAsDataURL(file);
+	}
+
+	//uploads the main asset and calls the uploading of the thumbnail asset
+	$scope.uploadAsset = function(assetName, assetURL, thumbnailURL){
+		//remove unecessary base64 string data
+		assetURL = assetURL.split(',')[1];
+
+		//new asset ID, will be used to generate thumbnail firebase name
+		var assetID = $scope.randID();
+
+		// thumbnail metadata
+		var metadata = {
+			customMetadata: {
+				'AuraAPIKey': 'dGhpc2lzYWRldmVsb3BlcmFwcA=='
+			}
+		};
+
+		var assetRef = $scope.storageRef.child(assetID + "_img.jpg");
+
+		// Upload file and metadata to the object 
+		var uploadTask = assetRef.putString(assetURL, 'base64', metadata);
+
+		// Listen for state changes, errors, and completion of the upload.
+		uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
+		  function(snapshot){
+		    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+		    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+		    console.log('Upload is ' + progress + '% done');
+		    switch (snapshot.state) {
+		      case firebase.storage.TaskState.PAUSED:
+		        console.log('Upload is paused');
+		        break;
+		      case firebase.storage.TaskState.RUNNING:
+		        console.log('Upload is running');
+		        break;
+		    }
+		  }, function(error) {
+
+		  switch (error.code) {
+		    case 'storage/unauthorized':
+		      // User doesn't have permission to access the object
+		      break;
+
+		    case 'storage/canceled':
+		      // User canceled the upload
+		      break;
+
+		    case 'storage/unknown':
+		      // Unknown error occurred, inspect error.serverResponse
+		      break;
+		  }
+		}, function() {
+		 // Upload completed successfully, now we can get the download URL
+		  $scope.assetURL = uploadTask.snapshot.downloadURL;
+		  $scope.uploadAssetThumbnail(assetName, assetID, thumbnailURL);
+		});
+	}
+
+	$scope.uploadAssetThumbnail = function(assetName, assetID, thumbnailURL){
+		//remove unecessary base64 string data
+		thumbnailURL = thumbnailURL.split(',')[1];
+
+		// thumbnail metadata
+		var metadata = {
+			customMetadata: {
+				'AuraAPIKey': 'dGhpc2lzYWRldmVsb3BlcmFwcA=='
+			}
+		};
+
+		var thumnailRef = $scope.storageRef.child(assetID + "_thumb.jpg");
+
+		// Upload file and metadata to the object 
+		var uploadTask = thumnailRef.putString(thumbnailURL, 'base64', metadata);
+
+		// Listen for state changes, errors, and completion of the upload.
+		uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
+		  function(snapshot){
+		    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+		    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+		    console.log('Upload is ' + progress + '% done');
+		    switch (snapshot.state) {
+		      case firebase.storage.TaskState.PAUSED:
+		        console.log('Upload is paused');
+		        break;
+		      case firebase.storage.TaskState.RUNNING:
+		        console.log('Upload is running');
+		        break;
+		    }
+		  }, function(error) {
+
+		  switch (error.code) {
+		    case 'storage/unauthorized':
+		      // User doesn't have permission to access the object
+		      break;
+
+		    case 'storage/canceled':
+		      // User canceled the upload
+		      break;
+
+		    case 'storage/unknown':
+		      // Unknown error occurred, inspect error.serverResponse
+		      break;
+		  }
+		}, function() {
+		 // Upload completed successfully, now we can get the download URL
+		  $scope.assetThumbnailURL = uploadTask.snapshot.downloadURL;
+		  $scope.addAsset(assetName, assetID);
+		});
 	}
 
 //---------------------------------------End of Firebase functions--------------------------------------
@@ -411,6 +604,43 @@ app.controller('myCtrl', function($scope, $http) {
 		});
 		$scope.loadBeacons();
 
+	}
+
+	//adds an asset to a obect
+	$scope.addAsset = function(assetName, assetID){
+		newAsset = {
+			name: assetName,
+			value: $scope.assetURL,
+			content_type: "image",
+			arobj_id: $scope.curObj.arobj_id,
+			content_id: assetID,
+			thumbnail: $scope.assetThumbnailURL
+		}
+		updatedAssets = $scope.curObj.assets;
+		updatedAssets[length] = newAsset;
+		$http({
+        method: 'PUT',
+        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
+        data: {
+        	name: $scope.curObj.name, 
+        	desc: $scope.curObj.description,
+        	beacon_id: $scope.curObj.beacon_id, 
+        	arobj_id: $scope.curObj.arobj_id, 
+        	organization_id: $scope.curObj.organization_id,
+        	altitude: $scope.curObj.altitude, 
+        	latitude: $scope.curObj.latitude, 
+        	longitude: $scope.curObj.longitude,
+        	thumbnail: $scope.curObj.thumbnail,
+        	contents: updatedAssets
+        },
+        headers: {
+        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		}
+		}).then(function mySuccess(response) {
+			alert("The asset has been successfully added to " + $scope.curObj.name + "!");
+		}, function myError(response) {
+		});
+		$scope.displayObject($scope.curObj);
 	}
 //---------------------------------------end of upload functions----------------------------------------
 

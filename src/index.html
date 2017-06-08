@@ -385,10 +385,15 @@
 		 					<div class="panel-heading center-block">
 		 						<div class="row">
 		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
-		 								<button class="btn btn btn-info" type="button" ng-click="loadBeacon(curObj.beacon_name)">Beacon: {{curObj.beacon_name}}</button>
+		 								<button class="btn btn-info" type="button" ng-click="loadBeacon(curObj.beacon_name)">Beacon: {{curObj.beacon_name}}</button>
 		 							</div>
-		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
-		 								<button class="btn btn btn-info" type="button" ng-click="displayAssetsModal()">Media</button>
+		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center center-block">
+		 								<div class="btn-group">
+		 									<button class="btn btn-info" type="button" ng-click="displayAssetsModal()">Media</button>
+		 									<label class="btn btn-success" type="button" data-toggle="modal" data-target="#newAssetsModal">
+									          <span class="glyphicon glyphicon-plus"></span> 
+									        </label>
+									    </div>
 		 							</div>
 			 						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
 			 							<button class="btn btn-info" type="button" ng-click="displayDescriptionModal()">Description</button>
@@ -420,6 +425,39 @@
 							        </div>
 							        <div class="modal-footer">
 							          <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+							        </div>
+							      </div>
+							    </div>
+							</div>
+
+							<!-- Asset Creation Modal -->
+							<div class="modal fade" id="newAssetsModal" role="dialog">
+							    <div class="modal-dialog">
+							    
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header" style="padding:2em 3em;">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h3><b>New Media Content for {{curObj.name}}</b></h3>
+							        </div>
+							        <div class="modal-body" style="padding:2em 3em;">
+							          <form role="form">
+							            <div class="form-group">
+							              <label>Title</label>
+							              <input type="text" class="form-control" placeholder="Enter a title for the asset" ng-model="addAssetName" required>
+							            </div>
+							            <div class="form-group">
+					            			<label class="btn btn-info" for="assetFiles">
+											    <input id="assetFiles" type="file" style="display:none;" onchange="$('#preview').html($(this).val());" accept="image/*" required>
+											    Upload thumbnail:
+											</label>
+											<span class='label label-warning' id="preview">No file chosen.</span>
+							            </div>
+							            <button type="submit" class="btn btn-success btn-block" ng-click="resizeAsset(addAssetName)" data-dismiss="modal">Create</button>
+							          </form>
+							        </div>
+							        <div class="modal-footer">
+							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
 							        </div>
 							      </div>
 							    </div>
@@ -558,6 +596,7 @@
 							<!-- Object Management -->
 			 				<!-- Creating a object -->
 			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addObjectModal" ng-click="loadGoogleScript()">Add Object</button>
+
 			 				<!-- Modal for creating an object-->
 							<div class="modal fade" id="addObjectModal" role="dialog">
 							    <div class="modal-dialog">

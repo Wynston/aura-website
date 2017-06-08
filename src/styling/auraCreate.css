@@ -44,8 +44,7 @@ h6{
 	}
 
 	.carouselBody{
-		height: 60vh;
-		background-color: #DEDEDE;
+		min-height: 10vh;
 	}
  
 	.carousel-indicators .active {

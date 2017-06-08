@@ -563,19 +563,17 @@
 							            </div>
 							            <div class="form-group">
 					            			<label class="btn btn-info" for="thumbnailSelect">
-											    <input id="thumbnailSelect" type="file" style="display:none;" onchange="$('#thumbnailUpload').html($(this).val());" accept="image/*" fileread="newObjectThumbnail" required>
+											    <input id="thumbnailSelect" type="file" style="display:none;" onchange="$('#thumbnailUpload').html($(this).val());" accept="image/*" required>
 											    Upload thumbnail:
 											</label>
 											<span class='label label-warning' id="thumbnailUpload">No file chosen.</span>
-											<canvas id="thumbnailCanvas" ng-show="false">
-									  		</canvas>
 							            </div>
 							            <div class="form-group panel panel-default text-center">
 							            	<label><h5>Click a position on the map to the determine the object's location:</h5></label>
 							            	<div id="googleMapsAddObject" class="panel-body">
 							            	</div>
 							            </div>
-							            <button type="submit" class="btn btn-success btn-block" ng-click="uploadThumbnail(addObjectName, addObjectDesc, newObjectThumbnail)" data-dismiss="modal">Create</button>
+							            <button type="submit" class="btn btn-success btn-block" ng-click="thumbnailResize(addObjectName, addObjectDesc)" data-dismiss="modal">Create</button>
 							          </form>
 							        </div>
 							        <div class="modal-footer">

@@ -40,9 +40,8 @@ app.controller('myCtrl', function($scope, $http) {
 
 //---------------------------------------Firebase functions begin---------------------------------------
 	//uploads a thumbnail to the firebase and retrieves a url of it to be stored in the AR object
-	$scope.uploadThumbnail = function(name, desc, thumbnailFile){
-		//default thumbnail size is 150px by 150px
-		var thumbnailURL = $scope.thumbnailResize(thumbnailFile);
+	$scope.uploadThumbnail = function(name, desc, thumbnailURL, fileName){
+		//remove unecessary base64 string data
 		thumbnailURL = thumbnailURL.split(',')[1];
 
 		// thumbnail metadata
@@ -53,7 +52,7 @@ app.controller('myCtrl', function($scope, $http) {
 		};
 
 		// Upload file and metadata to the object 
-		var uploadTask = $scope.storageRef.child('images/' + thumbnailFile.name).putString(thumbnailURL, 'base64', metadata);
+		var uploadTask = $scope.storageRef.child('images/' + fileName).putString(thumbnailURL, 'base64', metadata);
 
 		// Listen for state changes, errors, and completion of the upload.
 		uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
@@ -92,40 +91,54 @@ app.controller('myCtrl', function($scope, $http) {
 	}
 
 	//scales a thumbnail to about 150px by 150px to be easily stored in firebase
-	$scope.thumbnailResize = function(thumbnailFile){
-		var img = new Image();
-		img.onload = function(){
-		}
-		img.src = thumbnailFile;
+	$scope.thumbnailResize = function(name, desc){
+		var filesToUpload = document.getElementById('thumbnailSelect').files;
+	    var file = filesToUpload[0];
+	    var fileName = file.name;
 
-		var canvas = document.getElementById("thumbnailCanvas");
+	    // Create an image
+	    var img = document.createElement("img");
+	    // Create a file reader
+	    var reader = new FileReader();
+	    // Set the image once loaded into file reader
+	    reader.onload = function(e)
+	    {
+	        img.src = e.target.result;
+	        img.onload = function(){
+	        	var canvas = document.createElement("canvas");
+		        //var canvas = $("<canvas>", {"id":"testing"})[0];
+		        var ctx = canvas.getContext("2d");
+		        ctx.drawImage(img, 0, 0);
 
-		var ctx = canvas.getContext("2d");
-		ctx.drawImage(img, 0, 0);
+		        var MAX_WIDTH = 150;
+		        var MAX_HEIGHT = 150;
+		        var width = img.width;
+		        var height = img.height;
 
-		var MAX_WIDTH = 150;
-		var MAX_HEIGHT = 150;
-		var width = img.width;
-		var height = img.height;
+		        if (width > height) {
+		          if (width > MAX_WIDTH) {
+		            height *= MAX_WIDTH / width;
+		            width = MAX_WIDTH;
+		          }
+		        } else {
+		          if (height > MAX_HEIGHT) {
+		            width *= MAX_HEIGHT / height;
+		            height = MAX_HEIGHT;
+		          }
+		        }
+		        canvas.width = width;
+		        canvas.height = height;
+		        var ctx = canvas.getContext("2d");
+		        ctx.drawImage(img, 0, 0, width, height);
 
-		if (width > height) {
-		  if (width > MAX_WIDTH) {
-		    height *= MAX_WIDTH / width;
-		    width = MAX_WIDTH;
-		  }
-		} else {
-		  if (height > MAX_HEIGHT) {
-		    width *= MAX_HEIGHT / height;
-		    height = MAX_HEIGHT;
-		  }
-		}
-		canvas.width = width;
-		canvas.height = height;
-		var ctx = canvas.getContext("2d");
-		ctx.drawImage(img, 0, 0, width, height);
-
-		return canvas.toDataURL("image/png");
+		        var dataurl = canvas.toDataURL("image/png");  
+		        $scope.uploadThumbnail(name, desc, dataurl, fileName); 
+	        }
+	    }
+	    // Load files into file reader
+	    reader.readAsDataURL(file);
 	}
+
 //---------------------------------------End of Firebase functions--------------------------------------
 
 //---------------------------------display functions begin----------------------------------------
@@ -1432,25 +1445,6 @@ app.filter('removeDuplicates', function() {
 });
 
 //-------------------------------------end of custom filters-------------------------------------
-
-//-------------------------------------Custom Directives begin-----------------------------------
-
-//for getting files from a users local computer in angular
-app.directive("fileread", [function () {
-    return {
-        scope: {
-            fileread: "="
-        },
-        link: function (scope, element, attributes) {
-            element.bind("change", function (changeEvent) {
-                scope.$apply(function () {
-                    scope.fileread = changeEvent.target.files[0];
-                });
-            });
-        }
-    }
-}]);
-//-------------------------------------End of Custom Directives-----------------------------------
 
 //-------------------------------------google maps handling begins-------------------------------
 //initMap function for google maps api

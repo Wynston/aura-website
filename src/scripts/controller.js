@@ -1,4 +1,6 @@
 //jpeg: scale to a width of 750px
+// Object Thumbnail Naming: `<object_id>_thumb.jpg`
+// Image Full Size Naming: `<asset_id>_img.jpg`
 
 //-------------------------------Angular Controller---------------------------------------
 var app = angular.module('auraCreate', []);
@@ -28,6 +30,12 @@ app.controller('myCtrl', function($scope, $http) {
 			"Zoo"
 		];
 
+		//media carousel filters preset to true
+		$scope.imageFilter = true;
+		$scope.audioFilter = true;
+		$scope.videoFilter = true;
+		$scope.threeDFilter = true;
+
 		//-------------------------------------- Initialize Firebase ------------------------------------------
 		var config = {
 			storageBucket: "https://firebasestorage.googleapis.com/v0/b/auraalert-21339.appspot.com"
@@ -40,9 +48,12 @@ app.controller('myCtrl', function($scope, $http) {
 
 //---------------------------------------Firebase functions begin---------------------------------------
 	//uploads a thumbnail to the firebase and retrieves a url of it to be stored in the AR object
-	$scope.uploadThumbnail = function(name, desc, thumbnailURL, fileName){
+	$scope.uploadThumbnail = function(name, desc, thumbnailURL){
 		//remove unecessary base64 string data
 		thumbnailURL = thumbnailURL.split(',')[1];
+
+		//new AR object ID, will be used to generate thumbnail firebase name
+		var objID = $scope.randID();
 
 		// thumbnail metadata
 		var metadata = {
@@ -51,8 +62,10 @@ app.controller('myCtrl', function($scope, $http) {
 			}
 		};
 
+		var thumnailRef = $scope.storageRef.child(objID + "_thumb.jpg");
+
 		// Upload file and metadata to the object 
-		var uploadTask = $scope.storageRef.child('images/' + fileName).putString(thumbnailURL, 'base64', metadata);
+		var uploadTask = thumnailRef.putString(thumbnailURL, 'base64', metadata);
 
 		// Listen for state changes, errors, and completion of the upload.
 		uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
@@ -86,7 +99,7 @@ app.controller('myCtrl', function($scope, $http) {
 		}, function() {
 		 // Upload completed successfully, now we can get the download URL
 		  $scope.thumbnailURL = uploadTask.snapshot.downloadURL;
-		  $scope.addObject(name, desc);
+		  $scope.addObject(name, desc, objID);
 		});
 	}
 
@@ -94,7 +107,6 @@ app.controller('myCtrl', function($scope, $http) {
 	$scope.thumbnailResize = function(name, desc){
 		var filesToUpload = document.getElementById('thumbnailSelect').files;
 	    var file = filesToUpload[0];
-	    var fileName = file.name;
 
 	    // Create an image
 	    var img = document.createElement("img");
@@ -106,7 +118,6 @@ app.controller('myCtrl', function($scope, $http) {
 	        img.src = e.target.result;
 	        img.onload = function(){
 	        	var canvas = document.createElement("canvas");
-		        //var canvas = $("<canvas>", {"id":"testing"})[0];
 		        var ctx = canvas.getContext("2d");
 		        ctx.drawImage(img, 0, 0);
 
@@ -131,8 +142,8 @@ app.controller('myCtrl', function($scope, $http) {
 		        var ctx = canvas.getContext("2d");
 		        ctx.drawImage(img, 0, 0, width, height);
 
-		        var dataurl = canvas.toDataURL("image/png");  
-		        $scope.uploadThumbnail(name, desc, dataurl, fileName); 
+		        var dataurl = canvas.toDataURL("image/jpeg");  
+		        $scope.uploadThumbnail(name, desc, dataurl); 
 	        }
 	    }
 	    // Load files into file reader
@@ -347,7 +358,7 @@ app.controller('myCtrl', function($scope, $http) {
 	}
 
 	//adds a object for an organization onto the database
-	$scope.addObject = function(name, objDesc){
+	$scope.addObject = function(name, objDesc, objID){
 		$scope.findClosestBeacon();
 		$http({
         method: 'PUT',
@@ -356,7 +367,7 @@ app.controller('myCtrl', function($scope, $http) {
         	name: name, 
         	desc: objDesc,
         	beacon_id: $scope.closestBeaconID, 
-        	arobj_id: $scope.randID(), 
+        	arobj_id: objID, 
         	organization_id: $scope.curOrg.id,
         	altitude: $scope.newAlt, 
         	latitude: $scope.newLat, 

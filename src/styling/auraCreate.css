@@ -42,6 +42,11 @@ h6{
 		font-size: 0.75em;
 		white-space: normal;
 	}
+
+	.carouselBody{
+		height: 60vh;
+		background-color: #DEDEDE;
+	}
  
 	.carousel-indicators .active {
 		background-color: #5AE2FF;

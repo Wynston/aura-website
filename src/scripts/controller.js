@@ -617,7 +617,7 @@ app.controller('myCtrl', function($scope, $http) {
 			thumbnail: $scope.assetThumbnailURL
 		}
 		updatedAssets = $scope.curObj.assets;
-		updatedAssets[length] = newAsset;
+		updatedAssets[updatedAssets.length] = newAsset;
 		$http({
         method: 'PUT',
         url: 'https://website-155919.appspot.com/api/v1.0/arobj',

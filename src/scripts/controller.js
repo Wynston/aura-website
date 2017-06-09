@@ -32,6 +32,10 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.videoFilter = true;
 		$scope.threeDFilter = true;
 
+		//initiates the arrays for file input
+		$scope.files = [];
+		$scope.fileNames = [];
+
 		//-------------------------------------- Initialize Firebase ------------------------------------------
 		var config = {
 			storageBucket: "https://firebasestorage.googleapis.com/v0/b/auraalert-21339.appspot.com"
@@ -43,6 +47,18 @@ app.controller('myCtrl', function($scope, $http) {
 	}
 
 //---------------------------------------Firebase functions begin---------------------------------------
+	//displays the current input files to the user
+	$scope.$watch('inputFiles', function()){
+		var files = element.files;
+        var fileNames=[];
+
+        for (i=0; i<files.length; i++){
+            fileNames.push(files[i].value);           
+        }
+        $scope.files = files;
+        $scope.fileNames = fileNames;  
+	}
+
 	//uploads a thumbnail to the firebase and retrieves a url of it to be stored in the AR object
 	$scope.uploadThumbnail = function(name, desc, thumbnailURL){
 		//remove unecessary base64 string data

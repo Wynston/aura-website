@@ -438,22 +438,27 @@
 							      <div class="modal-content">
 							        <div class="modal-header" style="padding:2em 3em;">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
-							          <h3><b>New Media Content for {{curObj.name}}</b></h3>
+							          <h3 class="text-primary"><b>New Media Content for {{curObj.name}}</b></h3>
 							        </div>
 							        <div class="modal-body" style="padding:2em 3em;">
-							          <form role="form">
-							            <div class="form-group">
-							              <label>Title</label>
-							              <input type="text" class="form-control" placeholder="Enter a title for the asset" ng-model="addAssetName" required>
-							            </div>
-							            <div class="form-group">
-					            			<label class="btn btn-info" for="assetFiles">
-											    <input id="assetFiles" type="file" style="display:none;" onchange="$('#preview').html($(this).val());" accept="image/*" required>
-											    Upload thumbnail:
+							          <form role="form" class="form">
+							            <div class="form-group well well-sm">
+						            		<h4 class="text-primary">Import image, audio, or video files:</h4>
+						            		<label class="btn btn-info" for="assetFiles">
+											    Browse
 											</label>
-											<span class='label label-warning' id="preview">No file chosen.</span>
 							            </div>
-							            <button type="submit" class="btn btn-success btn-block" ng-click="resizeAsset(addAssetName)" data-dismiss="modal">Create</button>
+							            <div class="form-group well well-sm ">
+							              <h4 class="text-primary">Enter a title for each file:</h4>
+							            	<ul class="list list-unstyled">
+							            		<li ng-if="fileNames.length < 1" class='label label-warning'>No file chosen.</li>
+							            		<li class='label label-warning' ng-repeat="name in fileNames">
+							            			{{name}}
+							            			<input type="text" class="form-control" placeholder="Enter a title for the asset" ng-model="addAssetName" required></input>
+							            		</li>
+							            	</ul>
+							            </div>	
+							            <button type="submit" class="btn btn-success btn-block" ng-click="resizeAsset(addAssetName)" data-dismiss="modal">Upload</button>
 							          </form>
 							        </div>
 							        <div class="modal-footer">

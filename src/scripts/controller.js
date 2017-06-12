@@ -33,8 +33,7 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.threeDFilter = true;
 
 		//initiates the arrays for file input
-		$scope.files = [];
-		$scope.fileNames = [];
+		$scope.resetAssetsForm();
 
 		//-------------------------------------- Initialize Firebase ------------------------------------------
 		var config = {
@@ -46,18 +45,40 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.storageRef = $scope.storage.ref();
 	}
 
-//---------------------------------------Firebase functions begin---------------------------------------
-	//displays the current input files to the user
-	$scope.$watch('inputFiles', function()){
-		var files = element.files;
-        var fileNames=[];
+	//------------------Start of Bootstrap Alert System-------------------------
 
-        for (i=0; i<files.length; i++){
-            fileNames.push(files[i].value);           
-        }
-        $scope.files = files;
-        $scope.fileNames = fileNames;  
+	//shows a success alert of a given message
+	$scope.alertSuccess = function(msg){
+		$('#alert').html('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+msg+'</span></div>');
 	}
+
+	//shows a fail alert of a given message
+	$scope.alertFailure = function(msg){
+		$('#alert').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+msg+'</span></div>');
+	}
+	//------------------End of Bootstrap Alert System---------------------------
+
+//---------------------------------------Firebase functions begin---------------------------------------
+
+	//resets the assets form fields
+	$scope.resetAssetsForm = function(){
+		$scope.files = [];
+		$scope.fileNames = [];
+		$scope.uploadCount = 0;
+	}
+
+	//contains the current files to be uploaded
+    $scope.uploadFile = function(event){
+        var files = event.target.files;
+        $scope.files = files;
+        $scope.$apply();
+    }; 
+
+    //removes a file from the currently upload files
+    $scope.removeFile = function(index){
+    	$scope.files.splice(index, 1);  
+    	$scope.apply();
+    }
 
 	//uploads a thumbnail to the firebase and retrieves a url of it to be stored in the AR object
 	$scope.uploadThumbnail = function(name, desc, thumbnailURL){
@@ -162,19 +183,23 @@ app.controller('myCtrl', function($scope, $http) {
 	    reader.readAsDataURL(file);
 	}
 
-	//resize an asset to be 750px and creates a 150px thumbnail version of itself
-	$scope.resizeAsset = function(assetName){
-		var filesToUpload = document.getElementById('assetFiles').files;
-	    var file = filesToUpload[0];
+	//helper function to loop through input files 
+	$scope.multiFileUpload = function(){
+		for (var i = 0; i < filesToUpload.length; i++) {
+		    $scope.resizeAsset($scope.files, $scope.fileNames[i]);
+		}
+	}
 
-	    // Create an image and a thumbnail copy
+	//resize an asset to be 750px and creates a 150px thumbnail version of itself
+	$scope.resizeAsset = function(file, fileName){
+		
+		// Create an image and a thumbnail copy
 	    var imgAsset = document.createElement("img");
 	    var assetThumbnail = document.createElement("img");
 	    // Create a file reader
 	    var reader = new FileReader();
 	    // Set the image once loaded into file reader
-	    reader.onload = function(e)
-	    {
+	    reader.onload = function(e){
 	        imgAsset.src = e.target.result;
 	        assetThumbnail.src = e.target.result;
 	        imgAsset.onload = function(){
@@ -240,19 +265,19 @@ app.controller('myCtrl', function($scope, $http) {
 			        ctx2.drawImage(assetThumbnail, 0, 0, width2, height2);
 
 			        //taking the base64 url for the asset and its thumbnail
-			        var dataurl1 = canvas1.toDataURL("image/jpeg"); 
-			        var dataurl2 = canvas2.toDataURL("image/jpeg");
+			        var assetURL = canvas1.toDataURL("image/jpeg"); 
+			        var thumbnailURL = canvas2.toDataURL("image/jpeg");
 
-			        $scope.uploadAsset(assetName, dataurl1, dataurl2);
+			        $scope.uploadFBAsset(fileName, assetURL, thumbnailURL);
 	        	}
 	        }
 	    }
-	    // Load files into file reader
+	    //Load files into file reader
 	    reader.readAsDataURL(file);
 	}
 
 	//uploads the main asset and calls the uploading of the thumbnail asset
-	$scope.uploadAsset = function(assetName, assetURL, thumbnailURL){
+	$scope.uploadFBAsset = function(assetName, assetURL, thumbnailURL){
 		//remove unecessary base64 string data
 		assetURL = assetURL.split(',')[1];
 
@@ -302,12 +327,12 @@ app.controller('myCtrl', function($scope, $http) {
 		  }
 		}, function() {
 		 // Upload completed successfully, now we can get the download URL
-		  $scope.assetURL = uploadTask.snapshot.downloadURL;
-		  $scope.uploadAssetThumbnail(assetName, assetID, thumbnailURL);
+		  var newAssetURL = uploadTask.snapshot.downloadURL;
+		  $scope.uploadFBAssetThumbnail(assetName, assetID, newAssetURL, thumbnailURL);
 		});
 	}
 
-	$scope.uploadAssetThumbnail = function(assetName, assetID, thumbnailURL){
+	$scope.uploadFBAssetThumbnail = function(assetName, assetID, assetURL, thumbnailURL){
 		//remove unecessary base64 string data
 		thumbnailURL = thumbnailURL.split(',')[1];
 
@@ -354,9 +379,28 @@ app.controller('myCtrl', function($scope, $http) {
 		  }
 		}, function() {
 		 // Upload completed successfully, now we can get the download URL
-		  $scope.assetThumbnailURL = uploadTask.snapshot.downloadURL;
-		  $scope.addAsset(assetName, assetID);
+		  var newAssetThumbnailURL = uploadTask.snapshot.downloadURL;
+		  $scope.updateAssets(assetName, assetID, assetURL, newAssetThumbnailURL);
 		});
+	}
+
+	//adds the asset to local storage in preparation to be added to the server
+	$scope.updateAssets = function(assetName, assetID, assetURL, thumbnailURL){
+		var newAsset = {
+			name: assetName,
+			value: assetURL,
+			content_type: "image",
+			arobj_id: $scope.curObj.arobj_id,
+			content_id: assetID,
+			thumbnail: thumbnailURL
+		}
+		$scope.updatedAssets = $scope.curObj.assets;
+		$scope.updatedAssets[$scope.updatedAssets.length] = newAsset;
+		$scope.uploadCount ++;
+		alert($scope.uploadCount);
+		if($scope.uploadCount == $scope.files.length){
+			$scope.addAssets();
+		}
 	}
 
 //---------------------------------------End of Firebase functions--------------------------------------
@@ -622,18 +666,9 @@ app.controller('myCtrl', function($scope, $http) {
 
 	}
 
+
 	//adds an asset to a obect
-	$scope.addAsset = function(assetName, assetID){
-		newAsset = {
-			name: assetName,
-			value: $scope.assetURL,
-			content_type: "image",
-			arobj_id: $scope.curObj.arobj_id,
-			content_id: assetID,
-			thumbnail: $scope.assetThumbnailURL
-		}
-		updatedAssets = $scope.curObj.assets;
-		updatedAssets[updatedAssets.length] = newAsset;
+	$scope.addAssets = function(){
 		$http({
         method: 'PUT',
         url: 'https://website-155919.appspot.com/api/v1.0/arobj',
@@ -647,13 +682,13 @@ app.controller('myCtrl', function($scope, $http) {
         	latitude: $scope.curObj.latitude, 
         	longitude: $scope.curObj.longitude,
         	thumbnail: $scope.curObj.thumbnail,
-        	contents: updatedAssets
+        	contents: $scope.updatedAssets
         },
         headers: {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			alert("The asset has been successfully added to " + $scope.curObj.name + "!");
+			$scope.alertSuccess($scope.uploadCount +  " assets have been successfully added to " + $scope.curObj.name + "!");
 		}, function myError(response) {
 		});
 		$scope.displayObject($scope.curObj);
@@ -1644,6 +1679,20 @@ app.controller('myCtrl', function($scope, $http) {
 });
 
 //-------------------------------------end of helper functions-----------------------------------
+
+//-------------------------------------Custom Directives begins----------------------------------
+
+app.directive('customOnChange', function() {
+  return {
+    restrict: 'A',
+    link: function (scope, element, attrs) {
+      var onChangeHandler = scope.$eval(attrs.customOnChange);
+      element.bind('change', onChangeHandler);
+    }
+  };
+});
+
+//-------------------------------------End of Custom Directives----------------------------------
 
 
 //-------------------------------------custom filters begins-------------------------------------

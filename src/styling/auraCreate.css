@@ -43,6 +43,15 @@ h6{
 		white-space: normal;
 	}
 
+	.cancelFile{
+		color: white;
+	}
+
+	.cancelFile:hover{
+		cursor: pointer;
+		color: #1646CB;
+	}
+
 	.carouselBody{
 		min-height: 10vh;
 	}
@@ -126,10 +135,31 @@ h6{
 	}
 
 	/*-----------------------------------------------ID's-----------------------------------------------*/
+	#alert{
+	    position:fixed; 
+	    top: 0px; 
+	    left: 0px; 
+	    width: 100%;
+	    z-index:9999; 
+	    border-radius:0px
+	}
+
 	#banner{
 		margin-top: 2em;
 		margin-left: 1em;
 		margin-right: 1em;
+	}
+
+	#fileLabel{
+		display: inline-block; 
+		width: 30%; 
+		overflow: hidden; 
+		text-overflow: ellipsis; 
+		white-space: nowrap;
+		vertical-align: middle;
+		float: left;
+		margin-right: 0.25em;
+		margin-top: 0.5em;
 	}
 
 	#googleMapsAddBeacon, #googleMapsAddObject{
@@ -201,6 +231,10 @@ h6{
 	body{
 		font-size: 14px;
 	}
+
+	#fileLabel{
+		margin-top: 0.5em;
+	}
 }
 
 /* --------------------------Portrait tablets and small desktops--------------------------------- */
@@ -208,12 +242,20 @@ h6{
 	body{
 		font-size: 12px;
 	}
+
+	#fileLabel{
+		margin-top: 0.75em;
+	}
 }	
 
 /* --------------------------------Landscape phones and portrait tablets------------------------- */
 @media (max-width: 767px) {
 	body{
 		font-size: 10px;
+	}
+
+	#fileLabel{
+		margin-top: 0.75em;
 	}
 
 	#liveDisplay{
@@ -239,6 +281,10 @@ h6{
 
 	.dropdown-menu{
 		line-height: 0.5
+	}
+
+	#fileLabel{
+		margin-top: 1em;
 	}
 
 	#filterTitle{

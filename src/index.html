@@ -12,6 +12,8 @@
 	</head>
 	<body>
 		<div class="container-fluid" ng-app="auraCreate" ng-controller="myCtrl" ng-init="init()" ng-cloak id="MAIN">
+			<div id="alert">
+			</div>
 			<div class="row page-header" id="banner">
 				<div class="col-xs-9 col-sm-6 col-md-6 col-lg-6">
 					<img ng-src="images/aura_logo.png" alt="Aura Logo" class="img-responsive pull-left logo" ng-click="changeView('dashboard', '')"/>
@@ -24,7 +26,7 @@
 		        	</a>	
 				</div>
 			</div> 
-			
+		
 			<!-- Main Content -->
 			<div class="container-fluid row well well-lg" id="mainContentContainer">
 				<!-- User Organizations Menu -->
@@ -357,7 +359,7 @@
 									          <h3 class="modal-title"><strong>{{modalHeader}}</strong></h3>
 									        </div>
 									        <div class="modal-body text-center">
-									          <img ng-src={{modalImgSrc}}></img>
+									          <img class="img-rounded" ng-src={{modalImgSrc}}></img>
 									        </div>
 									        <div class="modal-footer">
 									        	<ul class="list-inline text-center">
@@ -390,7 +392,7 @@
 		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center center-block">
 		 								<div class="btn-group">
 		 									<button class="btn btn-info" type="button" ng-click="displayAssetsModal()">Media</button>
-		 									<label class="btn btn-success" type="button" data-toggle="modal" data-target="#newAssetsModal">
+		 									<label class="btn btn-success" type="button" data-toggle="modal" ng-click="resetAssetsForm()" data-target="#newAssetsModal">
 									          <span class="glyphicon glyphicon-plus"></span> 
 									        </label>
 									    </div>
@@ -445,20 +447,24 @@
 							            <div class="form-group well well-sm">
 						            		<h4 class="text-primary">Import image, audio, or video files:</h4>
 						            		<label class="btn btn-info" for="assetFiles">
+											    <input id="assetFiles" type="file" style="display:none;" accept="image/*|audio/*|video*" custom-on-change="uploadFile" required multiple="true"></input>
 											    Browse
 											</label>
 							            </div>
-							            <div class="form-group well well-sm ">
+							            <div class="form-group well well-sm form-horizontal">
 							              <h4 class="text-primary">Enter a title for each file:</h4>
 							            	<ul class="list list-unstyled">
-							            		<li ng-if="fileNames.length < 1" class='label label-warning'>No file chosen.</li>
-							            		<li class='label label-warning' ng-repeat="name in fileNames">
-							            			{{name}}
-							            			<input type="text" class="form-control" placeholder="Enter a title for the asset" ng-model="addAssetName" required></input>
+							            		<li ng-if="files.length < 1" class='label label-warning float-left'>No files chosen.</li>
+							            		<li ng-repeat="file in files" style="margin-bottom: 1em;">
+							            			<label class="label label-warning" id="fileLabel">
+							            				{{file.name}}
+												        <span class="glyphicon glyphicon-remove pull-right cancelFile" ng-click="removeFile($index)"></span>
+							            			</label>
+							            			<input type="text" class="form-control input-sm" placeholder="Enter title" ng-model="fileNames[$index]" style="width:66%;" required></input>
 							            		</li>
 							            	</ul>
 							            </div>	
-							            <button type="submit" class="btn btn-success btn-block" ng-click="resizeAsset(addAssetName)" data-dismiss="modal">Upload</button>
+							            <button type="submit" class="btn btn-success btn-block" ng-click="multiFileUpload()" data-dismiss="modal">Upload</button>
 							          </form>
 							        </div>
 							        <div class="modal-footer">
@@ -491,7 +497,7 @@
 											  <!-- Media Content -->
 											  <div class="carousel-inner carouselBody">
 											  	<div class="item active">
-											      <img ng-show="imageFilter" ng-if="assets[0].content_type == 'image'" ng-src={{assets[0].value}} alt={{assets[0].name}} class="objectMedia center-block">
+											      <img ng-show="imageFilter" ng-if="assets[0].content_type == 'image'" ng-src={{assets[0].value}} alt={{assets[0].name}} class="objectMedia center-block img-rounded">
 
 											      <audio ng-show="audioFilter" ng-if="assets[0].content_type == 'audio'" class="objectMedia center-block" src="" autobuffer autoloop loop controls></audio>
 
@@ -505,7 +511,7 @@
 											    </div>
 
 											    <div class="item" ng-repeat="asset in assets" ng-if="$index > 0">
-											      <img ng-show="imageFilter" ng-if="assets[$index].content_type == 'image'" ng-src={{assets[$index].value}} alt={{assets[$index].name}} class="objectMedia center-block">
+											      <img ng-show="imageFilter" ng-if="assets[$index].content_type == 'image'" ng-src={{assets[$index].value}} alt={{assets[$index].name}} class="objectMedia center-block img-rounded">
 
 											      <audio ng-show="audioFilter" ng-if="assets[$index].content_type == 'audio'" class="objectMedia center-block" src="" autobuffer autoloop loop controls></audio>
 

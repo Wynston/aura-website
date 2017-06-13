@@ -34,6 +34,7 @@ app.controller('myCtrl', function($scope, $http) {
 
 		//initiates the arrays for file input
 		$scope.resetAssetsForm();
+		$scope.resetThumbnailForm();
 
 		//-------------------------------------- Initialize Firebase ------------------------------------------
 		var config = {
@@ -65,6 +66,11 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.files = [];
 		$scope.fileNames = [];
 		$scope.uploadCount = 0;
+	}
+
+	//resets the thumbnail file name field
+	$scope.resetThumbnailForm = function(){
+		$scope.curThumbnail = "No file chosen.";
 	}
 
 	//updates the current files to be uploaded
@@ -136,6 +142,13 @@ app.controller('myCtrl', function($scope, $http) {
 			}
 		}
 		$scope.files = temp;
+    }
+
+    //changes the thumbnail label to the selected file name
+    $scope.updateThumbnailLabel = function(event){
+    	var thumb = document.getElementById("thumbnailSelect");
+    	$scope.curThumbnail = thumb.value;
+    	$scope.$apply();
     }
 
 	//uploads a thumbnail to the firebase and retrieves a url of it to be stored in the AR object
@@ -243,8 +256,8 @@ app.controller('myCtrl', function($scope, $http) {
 
 	//helper function to loop through input files 
 	$scope.multiFileUpload = function(){
-		for (var i = 0; i < filesToUpload.length; i++) {
-		    $scope.resizeAsset($scope.files, $scope.fileNames[i]);
+		for (var i = 0; i < $scope.files.length; i++) {
+		    $scope.resizeAsset($scope.files[i], $scope.fileNames[i]);
 		}
 	}
 
@@ -454,7 +467,6 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.updatedAssets = $scope.curObj.assets;
 		$scope.updatedAssets[$scope.updatedAssets.length] = newAsset;
 		$scope.uploadCount ++;
-		alert($scope.uploadCount);
 		if($scope.uploadCount == $scope.files.length){
 			$scope.addAssets();
 		}
@@ -602,6 +614,12 @@ app.controller('myCtrl', function($scope, $http) {
 		$("#thumbnailModal").modal();
 	}
 
+	//activates the modal, loads the google scripts and resets any forms necessary
+	$scope.displayAddObjectModal = function(){
+		$scope.loadGoogleScript();
+		$scope.resetThumbnailForm();
+	}
+
 	//display an objects assets in a modal
 	$scope.displayAssetsModal = function(){
 		if($scope.curObj.assets.length > 0){
@@ -609,7 +627,7 @@ app.controller('myCtrl', function($scope, $http) {
 			$("#assetsModal").modal();
 		}
 		else{
-			alert("Error: " + $scope.curObj.name + " has no media.");
+			$scope.alertFailure("Error: " + $scope.curObj.name + " has no media.");
 		}
 	}
 
@@ -632,7 +650,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			alert(name + " has been successfully added!");
+			$scope.alertSuccess(name + " has been successfully added!");
 		}, function myError(response) {
 		    
 		});
@@ -660,7 +678,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			alert(name + " has been successfully added!");
+			$scope.alertSuccess(name + " has been successfully added!");
 		}, function myError(response) {
 		    
 		});
@@ -688,7 +706,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			alert(name + " has been successfully added!");
+			$scope.alertSuccess(name + " has been successfully added!");
 		}, function myError(response) {
 		});
 		$scope.loadObjects();
@@ -716,7 +734,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			alert(name + " has been successfully added!");
+			$scope.alertSuccess(name + " has been successfully added!");
 		}, function myError(response) {
 		});
 		$scope.loadBeacons();
@@ -864,7 +882,7 @@ app.controller('myCtrl', function($scope, $http) {
     		}
     	}
     	if(!found){
-    		alert("Error: beacon not found.");
+    		$scope.alertFailure("Error: beacon not found.");
     	}
     }
 
@@ -1409,7 +1427,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			alert($scope.curBeacon.beacon_name + " has been successfully updated!");
+			$scope.alertSuccess($scope.curBeacon.beacon_name + " has been successfully updated!");
 		}, function myError(response) {
 		    
 		});
@@ -1437,7 +1455,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			alert($scope.curBeacon.beacon_name + " has been successfully updated!");
+			$scope.alertSuccess($scope.curBeacon.beacon_name + " has been successfully updated!");
 		}, function myError(response) {
 		    
 		});
@@ -1465,7 +1483,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			alert($scope.curObj.name + " has been successfully updated!");
+			$scope.alertSuccess($scope.curObj.name + " has been successfully updated!");
 		}, function myError(response) {
 		});
 		//reload the object 
@@ -1712,12 +1730,12 @@ app.controller('myCtrl', function($scope, $http) {
 				} 
 				else 
 				{
-					alert("No results found");
+					angular.element(document.getElementById('MAIN')).scope().alertFailure("No results found");
 				}
 		  	} 
 		  	else 
 		  	{
-				alert("Elevation service failed due to: " + status);
+		  		angular.element(document.getElementById('MAIN')).scope().alertFailure("Elevation service failed due to: " + status);
 			}
 		});
 	}
@@ -1981,7 +1999,7 @@ function initMap(){
 		heatmap.setMap(map);
 	}
 	else{
-		alert("Error: undefined map");
+		angular.element(document.getElementById('MAIN')).scope().alertFailure("Error: undefined map");
 	}
 }
 
@@ -2054,12 +2072,12 @@ function getElevation(latLng)
 			} 
 			else 
 			{
-				alert("No results found");
+				angular.element(document.getElementById('MAIN')).scope().alertFailure("No results found");
 			}
 	  	} 
 	  	else 
 	  	{
-			alert("Elevation service failed due to: " + status);
+	  		angular.element(document.getElementById('MAIN')).scope().alertFailure("Elevation service failed due to: " + status);
 		}
 	});
 }

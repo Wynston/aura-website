@@ -67,17 +67,75 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.uploadCount = 0;
 	}
 
-	//contains the current files to be uploaded
+	//updates the current files to be uploaded
+	//	NOTE: JS array methods don't work with FileList objects
     $scope.uploadFile = function(event){
-        var files = event.target.files;
-        $scope.files = files;
+    	var files = event.target.files;
+        if($scope.files.length == 0){
+        	$scope.files = files;
+        }
+        else{
+        	//concant both arrays
+        	var temp1 = [];
+        	for(var i = 0; i < $scope.files.length; i++){
+        		temp1[i] = $scope.files[i];
+        	}
+        	for(var i = 0; i < files.length; i++){
+        		temp1[$scope.files.length + i] = files[i];
+        	}
+
+        	//remove duplicates
+        	var temp2 = [];
+			for(var i = 0; i < temp1.length; i++){
+				//searching for a duplicate
+				var cur = temp1[i];
+				var duplicate = false;
+				for(var j = 0; j < temp2.length; j++){
+					if(cur.name == temp2[j].name){
+						duplicate = true;
+					}
+				}
+				if(duplicate == true){
+					//don't add the element
+				}
+				else{
+					//no duplicate case, add to array
+					temp2[temp2.length] = cur;
+				}
+			}
+        	$scope.files = temp2;
+        }
         $scope.$apply();
     }; 
 
     //removes a file from the currently upload files
+    //	NOTE: JS array methods don't work with FileList objects
     $scope.removeFile = function(index){
-    	$scope.files.splice(index, 1);  
-    	$scope.apply();
+		var temp = []
+		//element to remove is the first 
+		if(index == 0){
+			for(var i = 0; i < $scope.files.length - 1; i++){
+				temp[i] = $scope.files[i + 1];
+			}
+		}
+		//element to remove is the last
+		else if(index == $scope.files.length - 1){
+			for(var i = 0; i < $scope.files.length - 1; i++){
+				temp[i] = $scope.files[i];
+			}
+		}
+		//element to remove is in the middle
+		else{
+			//copy elements before the index
+			for(var i = 0; i < index; i++){
+				temp[i] = $scope.files[i];
+			}
+			//copy elements after the index and shift left
+			for(var i = index + 1; i < $scope.files.length; i++){
+				temp[i - 1] = $scope.files[i];
+			}
+		}
+		$scope.files = temp;
     }
 
 	//uploads a thumbnail to the firebase and retrieves a url of it to be stored in the AR object
@@ -192,7 +250,6 @@ app.controller('myCtrl', function($scope, $http) {
 
 	//resize an asset to be 750px and creates a 150px thumbnail version of itself
 	$scope.resizeAsset = function(file, fileName){
-		
 		// Create an image and a thumbnail copy
 	    var imgAsset = document.createElement("img");
 	    var assetThumbnail = document.createElement("img");

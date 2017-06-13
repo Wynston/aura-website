@@ -391,9 +391,12 @@
 		 							</div>
 		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center center-block">
 		 								<div class="btn-group">
-		 									<button class="btn btn-info" type="button" ng-click="displayAssetsModal()">Media</button>
 		 									<label class="btn btn-success" type="button" data-toggle="modal" ng-click="resetAssetsForm()" data-target="#newAssetsModal">
 									          <span class="glyphicon glyphicon-plus"></span> 
+									        </label>
+		 									<button class="btn btn-info" type="button" ng-click="displayAssetsModal()">Media</button>
+									        <label class="btn btn-danger" type="button" data-toggle="modal" data-target="#deleteAssetsModal" ng-click="setAssets()">
+									        	<span class="glyphicon glyphicon-minus"></span> 
 									        </label>
 									    </div>
 		 							</div>
@@ -418,11 +421,11 @@
 							    
 							      <!-- Description Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header">
+							        <div class="modal-header text-primary">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h4 class="modal-title"><strong>{{curObj.name}}</strong></h4>
 							        </div>
-							        <div class="modal-body text-left">
+							        <div class="modal-body text-left text-primary">
 							          <p>{{curObj.description}}</p>
 							        </div>
 							        <div class="modal-footer">
@@ -469,6 +472,34 @@
 							        </div>
 							        <div class="modal-footer">
 							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+							        </div>
+							      </div>
+							    </div>
+							</div>
+
+							<!-- Asset Deletion Modal -->
+				 			<div class="modal fade" id="deleteAssetsModal" role="dialog" data-backdrop="true">
+							    <div class="modal-dialog">
+							    
+							      <!-- Asset Deletion Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header text-primary">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h3 class="modal-title"><strong>Media deletion for {{curObj.name}}</strong></h3>
+							        </div>
+							        <div class="modal-body">
+							        	<ul class="list list-unstyled">
+							        		<li ng-repeat="asset in curAssets" class="panel panel-primary">
+						        				<h4 class="panel-heading" style="margin-top: 0; 	">{{asset.name}}</h4>
+						        				<img class="img-thumbnail panel-body" src="{{asset.thumbnail}}" alt="{{asset.name}}" style="margin-bottom: 0.5em;"></img>
+						        				<div class="panel-footer">
+						        					<label class="btn btn-danger text-center" ng-click="removeAsset(asset)">Delete <span class="glyphicon glyphicon-remove"></span></label>
+						        				</div>
+							        		</li>
+							        	</ul>
+							        </div>
+							        <div class="modal-footer">
+							          <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
 							        </div>
 							      </div>
 							    </div>
@@ -572,24 +603,24 @@
 							    
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header" style="padding:2em 3em;">
+							        <div class="modal-header text-primary" style="padding:2em 3em;">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3><b>Beacon creation for {{curOrg.name}}</b></h3>
 							        </div>
 							        <div class="modal-body" style="padding:2em 3em;">
 							          <form role="form">
-							            <div class="form-group">
+							            <div class="form-group text-primary">
 							              <label>Name</label>
 							              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconName" required>
 							            </div>
-							            <div class="form-group form-group-sm">
+							            <div class="form-group form-group-sm text-primary">
 							            	<label>Type:</label>
 										    <select ng-model="addBeaconType" class="form-control input-sm" required>
 										    	<option value="" disabled selected hidden>Select beacon type</option>
 										    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
 										    </select>
 							            </div> 
-							            <div class="form-group panel panel-default text-center">
+							            <div class="form-group panel panel-default text-center text-primary">
 							            	<label><h5>Click a position on the map to the determine the beacon's location:</h5></label>
 							            	<div id="googleMapsAddBeacon" class="panel-body">
 							            	</div>
@@ -614,28 +645,28 @@
 							    
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header" style="padding:2em 3em;">
+							        <div class="modal-header text-primary" style="padding:2em 3em;">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3><b>Object creation for {{curOrg.name}}</b></h3>
 							        </div>
 							        <div class="modal-body" style="padding:2em 3em;">
 							          <form role="form">
-							            <div class="form-group">
+							            <div class="form-group text-primary">
 							              <label>Name</label>
 							              <input type="text" class="form-control" placeholder="Enter object's name" ng-model="addObjectName" required>
 							            </div>
-							            <div class="form-group">
+							            <div class="form-group text-primary">
 							              <label>Description</label>
 							              <textarea type="text" class="form-control" placeholder="Enter object's description" ng-model="addObjectDesc" rows=3 required style="resize: none;"></textarea>
 							            </div>
-							            <div class="form-group">
+							            <div class="form-group text-primary">
 					            			<label class="btn btn-info" for="thumbnailSelect">
 											    <input id="thumbnailSelect" type="file" style="display:none;" custom-on-change="updateThumbnailLabel" accept="image/*" required>
 											    Upload thumbnail:
 											</label>
 											<span class='label label-warning'>{{curThumbnail}}</span>
 							            </div>
-							            <div class="form-group panel panel-default text-center">
+							            <div class="form-group panel panel-default text-center text-primary">
 							            	<label><h5>Click a position on the map to the determine the object's location:</h5></label>
 							            	<div id="googleMapsAddObject" class="panel-body">
 							            	</div>
@@ -656,24 +687,24 @@
 							    
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header" style="padding:2em 3em;">
+							        <div class="modal-header text-primary" style="padding:2em 3em;">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3><b>Beacon creation for {{curOrg.name}}</b></h3>
 							        </div>
 							        <div class="modal-body" style="padding:2em 3em;">
 							          <form role="form">
-							            <div class="form-group">
+							            <div class="form-group text-primary">
 							              <label>Name</label>
 							              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconForObjectName" required>
 							            </div>
-							            <div class="form-group form-group-sm">
+							            <div class="form-group form-group-sm text-primary">
 							            	<label>Type:</label>
 										    <select ng-model="addBeaconForObjectType" class="form-control" required>
 										    	<option value="" disabled selected hidden>Select beacon type</option>
 										    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
 										    </select>
 							            </div> 
-							            <label>Location pre-determined from the new object's location.</label>
+							            <label class="text-primary">Location pre-determined from the new object's location.</label>
 							            <button type="submit" class="btn btn-success btn-block" ng-click="addBeaconForObject(addBeaconForObjectName, addBeaconForObjectType)" data-dismiss="modal">Create</button>
 							          </form>
 							        </div>

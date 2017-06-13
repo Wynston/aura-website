@@ -117,6 +117,15 @@ h6{
 		display:inline; 
 	}
 
+
+	.modal-dialog{
+	    overflow-y: initial !important
+	}
+	.modal-body{
+	    max-height: 44em;
+	    overflow-y: auto;
+	}
+
 	.objectMedia{
 		max-height: 70vh;
 	}
@@ -152,7 +161,7 @@ h6{
 
 	#fileLabel{
 		display: inline-block; 
-		width: 30%; 
+		width: 33%; 
 		overflow: hidden; 
 		text-overflow: ellipsis; 
 		white-space: nowrap;

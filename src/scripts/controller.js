@@ -50,12 +50,12 @@ app.controller('myCtrl', function($scope, $http) {
 
 	//shows a success alert of a given message
 	$scope.alertSuccess = function(msg){
-		$('#alert').html('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+msg+'</span></div>');
+		$('#alert').html('<div class="alert alert-success alert-dismissable fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+msg+'</span></div>');
 	}
 
 	//shows a fail alert of a given message
 	$scope.alertFailure = function(msg){
-		$('#alert').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+msg+'</span></div>');
+		$('#alert').html('<div class="alert alert-danger alert-dismissable fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+msg+'</span></div>');
 	}
 	//------------------End of Bootstrap Alert System---------------------------
 
@@ -590,7 +590,7 @@ app.controller('myCtrl', function($scope, $http) {
 
 	//used to show a specified beacon's objects when selected from the beacons page
 	$scope.displayBeaconObjects = function (){
-		$scope.changeView("objectsList", "");
+		$scope.changeView("objectsList", $scope.curOrg);
 		$scope.changeBeaconFilter($scope.curBeacon.beacon_name);
 	}
 
@@ -1491,6 +1491,14 @@ app.controller('myCtrl', function($scope, $http) {
 	}
 //-------------------------------------- End of update functions----------------------------------------
 
+//--------------------------------------Start of Delete Functions---------------------------------------
+	
+	//removes an asset from an objects assets and from firebase
+	$scope.removeAsset = function(asset){
+
+	}
+//--------------------------------------End of Delete Function------------------------------------------
+
 //--------------------------------------helper functions begin-----------------------------------------
 	//transforms the beacon type from the database to be more readable
     $scope.parseBeaconType = function (beaconType){
@@ -1578,6 +1586,11 @@ app.controller('myCtrl', function($scope, $http) {
     		}
     	}
     	return tally;
+    }
+
+    //helper function to scopify assets for deletion purposes
+    $scope.setAssets = function(){
+    	$scope.curAssets = $scope.curObj.assets;
     }
 
     //finds the beacon associated with an object

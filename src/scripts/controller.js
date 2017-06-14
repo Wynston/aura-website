@@ -285,29 +285,22 @@ app.controller('myCtrl', function($scope, $http) {
 			        ctx2.drawImage(assetThumbnail, 0, 0);
 
 			        //width and height for the main asset
-			        var MAX_WIDTH1 = 750;
-			        var MAX_HEIGHT1 = 750;
-			        var width1 = imgAsset.width;
-			        var height1 = imgAsset.height;
+			        //  Note: Scale height proportional to width of 750px
+			        var oldHeight = imgAsset.height;
+			        var oldWidth = imgAsset.width;
+			        var width1;
+			        var height1;
+
+			        //scaling for the main asset
+			        var scaleFactor  = 750 / oldWidth;
+			        width1 = oldWidth * scaleFactor;
+			        height1 = oldHeight * scaleFactor;
 
 			        //width and height for the asset thumbnail
 			        var MAX_WIDTH2 = 150;
 			        var MAX_HEIGHT2 = 150;
 			        var width2 = assetThumbnail.width;
 			        var height2 = assetThumbnail.height;
-
-			        //scaling for the main asset
-			        if (width1 > height1) {
-			          if (width1 > MAX_WIDTH1) {
-			            height1 *= MAX_WIDTH1 / width1;
-			            width1 = MAX_WIDTH1;
-			          }
-			        } else {
-			          if (height1 > MAX_HEIGHT1) {
-			            width1 *= MAX_HEIGHT1 / height1;
-			            height1 = MAX_HEIGHT1;
-			          }
-			        }
 
 			        //scaling for the asset thumbnail
 			        if (width2 > height2) {
@@ -521,10 +514,6 @@ app.controller('myCtrl', function($scope, $http) {
 				$scope.loadStats();
 				$scope.loadGoogleScript();
 				break;
-			case "webcam":
-				$scope.changeLiveTitle("Webcam", $scope.userName, false);
-				sessionStorage.curView = view;
-				$scope.curView = view;
 		}
 	}
 
@@ -1486,16 +1475,109 @@ app.controller('myCtrl', function($scope, $http) {
 			$scope.alertSuccess($scope.curObj.name + " has been successfully updated!");
 		}, function myError(response) {
 		});
-		//reload the object 
+		//reload the object change
 		$scope.displayObject($scope.curObj);
 	}
 //-------------------------------------- End of update functions----------------------------------------
 
 //--------------------------------------Start of Delete Functions---------------------------------------
 	
-	//removes an asset from an objects assets and from firebase
-	$scope.removeAsset = function(asset){
+	//removes an organization and all of its beacons, objects, and assets from the database and storage bucket
+	$scope.removeOrganization = function(organization){
+		if(confirm("Are you sure you want to remove " + organization.name + " and all of its beacons, objects, and media?")){
+			//Delete the organization
+			// $http({
+		 //        method: 'Delete',
+		 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
+		 //        headers: {
+		 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+			// 	}
+			// }).then(function mySuccess(response) {
+			// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
+			// }, function myError(response) {
+			    
+			// });	
 
+			//Delete all beacons, objects, and assets for the organization
+			$scope.$apply();
+		}
+		else{
+			//Don't delete the organization
+		}
+	}
+
+	//deletes a beacon from the server and local
+	$scope.removeBeacon = function(beacon){
+		if(confirm("Are you sure you want to remove " + beacon.beacon_name + "?")){
+			//Delete the beacon
+			// $http({
+		 //        method: 'Delete',
+		 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
+		 //        headers: {
+		 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+			// 	}
+			// }).then(function mySuccess(response) {
+			// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
+			// }, function myError(response) {
+			    
+			// });
+
+			//refresh the bindings
+			$scope.$apply();
+		}
+		else{
+			//Don't delete the beacon
+		}
+	}
+
+	//deletes an object and all of its assetschange
+	$scope.removeObject = function(object){
+		if(confirm("Are you sure you want to remove " + object.name + " and all of its assets?")){
+			//Delete the object
+			// $http({
+		 //        method: 'Delete',
+		 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
+		 //        headers: {
+		 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+			// 	}
+			// }).then(function mySuccess(response) {
+			// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
+			// }, function myError(response) {
+			    
+			// });
+
+			//Delete all assets associated with the object from firebase
+
+			//refresh the bindings
+			$scope.$apply();
+		}
+		else{
+			//Don't delete the object
+		}
+	}
+
+	//deletes an asset from an objects assets and from firebase
+	$scope.removeAsset = function(asset){
+		if(confirm("Are you sure you want to remove " + asset.name + "?")){
+			//Delete the asset
+			// $http({
+		 //        method: 'Delete',
+		 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
+		 //        headers: {
+		 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+			// 	}
+			// }).then(function mySuccess(response) {
+			// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
+			// }, function myError(response) {
+			    
+			// });
+
+			//refresh the bindings
+			$scope.$apply();
+		}
+		else{
+			//Don't delete the asset
+		}
 	}
 //--------------------------------------End of Delete Function------------------------------------------
 

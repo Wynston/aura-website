@@ -108,7 +108,7 @@
 			 	<div class="col-xs-12 col-sm-9 col-md-9 col-lg-10 container-fluid">
 			 		<!-- Dynamic Title -->
 			 		<div class="row text-center panel panel-heading" id="liveTitle">
-			 			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
+			 			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">
 			 				<h3><b>{{primTitle}}</b></h3>
 			 			</div>
 					    <div ng-switch="filterTitle" id="filterTitle" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 center-block text-center">
@@ -176,35 +176,68 @@
 			 		</div>
 
 			 		<!-- Live Display -->
-			 		<div ng-switch="curView" id="liveDisplay" class="container-fluid panel-body">
+			 		<div ng-switch="curView" id="liveDisplay" class="container-fluid panel">
 			 			<!-- Dashboard -->
-			 			<div ng-switch-when="dashboard">
-			 				<div class="panel panel-body">
-				 				<h3># Organizations: {{numOrganizations}}</h3>
-				 				<h3># Beacons: {{numBeacons}}</h3>
-				 				<h3># Objects: {{numObjects}}</h3>
-				 				<h3>Average Throughput: {{avgThroughput}}</h3>
-				 			</div>
+			 			<div ng-switch-when="dashboard" class="panel-body text-primary">
+			 				<h2># Organizations: {{numOrganizations}}</h2>
+			 				<h2># Beacons: {{numBeacons}}</h2>
+			 				<h2># Objects: {{numObjects}}</h2>
+			 				<h2>Average Throughput: {{avgThroughput}}</h2>
 			 			</div>
 
 			 			<!-- Profile Settings -->
-			 			<div ng-switch-when="profileSettings" class="text-center panel">
-			 				<!-- Webcam -->
-			 				<button class="btn btn-info" ng-click="changeView('webcam', userName)">Webcam</button>
-			 				<!-- Organization Management -->
-			 				<!-- Creating an organization -->
-			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addOrgModal">Add Organization</button>
+			 			<div ng-switch-when="profileSettings" class="text-center panel-body">
+			 				<div class="row" style="padding-bottom: 2em;">
+			 					<!-- Organization Management -->
+			 					<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 pull-left">
+			 						<!-- Organization Management -->
+			 						<h2 class="text-primary"><b>Organization Management</b></h2>
+
+					 				<!-- Creating an organization -->
+					 				<label type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#addOrgModal">Add Organization</label>
+
+					 				<label type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#removeOrgModal">Delete Organization</label>
+			 					</div>
+
+			 					<!-- Webcam -->
+			 					<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 pull-right">
+			 						<!-- Webcam -->
+			 						<h2 class="text-primary"><b>Will's Webcam</b></h2>
+				 					<label class="btn btn-info btn-lg" data-toggle="modal" data-target="#webcamModal">View</label>
+			 					</div>
+			 				</div>
+
+			 				<!-- Webcam Modal -->
+							  <div class="modal fade" id="webcamModal" role="dialog">
+							    <div class="modal-dialog">
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header" style="padding:2em 3em;">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h3><b>Will's Webcam</b></h3>
+							        </div>
+							        <div class="modal-body" style="padding:2em 3em;">
+							        	<iframe src="http://10.0.1.1:8009?action=stream" style="height: 20em; width: 30em;">
+			 							</iframe>
+							        </div>
+							        <div class="modal-footer">
+							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+							        </div>
+							      </div>
+							    </div>
+							  </div>
+			 				
 			 				<!-- Modal for creating an organization-->
 							  <div class="modal fade" id="addOrgModal" role="dialog">
 							    <div class="modal-dialog">
 							    
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header" style="padding:2em 3em;">
+							        <div class="modal-header" style="padding:2em 4em;">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3><b>Organization creation for {{userName}}</b></h3>
 							        </div>
-							        <div class="modal-body" style="padding:2em 3em;">
+							        <div class="modal-body" style="padding:2em 4em;">
 							          <form role="form">
 							            <div class="form-group">
 							              <label>Name</label>
@@ -218,18 +251,53 @@
 							          </form>
 							        </div>
 							        <div class="modal-footer">
-							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+							        </div>
+							      </div>
+							    </div>
+							  </div>
+
+							  <!-- Modal for deleting an organization-->
+							  <div class="modal fade" id="removeOrgModal" role="dialog">
+							    <div class="modal-dialog">
+							    
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header" style="padding:2em 3em;">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h3><b>Organization deletion for {{userName}}</b></h3>
+							        </div>
+							        <div class="modal-body" style="padding:2em 7em;">
+							          <form role="form">
+							            <div class="form-group">
+							            	<ul class="list list-unstyled">
+								        		<li ng-repeat="organization in organizationsArray" class="panel panel-primary">
+							        				<h4 class="panel-heading" style="margin-top: 0;" data-dismiss="modal">{{organization.name}}</h4>
+							        				<div class="panel-body text-left">
+							        					<label class="label label-info">Description:</label>
+							        					<h5 style="display:inline;">{{organization.description}}</h5>
+							        				</div>
+							        				<div class="panel-footer text-center">
+							        					<label class="btn btn-danger text-center" ng-click="removeOrganization(organization)">Delete <span class="glyphicon glyphicon-remove"></span></label>
+							        				</div>
+								        		</li>
+								        	</ul>
+							            </div>
+							          </form>
+							        </div>
+							        <div class="modal-footer">
+							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 							        </div>
 							      </div>
 							      
 							    </div>
-							  </div> 
+							  </div>  
 			 			</div>
 
 			 			<!-- Beacons List -->
 			 			<div ng-switch-when="beaconsList">
-			 				<div ng-switch="viewType">
-			 					<div ng-switch-when="List" class="panel panel-body table-responsive">
+			 				<div ng-switch="viewType" class="panel-body">
+			 					<div ng-switch-when="List" class="table-responsive">
 					 				<table class="table table-condensed">
 						 				<thead>
 						 					<tr>
@@ -265,7 +333,7 @@
 			 			<!-- Beacon (Singular) -->
 		 				<!-- Google Maps API -->
 		 				<div ng-switch-when="beacon">
-		 					<div class="text-center center-block panel panel-default">
+		 					<div class="text-center center-block panel-body">
 			 					<div class="panel-heading container-fluid">
 			 						<div class="row">
 			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary"> 
@@ -294,7 +362,7 @@
 							    <div class="modal-dialog">
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header" style="padding:2em 3em;">
+							        <div class="modal-header text-primary" style="padding:2em 3em;">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3><b>Type Editing for {{curBeacon.beacon_name}}</b></h3>
 							        </div>
@@ -311,7 +379,7 @@
 							          </form>
 							        </div>
 							        <div class="modal-footer">
-							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 							        </div>
 							      </div>
 							    </div>
@@ -321,7 +389,7 @@
 			 			<!-- Objects List -->
 			 			<div ng-switch-when="objectsList">
 			 				<div ng-switch="viewType">
-				 				<div ng-switch-when="List" class="panel panel-body">
+				 				<div ng-switch-when="List" class="panel-body">
 					 				<table class="table table-condensed table-responsive">
 						 				<thead>
 						 					<tr>
@@ -383,11 +451,12 @@
 
 			 			<!-- Object (Singular) -->
 			 			<!-- Google Maps API -->
-		 				<div ng-switch-when="object" class="center-block panel panel-default text-center">
+		 				<div ng-switch-when="object" class="center-block panel-body text-center">
 		 					<div class="panel-heading center-block">
 		 						<div class="row">
-		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
+		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left btn-group">
 		 								<button class="btn btn-info" type="button" ng-click="loadBeacon(curObj.beacon_name)">Beacon: {{curObj.beacon_name}}</button>
+		 								<label class="btn btn-warning" data-toggle="modal" data-target="#editBeacForObjModal"><span class="glyphicon glyphicon-pencil"></span></label>
 		 							</div>
 		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center center-block">
 		 								<div class="btn-group">
@@ -413,23 +482,40 @@
 				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right text-primary">Longitude: {{curObj.longitude | number: 3}}</h4>
 				 				</div>
 		 					</div>
-			 				
+
+		 					<!-- Edit Beacon for Object Modal -->
+				 			<div class="modal fade" id="editBeacForObjModal" role="dialog" data-backdrop="true">
+							    <div class="modal-dialog">
+							      <!-- Edit Beacon for Object Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header text-primary" style="padding:2em 4em;">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h3 class="modal-title"><strong>Change {{curObj.name}}'s service beacon</strong></h3>
+							        </div>
+							        <div class="modal-body text-center" style="padding:2em 3em;">
+							          
+							        </div>
+							        <div class="modal-footer">
+							          <button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+							        </div>
+							      </div>
+							    </div>
+							</div>
 
 		 					<!-- Description Modal -->
 				 			<div class="modal fade" id="descriptionModal" role="dialog" data-backdrop="true">
-							    <div class="modal-dialog">
-							    
+							    <div class="modal-dialog" >
 							      <!-- Description Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header text-primary">
+							        <div class="modal-header text-primary" style="padding:2em 3em;">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
-							          <h4 class="modal-title"><strong>{{curObj.name}}</strong></h4>
+							          <h3 class="modal-title"><strong>{{curObj.name}}</strong></h3>
 							        </div>
-							        <div class="modal-body text-left text-primary">
-							          <p>{{curObj.description}}</p>
+							        <div class="modal-body text-left" style="padding:2em 3em; margin-bottom: 0;">
+							          <p>&nbsp;&nbsp;&nbsp;&nbsp;{{curObj.description}}</p>
 							        </div>
 							        <div class="modal-footer">
-							          <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+							          <button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 							        </div>
 							      </div>
 							    </div>
@@ -471,7 +557,7 @@
 							          </form>
 							        </div>
 							        <div class="modal-footer">
-							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 							        </div>
 							      </div>
 							    </div>
@@ -487,7 +573,7 @@
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3 class="modal-title"><strong>Media deletion for {{curObj.name}}</strong></h3>
 							        </div>
-							        <div class="modal-body">
+							        <div class="modal-body" style="padding:2em 7em;">
 							        	<ul class="list list-unstyled">
 							        		<li ng-repeat="asset in curAssets" class="panel panel-primary">
 						        				<h4 class="panel-heading" style="margin-top: 0; 	">{{asset.name}}</h4>
@@ -511,7 +597,7 @@
 
 									<!-- Assets/Media Modal content-->
 									<div class="modal-content">
-										<div class="modal-header">
+										<div class="modal-header text-primary">
 										  <button type="button" class="close" data-dismiss="modal">&times;</button>
 										  <h3 class="modal-title"><strong>{{curObj.name}}</strong></h3>
 										</div>
@@ -593,10 +679,31 @@
 			 			</div>
 
 			 			<!-- Settings -->
-			 			<div ng-switch-when="settings" class="container-fluid panel text-center">
-			 				<!-- Beacon Management -->
-			 				<!-- Creating a beacon -->
-			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addBeaconModal" ng-click="loadGoogleScript()">Add Beacon</button>
+			 			<div ng-switch-when="settings" class="container-fluid text-center">
+			 				<div class="row" style="padding-bottom: 2em;">
+			 					<!-- Beacon Management -->
+			 					<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 pull-left">
+			 						<h2 class="text-primary"><b>Beacon Management</b></h2>
+
+			 						<!-- Creating a beacon -->
+			 						<button type="button" class="btn btn-lg btn-success" data-toggle="modal" data-target="#addBeaconModal" ng-click="loadGoogleScript()">Add Beacon</button>
+
+			 						<!-- Removing a beacon -->
+									<button type="button" class="btn btn-lg btn-danger" data-toggle="modal" data-target="#removeBeaconModal">Delete Beacons</button>
+			 					</div>
+
+			 					<!-- Object Management -->
+			 					<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 pull-right">
+			 						<h2 class="text-primary"><b>Object Management</b></h2>
+
+			 						<!-- Creating a object -->
+			 						<button type="button" class="btn btn-lg btn-success" data-toggle="modal" data-target="#addObjectModal" ng-click="displayAddObjectModal()">Add Object</button>
+
+			 						<!-- Removing an object -->
+									<button type="button" class="btn btn-lg btn-danger" data-toggle="modal" data-target="#removeObjectModal">Delete Objects</button>
+			 					</div>
+			 				</div>
+
 			 				<!-- Modal for creating an beacon-->
 							  <div class="modal fade" id="addBeaconModal" role="dialog">
 							    <div class="modal-dialog">
@@ -609,35 +716,34 @@
 							        </div>
 							        <div class="modal-body" style="padding:2em 3em;">
 							          <form role="form">
-							            <div class="form-group text-primary">
-							              <label>Name</label>
+							            <div class="form-group">
+							              <label>Name:</label>
 							              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconName" required>
 							            </div>
-							            <div class="form-group form-group-sm text-primary">
+							            <div class="form-group form-group-sm">
 							            	<label>Type:</label>
 										    <select ng-model="addBeaconType" class="form-control input-sm" required>
 										    	<option value="" disabled selected hidden>Select beacon type</option>
 										    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
 										    </select>
 							            </div> 
-							            <div class="form-group panel panel-default text-center text-primary">
-							            	<label><h5>Click a position on the map to the determine the beacon's location:</h5></label>
+							            <div class="form-group panel panel-default text-center">
+							            	<h4><label>Location:</label></h4>
 							            	<div id="googleMapsAddBeacon" class="panel-body">
 							            	</div>
+							            	<h5 class="panel-body zeroPadding">Click a position on the map to the determine the beacon's location.</h5>
+							            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circles indicates a beacon's maximum service range.</h6>
 							            </div>
 							            <button type="submit" class="btn btn-success btn-block" ng-click="addBeacon(addBeaconName, addBeaconType)" data-dismiss="modal">Create</button>
 							          </form>
 							        </div>
 							        <div class="modal-footer">
-							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 							        </div>
 							      </div>
 							    </div>
 							</div>
 
-							<!-- Object Management -->
-			 				<!-- Creating a object -->
-			 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addObjectModal" ng-click="displayAddObjectModal()">Add Object</button>
 
 			 				<!-- Modal for creating an object-->
 							<div class="modal fade" id="addObjectModal" role="dialog">
@@ -651,31 +757,38 @@
 							        </div>
 							        <div class="modal-body" style="padding:2em 3em;">
 							          <form role="form">
-							            <div class="form-group text-primary">
-							              <label>Name</label>
+							            <div class="form-group">
+							              <label>Name:</label>
 							              <input type="text" class="form-control" placeholder="Enter object's name" ng-model="addObjectName" required>
 							            </div>
-							            <div class="form-group text-primary">
-							              <label>Description</label>
+							            <div class="form-group">
+							              <label>Description:</label>
 							              <textarea type="text" class="form-control" placeholder="Enter object's description" ng-model="addObjectDesc" rows=3 required style="resize: none;"></textarea>
 							            </div>
-							            <div class="form-group text-primary">
-					            			<label class="btn btn-info" for="thumbnailSelect">
-											    <input id="thumbnailSelect" type="file" style="display:none;" custom-on-change="updateThumbnailLabel" accept="image/*" required>
-											    Upload thumbnail:
-											</label>
-											<span class='label label-warning'>{{curThumbnail}}</span>
+							            <div class="form-group">
+							            	<label>Thumbnail:</label><br>
+							            	<div class="panel panel-default">
+							            		<label class="panel-body">
+								            		<label class="btn btn-info" for="thumbnailSelect">
+													    <input id="thumbnailSelect" type="file" style="display:none;" custom-on-change="updateThumbnailLabel" accept="image/*" required>
+													    Browse
+													</label>
+													<span class='label label-warning'>{{curThumbnail}}</span>
+												</label>
+							            	</div>
 							            </div>
-							            <div class="form-group panel panel-default text-center text-primary">
-							            	<label><h5>Click a position on the map to the determine the object's location:</h5></label>
+							            <div class="form-group panel panel-default text-center">
+							            	<h4><label>Location</label></h4>
 							            	<div id="googleMapsAddObject" class="panel-body">
 							            	</div>
+							            	<h5 class="panel-body zeroPadding">Click a position on the map to the determine the object's location.</h5>
+							            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circles indicates a beacon's maximum service range.</h6>
 							            </div>
 							            <button type="submit" class="btn btn-success btn-block" ng-click="thumbnailResize(addObjectName, addObjectDesc)" data-dismiss="modal">Create</button>
 							          </form>
 							        </div>
 							        <div class="modal-footer">
-							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 							        </div>
 							      </div>
 							    </div>
@@ -693,23 +806,105 @@
 							        </div>
 							        <div class="modal-body" style="padding:2em 3em;">
 							          <form role="form">
-							            <div class="form-group text-primary">
+							            <div class="form-group">
 							              <label>Name</label>
 							              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconForObjectName" required>
 							            </div>
-							            <div class="form-group form-group-sm text-primary">
+							            <div class="form-group form-group-sm">
 							            	<label>Type:</label>
 										    <select ng-model="addBeaconForObjectType" class="form-control" required>
 										    	<option value="" disabled selected hidden>Select beacon type</option>
 										    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
 										    </select>
 							            </div> 
-							            <label class="text-primary">Location pre-determined from the new object's location.</label>
+							            <label class="label label-warning">Location pre-determined from the new object's location.</label>
 							            <button type="submit" class="btn btn-success btn-block" ng-click="addBeaconForObject(addBeaconForObjectName, addBeaconForObjectType)" data-dismiss="modal">Create</button>
 							          </form>
 							        </div>
 							        <div class="modal-footer">
-							          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+							        </div>
+							      </div>
+							    </div>
+							</div>
+
+							<!-- Modal for removing a beacon -->
+							  <div class="modal fade" id="removeBeaconModal" role="dialog">
+							    <div class="modal-dialog">
+							    
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header text-primary" style="padding:2em 3em;">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h3><b>Beacon deletion for {{curOrg.name}}</b></h3>
+							        </div>
+							        <div class="modal-body" style="padding:2em 7em;">
+							          <form role="form">
+							          	<div class="form-group">
+							          		<ul class="list list-unstyled">
+								        		<li ng-repeat="beacon in beaconsArray" class="panel panel-primary">
+							        				<h4 class="panel-heading" style="margin-top: 0; cursor:pointer;" ng-click="displayBeacon(beacon)" data-dismiss="modal">{{beacon.beacon_name}}</h4>
+							        				<div class="panel-body center-block">
+							        					<h4 class="text-left"><label class="label label-info">Type:</label> {{beacon.beacon_type}}</h4>
+							        					<h4 class="text-left"><label class="label label-info">Associated:</label> {{beacon.associated}}</h4>
+							        					<h4 class="text-left"><label class="label label-info">Altitude:</label> {{beacon.altitude | number: 3}}</h4>
+								        				<h4 class="text-left"><label class="label label-info">Latitude:</label> {{beacon.latitude | number: 3}}</h4>
+								        				<h4 class="text-left"><label class="label label-info">Longitude:</label> {{beacon.longitude | number: 3}}</h4>
+							        				</div>
+							        				<div class="panel-footer text-center">
+							        					<label class="btn btn-danger text-center" ng-click="removeBeacon(beacon)">Delete <span class="glyphicon glyphicon-remove"></span></label>
+							        				</div>
+								        		</li>
+								        	</ul>
+							          	</div>
+							          </form>
+							        </div>
+							        <div class="modal-footer">
+							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</span></button>
+							        </div>
+							      </div>
+							    </div>
+							</div>
+
+							<!-- Modal for removing an object -->
+							  <div class="modal fade" id="removeObjectModal" role="dialog">
+							    <div class="modal-dialog">
+							    
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header" style="padding:2em 3em;">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h3><b>Object deletion for {{curOrg.name}}</b></h3>
+							        </div>
+							        <div class="modal-body" style="padding:2em 3em;">
+							          <form role="form">
+							          	<div class="form-group text-primary">
+							          		<ul class="list list-unstyled">
+								        		<li ng-repeat="object in objectsArray" class="panel panel-primary">
+							        				<h4 class="panel-heading" style="margin-top: 0; cursor:pointer;" ng-click="displayObject(object)" data-dismiss="modal">{{object.name}}</h4>
+							        				<div class="panel-body row">
+							        					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pull-left">
+							        						<img class="img-thumbnail" src="{{object.thumbnail}}" alt="{{object.name}}" style="margin-bottom: 0.5em;"></img>
+							        					</div>
+							        					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pull-right text-left">
+							        						<h4><label class="label label-info">#Images:</label> {{object.numImage}}</h4>
+									        				<h4><label class="label label-info">#Audio:</label> {{object.numAudio}}</h4>
+									        				<h4><label class="label label-info">#Video:</label> {{object.numVideo}}</h4>
+									        				<h4><label class="label label-info">#3D:</label> {{object.num3D}}</h4>
+							        					</div>
+							        				</div>
+
+							        				<div class="panel-footer">
+							        					<label class="btn btn-danger text-center" ng-click="removeObject(object)">Delete <span class="glyphicon glyphicon-remove"></span></label>
+							        				</div>
+								        		</li>
+								        	</ul>
+							          	</div>
+							          </form>
+							        </div>
+							        <div class="modal-footer">
+							        	<label class="label label-warning pull-left">Warning: All media associated with the object will also be removed.</label>
+							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</span></button>
 							        </div>
 							      </div>
 							    </div>
@@ -717,16 +912,9 @@
 			 			</div>
 
 			 			<!-- Stats -->
-			 			<div ng-switch-when="stats" class="panel panel-default">
-			 				<div id="googleMapsStats" class="panel-body"></div>
+			 			<div ng-switch-when="stats">
+			 				<div id="googleMapsStats" class="panel"></div>
 			 			</div>
-
-			 			<!-- Webcam -->
-			 			<div ng-switch-when="webcam" class="panel panel-default text-center center-block">
-			 				<iframe src="http://10.0.1.1:8009?action=stream" style="height: 60vh; width: 100%">
-			 				</iframe>
-			 			</div>
-
 			 		</div>
 			 	</div>
 			</div>

@@ -78,6 +78,8 @@ h6{
 		font-size: 1em;
 		padding: 0;
 		overflow: auto;
+		max-height: 25em;
+		height: auto;
 	}
 
 	.dropdown-menu > li{
@@ -122,7 +124,8 @@ h6{
 	    overflow-y: initial !important
 	}
 	.modal-body{
-	    max-height: 44em;
+		height: auto;
+	    max-height: 65vh;
 	    overflow-y: auto;
 	}
 
@@ -182,8 +185,9 @@ h6{
 	}
 
 	#googleMapsObjects, #googleMapsBeacons, #googleMapsStats{
-		height: 57vh;
+		height: 59.5vh;
 		width: 100%;
+		margin: 0;
 	}
 
 	#mainContentContainer{
@@ -201,7 +205,7 @@ h6{
 	}
 
 	#liveDisplay{
-		max-height: 60vh;
+		height: 60vh;
 		overflow: auto;
 		width: 100%;
 		padding:0;
@@ -268,6 +272,7 @@ h6{
 	}
 
 	#liveDisplay{
+		height: auto;
 		max-height: 10000000px;
 		overflow: hidden;
 	}
@@ -302,7 +307,8 @@ h6{
 	}
 
 	#liveDisplay{
-		max-height: 100%;
+		height: auto;
+		max-height: 10000000px;
 		overflow: hidden;
 	}
 

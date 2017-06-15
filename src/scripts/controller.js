@@ -257,22 +257,10 @@ app.controller('myCtrl', function($scope, $http) {
 		        var ctx = canvas.getContext("2d");
 		        ctx.drawImage(img, 0, 0);
 
-		        var MAX_WIDTH = 150;
-		        var MAX_HEIGHT = 150;
-		        var width = img.width;
-		        var height = img.height;
-
-		        if (width > height) {
-		          if (width > MAX_WIDTH) {
-		            height *= MAX_WIDTH / width;
-		            width = MAX_WIDTH;
-		          }
-		        } else {
-		          if (height > MAX_HEIGHT) {
-		            width *= MAX_HEIGHT / height;
-		            height = MAX_HEIGHT;
-		          }
-		        }
+		        //thumbnail size is 150px by 150px
+		        var width = 150;
+		        var height = 150;
+		        
 		        canvas.width = width;
 		        canvas.height = height;
 		        var ctx = canvas.getContext("2d");
@@ -328,24 +316,10 @@ app.controller('myCtrl', function($scope, $http) {
 			        width1 = oldWidth * scaleFactor;
 			        height1 = oldHeight * scaleFactor;
 
-			        //width and height for the asset thumbnail
-			        var MAX_WIDTH2 = 150;
-			        var MAX_HEIGHT2 = 150;
-			        var width2 = assetThumbnail.width;
-			        var height2 = assetThumbnail.height;
-
-			        //scaling for the asset thumbnail
-			        if (width2 > height2) {
-			          if (width2 > MAX_WIDTH2) {
-			            height2 *= MAX_WIDTH2 / width2;
-			            width2 = MAX_WIDTH2;
-			          }
-			        } else {
-			          if (height2 > MAX_HEIGHT2) {
-			            width2 *= MAX_HEIGHT2 / height2;
-			            height2 = MAX_HEIGHT2;
-			          }
-			        }
+			        //width and height for the asset thumbnail 
+			        	//thumbnails are 150px by 150px
+			        var width2 = 150;
+			        var height2 = 150;
 
 			        //draws the scaled asset on the canvas
 			        canvas1.width = width1;
@@ -652,6 +626,12 @@ app.controller('myCtrl', function($scope, $http) {
 		}
 	}
 
+	//displays a single asset in a modal
+	$scope.displaySingleAssetModal = function(asset){
+		$scope.curAsset = asset;
+		$("#singleAssetModal").modal();
+	}
+
 	//display an objects assets in a modal
 	$scope.displayDescriptionModal = function(){
 		$("#descriptionModal").modal();
@@ -703,7 +683,7 @@ app.controller('myCtrl', function($scope, $http) {
 		}, function myError(response) {
 		    
 		});
-		$scope.loadBeacons();
+		$scope.safeApply();r
 	}
 
 	//adds a object for an organization onto the database
@@ -1553,30 +1533,35 @@ app.controller('myCtrl', function($scope, $http) {
 				}, function myError(response){
 				    $scope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
 				});
+
+				$scope.safeApply();
 			}
 		});
-		$scope.loadBeacons();
-		$scope.safeApply();
 	}
 
 	//deletes an object and all of its assetschange
 	$scope.removeObject = function(object){
 		$scope.confirm("Are you sure you want to remove " + object.name + " and all of its assets?", function(result){
 			if(result){
-				//Delete the object
-				// $http({
-			 //        method: 'Delete',
-			 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
-			 //        headers: {
-			 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-				// 	}
-				// }).then(function mySuccess(response) {
-				// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
-				// }, function myError(response) {
-				    
-				// });
-
 				//Delete all assets associated with the object from firebase
+				for(var i = 0; i < object.assets.length; i++){
+					$scope.removeAsset(object.assets[i]);
+				}
+
+				//remove the object thumbnail from firebase
+
+				//Delete the object
+				$http({
+			        method: 'Delete',
+			        url: 'https://website-155919.appspot.com/api/v1.0/arobj/object.arobj_id',
+			        headers: {
+			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+					}
+				}).then(function mySuccess(response) {
+					$scope.alertSuccess(organization.name + " has been successfully deleted!");
+				}, function myError(response) {
+				    
+				});
 
 				//refresh the bindings
 				$scope.safeApply();
@@ -1588,6 +1573,10 @@ app.controller('myCtrl', function($scope, $http) {
 	$scope.removeAsset = function(asset){
 		$scope.confirm("Are you sure you want to remove " + asset.name + "?", function(result){
 			if(result){
+				//remove the asset thumbnail from firebase
+
+				//remove the asset url from firebase
+
 				//Delete the asset
 				// $http({
 			 //        method: 'Delete',
@@ -2131,9 +2120,6 @@ function initMap(){
           radius: 30
         });
 		heatmap.setMap(map);
-	}
-	else{
-		angular.element(document.getElementById('MAIN')).scope().alertFailure("Error: undefined map");
 	}
 }
 

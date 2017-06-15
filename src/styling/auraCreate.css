@@ -53,6 +53,14 @@ h6{
 		color: #1646CB;
 	}
 
+	.caption{
+		text-overflow: ellipsis; 
+		overflow-x: none;
+		overflow-y: none;
+		max-height: 50px; 
+		width: 100%;
+	}
+
 	.carouselBody{
 		min-height: 10vh;
 	}
@@ -78,7 +86,7 @@ h6{
 	}
 
 	.deleteIcon:hover{
-		color: black;
+		color: #BB6666;
 	}
 
 	.dropdown-menu{
@@ -121,7 +129,7 @@ h6{
 	}
 
 	.menuItem:hover{
-		background-color: #FEFFF1;
+		background-color: #FDFEEC;
 		cursor: pointer;
 	}
 
@@ -135,12 +143,8 @@ h6{
 	}
 	.modal-body{
 		height: auto;
-	    max-height: 65vh;
+		max-height: 72vh;
 	    overflow-y: auto;
-	}
-
-	.objectMedia{
-		max-height: 70vh;
 	}
 
 	.panel-default > .panel-heading, .panel-footer{

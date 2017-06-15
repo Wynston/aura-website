@@ -44,9 +44,21 @@ app.controller('myCtrl', function($scope, $http) {
 		// Root reference to the storage
 		$scope.storage = $scope.firebaseApp.storage("gs://auraalert-21339.appspot.com/");
 		$scope.storageRef = $scope.storage.ref();
+
+		//replacement of the $apply to safely reload DOM
+		$scope.safeApply = function(fn) {
+		  var phase = this.$root.$$phase;
+		  if(phase == '$apply' || phase == '$digest') {
+		    if(fn && (typeof(fn) === 'function')) {
+		      fn();
+		    }
+		  } else {
+		    this.$apply(fn);
+		  }
+		};
 	}
 
-	//------------------Start of Bootstrap Alert System-------------------------
+	//------------------Start of Bootstrap Alert/Confirm System-------------------------
 
 	//shows a success alert of a given message
 	$scope.alertSuccess = function(msg){
@@ -57,7 +69,27 @@ app.controller('myCtrl', function($scope, $http) {
 	$scope.alertFailure = function(msg){
 		$('#alert').html('<div class="alert alert-danger alert-dismissable fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+msg+'</span></div>');
 	}
-	//------------------End of Bootstrap Alert System---------------------------
+
+	//prompts a yes/no question to the user in bootstrap modal and returns a boolean value in the callback
+	$scope.confirm = function(msg, callback){
+		$scope.confirmMessage = msg;
+		$("#confirmModal").modal({
+			show:true,
+        	backdrop:false,
+            keyboard: false,
+    	});
+
+	    $('#cancelConfirm').click(function(){
+	        $('#confirmModal').modal('hide');
+	        if (callback) callback(false);
+
+	    });
+	    $('#acceptConfirm').click(function(){
+	        $('#confirmModal').modal('hide');
+	        if (callback) callback(true);
+	    });
+	}
+	//------------------End of Bootstrap Alert/Confirm System---------------------------
 
 //---------------------------------------Firebase functions begin---------------------------------------
 
@@ -111,7 +143,7 @@ app.controller('myCtrl', function($scope, $http) {
 			}
         	$scope.files = temp2;
         }
-        $scope.$apply();
+        $scope.safeApply();
     }; 
 
     //removes a file from the currently upload files
@@ -1484,100 +1516,95 @@ app.controller('myCtrl', function($scope, $http) {
 	
 	//removes an organization and all of its beacons, objects, and assets from the database and storage bucket
 	$scope.removeOrganization = function(organization){
-		if(confirm("Are you sure you want to remove " + organization.name + " and all of its beacons, objects, and media?")){
-			//Delete the organization
-			// $http({
-		 //        method: 'Delete',
-		 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
-		 //        headers: {
-		 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-			// 	}
-			// }).then(function mySuccess(response) {
-			// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
-			// }, function myError(response) {
-			    
-			// });	
+		$scope.confirm("Are you sure you want to remove " + organization.name + " and all of its beacons, objects, and media?", function(result){
+			if(result){
+				//Delete the organization
+				// $http({
+			 //        method: 'Delete',
+			 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
+			 //        headers: {
+			 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+				// 	}
+				// }).then(function mySuccess(response) {
+				// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
+				// }, function myError(response) {
+				    
+				// });	
 
-			//Delete all beacons, objects, and assets for the organization
-			$scope.$apply();
-		}
-		else{
-			//Don't delete the organization
-		}
+				//Delete all beacons, objects, and assets for the organization
+				$scope.safeApply();
+			}
+		});
 	}
 
 	//deletes a beacon from the server and local
 	$scope.removeBeacon = function(beacon){
-		if(confirm("Are you sure you want to remove " + beacon.beacon_name + "?")){
-			//Delete the beacon
-			// $http({
-		 //        method: 'Delete',
-		 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
-		 //        headers: {
-		 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-			// 	}
-			// }).then(function mySuccess(response) {
-			// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
-			// }, function myError(response) {
-			    
-			// });
-
-			//refresh the bindings
-			$scope.$apply();
-		}
-		else{
-			//Don't delete the beacon
-		}
+		$scope.confirm("Are you sure you want to remove " + beacon.beacon_name + "?", function(result){
+			if(result){
+				//Delete the beacon
+				$http({
+			        method: 'Delete',
+			        url: 'https://website-155919.appspot.com/api/v1.0/beacon/' + beacon.beacon_id,
+			        headers: {
+			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+					}
+				}).then(function mySuccess(response) {
+					$scope.alertSuccess(beacon.beacon_name + " has been successfully deleted!");
+				}, function myError(response){
+				    $scope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
+				});
+			}
+		});
+		$scope.loadBeacons();
+		$scope.safeApply();
 	}
 
 	//deletes an object and all of its assetschange
 	$scope.removeObject = function(object){
-		if(confirm("Are you sure you want to remove " + object.name + " and all of its assets?")){
-			//Delete the object
-			// $http({
-		 //        method: 'Delete',
-		 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
-		 //        headers: {
-		 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-			// 	}
-			// }).then(function mySuccess(response) {
-			// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
-			// }, function myError(response) {
-			    
-			// });
+		$scope.confirm("Are you sure you want to remove " + object.name + " and all of its assets?", function(result){
+			if(result){
+				//Delete the object
+				// $http({
+			 //        method: 'Delete',
+			 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
+			 //        headers: {
+			 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+				// 	}
+				// }).then(function mySuccess(response) {
+				// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
+				// }, function myError(response) {
+				    
+				// });
 
-			//Delete all assets associated with the object from firebase
+				//Delete all assets associated with the object from firebase
 
-			//refresh the bindings
-			$scope.$apply();
-		}
-		else{
-			//Don't delete the object
-		}
+				//refresh the bindings
+				$scope.safeApply();
+			}
+		});
 	}
 
 	//deletes an asset from an objects assets and from firebase
 	$scope.removeAsset = function(asset){
-		if(confirm("Are you sure you want to remove " + asset.name + "?")){
-			//Delete the asset
-			// $http({
-		 //        method: 'Delete',
-		 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
-		 //        headers: {
-		 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-			// 	}
-			// }).then(function mySuccess(response) {
-			// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
-			// }, function myError(response) {
-			    
-			// });
+		$scope.confirm("Are you sure you want to remove " + asset.name + "?", function(result){
+			if(result){
+				//Delete the asset
+				// $http({
+			 //        method: 'Delete',
+			 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
+			 //        headers: {
+			 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+				// 	}
+				// }).then(function mySuccess(response) {
+				// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
+				// }, function myError(response) {
+				    
+				// });
 
-			//refresh the bindings
-			$scope.$apply();
-		}
-		else{
-			//Don't delete the asset
-		}
+				//refresh the bindings
+				$scope.safeApply();
+			}
+		});	
 	}
 //--------------------------------------End of Delete Function------------------------------------------
 
@@ -1705,13 +1732,15 @@ app.controller('myCtrl', function($scope, $http) {
 	  	if(closest > 100){
 	  		$('#addObjectModal').modal('hide');
 	  		//prompt user to make a new beacon within range
-		    if (confirm("No beacons within range. Create a new one at this location?") == true) {
-			   $('#beaconForObjectModal').modal('show'); 
-			   $scope.closestBeaconID = $scope.randID();
-		    }
-		    else{
-		    	$scope.closestBeaconID = null;
-		    }
+	  		$scope.confirm("No beacons within range. Create a new one at this location?", function(result){
+	  			if(result){
+	  				$('#beaconForObjectModal').modal('show'); 
+			   		$scope.closestBeaconID = $scope.randID();
+	  			}
+	  			else{
+	  				$scope.closestBeaconID = null;
+	  			}	
+	  		});
 	  	}
 	  	else{
 	  		$scope.closestBeaconID = closestBeacon.beacon_id;
@@ -1779,20 +1808,22 @@ app.controller('myCtrl', function($scope, $http) {
     $scope.changeLocation = function(pos, type){
     	switch(type){
     		case "beacon":
-    			var locationPrompt = confirm("Are you sure you want to change " + $scope.curBeacon.beacon_name + "'s location?");
-    			if(locationPrompt){
-    				$scope.curBeacon.latitude = pos.lat;
-    				$scope.curBeacon.longitude = pos.lng;
-    				$scope.calcAltitude(pos, type);
-    			}
+    			$scope.confirm("Are you sure you want to change " + $scope.curBeacon.beacon_name + "'s location?", function(result){
+    				if(result){
+    					$scope.curBeacon.latitude = pos.lat;
+	    				$scope.curBeacon.longitude = pos.lng;
+	    				$scope.calcAltitude(pos, type);
+    				}
+    			});
     			break;
     		case "object":
-    			var locationPrompt = confirm("Are you sure you want to change " + $scope.curObj.name + "'s location?");
-    			if(locationPrompt){
-	    			$scope.curObj.latitude = pos.lat;
-	    			$scope.curObj.longitude = pos.lng;
-	    			$scope.calcAltitude(pos, type);
-	    		}
+    			$scope.confirm("Are you sure you want to change " + $scope.curObj.name + "'s location?", function(result){
+    				if(result){
+    					$scope.curObj.latitude = pos.lat;
+		    			$scope.curObj.longitude = pos.lng;
+		    			$scope.calcAltitude(pos, type);
+    				}
+    			});
     			break;
         }
     }
@@ -1922,9 +1953,102 @@ app.filter('removeDuplicates', function() {
 
 //-------------------------------------end of custom filters-------------------------------------
 
+//allows modals to stack based on z-index
+$(document).on('show.bs.modal', '.modal', function () {
+    var zIndex = 1040 + (10 * $('.modal:visible').length);
+    $(this).css('z-index', zIndex);
+    setTimeout(function() {
+        $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+    }, 0);
+});
+
 //-------------------------------------google maps handling begins-------------------------------
 //initMap function for google maps api
 function initMap(){
+	$('#addBeaconModal').on('shown.bs.modal', function (){
+		var beacons = JSON.parse(sessionStorage.beaconsArray);
+	    var map = new google.maps.Map(document.getElementById('googleMapsAddBeacon'), {
+	      zoom: 11,
+	      center: findDPCenter(beacons)
+	    });
+	    for (var i = 0; i < beacons.length; i++ ) {
+	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
+          // Adds a 100m radius circle around each beacon
+          var cityCircle = new google.maps.Circle({
+            strokeColor: '#00FFE4',
+            strokeOpacity: 0.8,
+            strokeWeight: 4,
+            fillColor: '#00FFE4',
+            fillOpacity: 0.35,
+            map: map,
+            center: beaconCenter,
+            radius: 100,
+            clickable: false
+          });
+        }
+	    google.maps.event.addListener(map, 'click', function(event) {
+		   placeMarker(event.latLng);
+		   //places a marker at a given location, used for onclick triggers
+			//places a marker at a given location, used for onclick triggers
+			function placeMarker(location) {
+				if ( marker ) {
+			    	marker.setPosition(location);
+			  	} 
+			  	else{
+			    	marker = new google.maps.Marker({
+				    	position: location,
+				    	map: map
+			    	});
+			  	}
+			  	var pos = (JSON.parse(JSON.stringify(location)));
+			  	getElevation(location);
+			  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
+            	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
+			}
+		});
+	});
+	$('#addObjectModal').on('shown.bs.modal', function () {
+		var beacons = JSON.parse(sessionStorage.beaconsArray);
+	    var map = new google.maps.Map(document.getElementById('googleMapsAddObject'), {
+	      zoom: 11,
+	      center: findDPCenter(beacons)
+	    });
+	    for (var i = 0; i < beacons.length; i++ ) {
+	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
+          // Adds a 100m radius circle around each beacon
+          var cityCircle = new google.maps.Circle({
+            strokeColor: '#00FFE4',
+            strokeOpacity: 0.8,
+            strokeWeight: 4,
+            fillColor: '#00FFE4',
+            fillOpacity: 0.35,
+            map: map,
+            center: beaconCenter,
+            radius: 100,
+            clickable: false
+          });
+        }
+	    google.maps.event.addListener(map, 'click', function(event) {
+		   placeMarker(event.latLng);
+		   //places a marker at a given location, used for onclick triggers
+			function placeMarker(location) {
+				if ( marker ) {
+			    	marker.setPosition(location);;
+			  	} 
+			  	else{
+			    	marker = new google.maps.Marker({
+			    	position: location,
+			    	map: map
+			    	});
+			  	}
+			  	var pos = (JSON.parse(JSON.stringify(location)));
+			  	getElevation(location);
+			  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
+            	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
+			}
+		});
+	});
+
 	if(sessionStorage.curView == "beacon"){
 		var curBeacon = JSON.parse(sessionStorage.curBeacon);
 	    var loc = {lat: curBeacon.latitude, lng: curBeacon.longitude };
@@ -1985,91 +2109,6 @@ function initMap(){
           radius: 30
         });
 		heatmap.setMap(map);
-	}
-	else if(sessionStorage.curView == "settings"){
-		$('#addBeaconModal').on('shown.bs.modal', function (){
-			var beacons = JSON.parse(sessionStorage.beaconsArray);
-		    var map = new google.maps.Map(document.getElementById('googleMapsAddBeacon'), {
-		      zoom: 11,
-		      center: findDPCenter(beacons)
-		    });
-		    for (var i = 0; i < beacons.length; i++ ) {
-		      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-	          // Adds a 100m radius circle around each beacon
-	          var cityCircle = new google.maps.Circle({
-	            strokeColor: '#00FFE4',
-	            strokeOpacity: 0.8,
-	            strokeWeight: 4,
-	            fillColor: '#00FFE4',
-	            fillOpacity: 0.35,
-	            map: map,
-	            center: beaconCenter,
-	            radius: 100,
-	            clickable: false
-	          });
-	        }
-		    google.maps.event.addListener(map, 'click', function(event) {
-			   placeMarker(event.latLng);
-			   //places a marker at a given location, used for onclick triggers
-				//places a marker at a given location, used for onclick triggers
-				function placeMarker(location) {
-					if ( marker ) {
-				    	marker.setPosition(location);
-				  	} 
-				  	else{
-				    	marker = new google.maps.Marker({
-					    	position: location,
-					    	map: map
-				    	});
-				  	}
-				  	var pos = (JSON.parse(JSON.stringify(location)));
-				  	getElevation(location);
-				  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
-                	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
-				}
-			});
-		});
-		$('#addObjectModal').on('shown.bs.modal', function () {
-			var beacons = JSON.parse(sessionStorage.beaconsArray);
-		    var map = new google.maps.Map(document.getElementById('googleMapsAddObject'), {
-		      zoom: 11,
-		      center: findDPCenter(beacons)
-		    });
-		    for (var i = 0; i < beacons.length; i++ ) {
-		      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-	          // Adds a 100m radius circle around each beacon
-	          var cityCircle = new google.maps.Circle({
-	            strokeColor: '#00FFE4',
-	            strokeOpacity: 0.8,
-	            strokeWeight: 4,
-	            fillColor: '#00FFE4',
-	            fillOpacity: 0.35,
-	            map: map,
-	            center: beaconCenter,
-	            radius: 100,
-	            clickable: false
-	          });
-	        }
-		    google.maps.event.addListener(map, 'click', function(event) {
-			   placeMarker(event.latLng);
-			   //places a marker at a given location, used for onclick triggers
-				function placeMarker(location) {
-					if ( marker ) {
-				    	marker.setPosition(location);;
-				  	} 
-				  	else{
-				    	marker = new google.maps.Marker({
-				    	position: location,
-				    	map: map
-				    	});
-				  	}
-				  	var pos = (JSON.parse(JSON.stringify(location)));
-				  	getElevation(location);
-				  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
-                	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
-				}
-			});
-		});
 	}
 	else if(sessionStorage.curView == "stats"){
 		var stats = JSON.parse(sessionStorage.statsArray);

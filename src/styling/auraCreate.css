@@ -36,6 +36,7 @@ h6{
   font-size: 75%;
 }
 
+
 /* ----------------------------Large desktops and laptops (DEFAULT)----------------------------- */
 	/*--------------------------------------------Classes--------------------------------------------*/
 	.btn{
@@ -69,6 +70,15 @@ h6{
 		width: 0.70em;
 		-webkit-transition: width 1s, height 1s;
     	transition: width 0.75s, height 0.75s;
+	}
+
+	.deleteIcon{
+		color: #F86F6F;
+		cursor: pointer;
+	}
+
+	.deleteIcon:hover{
+		color: black;
 	}
 
 	.dropdown-menu{

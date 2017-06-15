@@ -12,8 +12,27 @@
 	</head>
 	<body>
 		<div class="container-fluid" ng-app="auraCreate" ng-controller="myCtrl" ng-init="init()" ng-cloak id="MAIN">
-			<div id="alert">
+			<div id="alert"></div>
+			<!-- Modal for asking user confirmation-->
+			<div class="modal fade" id="confirmModal" role="dialog">
+				<div class="modal-dialog modal-sm">
+				  <!-- Modal content-->
+				  <div class="modal-content">
+				    <div class="modal-header bg-danger text-center" style="padding:1em 2em;">
+				      <button type="button" class="close" data-dismiss="modal">&times;</button>
+				      <h3><b>Attention</b></h3>
+				    </div>
+				    <div class="modal-body text-left" style="padding:1em 1em;">
+				    	<h4>&nbsp;&nbsp;&nbsp;&nbsp;{{confirmMessage}}</h4>
+				    </div>
+				    <div class="modal-footer">
+				    	<label id="acceptConfirm" type="button" class="btn btn-success pull-right" data-dismiss="modal" style="margin-left: 1em;">Accept</label>
+				    	<label id="cancelConfirm" type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</label>
+				    </div>
+				  </div>
+				</div>
 			</div>
+
 			<div class="row page-header" id="banner">
 				<div class="col-xs-9 col-sm-6 col-md-6 col-lg-6">
 					<img ng-src="images/aura_logo.png" alt="Aura Logo" class="img-responsive pull-left logo" ng-click="changeView('dashboard', '')"/>
@@ -128,7 +147,7 @@
 								    	</li>
 								    </ul>
 							    </div>
-					    		<div class="dropdown btn-group">
+					    		<div class="btn-group">
 							    	<button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" aria-labelledby="menu1">
 								    	Filter by Beacon: {{beaconsFilter}}
 								    	<span class="caret"></span>
@@ -154,19 +173,27 @@
 						    </div>
 
 						    <!-- Beacons View Filter -->
-						    <div ng-switch-when="beaconsView" class="dropdown btn-group" style="margin-top: 1em;">
-							    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" aria-labelledby="menu1">
-							    	View By: {{viewType}}
-							    	<span class="caret"></span>
-							    </button>
-							    <ul class="dropdown-menu">
-							    	<li class="text-center menuItem" ng-click="changeViewType('List')">
-							    		<a><h5>List</h5></a>
-							    	</li>
-							    	<li class="text-center menuItem" ng-click="changeViewType('Map')">
-							    		<a><h5>Map</h5></a>
-							    	</li>
-							    </ul>
+						    <div ng-switch-when="beaconsView" style="margin-top: 1em;">
+						    	<div class="btn-group">
+						    		<label type="button" class="btn btn-success" data-toggle="modal" data-target="#addBeaconModal" ng-click="loadGoogleScript()">
+						    			<span class=" glyphicon glyphicon-plus"></span>
+						    			<span class="hidden-xs hidden-sm">Beacon</span>
+							    	</label>
+							    	<div class="btn-group">
+							    		<button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" aria-labelledby="menu1">
+								    	View By: {{viewType}}
+								    	<span class="caret"></span>
+									    </button>
+									    <ul class="dropdown-menu">
+									    	<li class="text-center menuItem" ng-click="changeViewType('List')">
+									    		<a><h5>List</h5></a>
+									    	</li>
+									    	<li class="text-center menuItem" ng-click="changeViewType('Map')">
+									    		<a><h5>Map</h5></a>
+									    	</li>
+									    </ul>
+							    	</div>
+						    	</div>
 							</div>
 						</div>
 
@@ -300,23 +327,27 @@
 			 					<div ng-switch-when="List" class="table-responsive">
 					 				<table class="table table-condensed">
 						 				<thead>
-						 					<tr>
+						 					<tr class="row">
 						 						<th>Name</th>
 						 						<th>Associated</th>
 						 						<th>Type</th>
 						 						<th class="hidden-sm hidden-xs">Altitude</th>
 						 						<th class="hidden-sm hidden-xs">Latitude</th>
 						 						<th class="hidden-sm hidden-xs">Longitude</th>
+						 						<th></th>
 						 					</tr>
 						 				</thead>
 						 				<tbody ng-repeat="beacon in beaconsArray | orderBy:'beacon_name'">
-						 					<tr>
+						 					<tr class="row">
 						 						<td ng-click="displayBeacon(beacon)" class="menuItem">{{beacon.beacon_name}}</td>
 						 						<td class="menuItem">{{beacon.associated}}</td>
 						 						<td class="menuItem">{{beacon.beacon_type}}</td>
 						 						<td class="menuItem hidden-sm hidden-xs">{{beacon.altitude | number: 3}}</td>
 						 						<td class="menuItem hidden-sm hidden-xs">{{beacon.latitude | number: 3}}</td>
 						 						<td class="menuItem hidden-sm hidden-xs">{{beacon.longitude | number: 3}}</td>
+						 						<td>
+						 							<span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeBeacon(beacon)"></span>
+						 						</td>
 						 					</tr>
 						 				</tbody>
 						 			</table>
@@ -362,11 +393,11 @@
 							    <div class="modal-dialog">
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header text-primary" style="padding:2em 3em;">
+							        <div class="modal-header text-primary text-center" style="padding:2em 3em;">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3><b>Type Editing for {{curBeacon.beacon_name}}</b></h3>
 							        </div>
-							        <div class="modal-body" style="padding:2em 3em;">
+							        <div class="modal-body" style="padding:2em 5em;">
 							          <form role="form">
 							          	<div class="form-group form-group-sm">
 							            	<label>Type:</label>
@@ -400,6 +431,7 @@
 						 						<th class="hidden-xs hidden-sm">#Audio</th>
 						 						<th class="hidden-xs hidden-sm">#Video</th>
 						 						<th class="hidden-xs hidden-sm">#3D</th>
+						 						<th></th>
 						 					</tr>
 						 				</thead>
 						 				<tbody>
@@ -413,6 +445,9 @@
 						 						<td class="menuItem hidden-xs hidden-sm">{{arObject.numAudio}}</td>
 						 						<td class="menuItem hidden-xs hidden-sm" >{{arObject.numVideo}}</td>
 						 						<td class="menuItem hidden-xs hidden-sm">{{arObject.num3D}}</td>
+						 						<td>
+						 							<span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeObject(arObject)"></span>
+						 						</td>
 						 					</tr>
 						 				</tbody>
 						 			</table>
@@ -454,9 +489,13 @@
 		 				<div ng-switch-when="object" class="center-block panel-body text-center">
 		 					<div class="panel-heading center-block">
 		 						<div class="row">
-		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left btn-group">
-		 								<button class="btn btn-info" type="button" ng-click="loadBeacon(curObj.beacon_name)">Beacon: {{curObj.beacon_name}}</button>
-		 								<label class="btn btn-warning" data-toggle="modal" data-target="#editBeacForObjModal"><span class="glyphicon glyphicon-pencil"></span></label>
+		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
+		 								<div class="btn-group">
+			 								<label class="btn btn-info" type="button" ng-click="loadBeacon(curObj.beacon_name)">Beacon: {{curObj.beacon_name}}</label>
+			 								<label class="btn btn-warning" data-toggle="modal" data-target="#editBeacForObjModal">
+			 									<span class="glyphicon glyphicon-pencil"></span>
+			 								</label>
+		 								</div>
 		 							</div>
 		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center center-block">
 		 								<div class="btn-group">
@@ -704,47 +743,6 @@
 			 					</div>
 			 				</div>
 
-			 				<!-- Modal for creating an beacon-->
-							  <div class="modal fade" id="addBeaconModal" role="dialog">
-							    <div class="modal-dialog">
-							    
-							      <!-- Modal content-->
-							      <div class="modal-content">
-							        <div class="modal-header text-primary" style="padding:2em 3em;">
-							          <button type="button" class="close" data-dismiss="modal">&times;</button>
-							          <h3><b>Beacon creation for {{curOrg.name}}</b></h3>
-							        </div>
-							        <div class="modal-body" style="padding:2em 3em;">
-							          <form role="form">
-							            <div class="form-group">
-							              <label>Name:</label>
-							              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconName" required>
-							            </div>
-							            <div class="form-group form-group-sm">
-							            	<label>Type:</label>
-										    <select ng-model="addBeaconType" class="form-control input-sm" required>
-										    	<option value="" disabled selected hidden>Select beacon type</option>
-										    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
-										    </select>
-							            </div> 
-							            <div class="form-group panel panel-default text-center">
-							            	<h4><label>Location:</label></h4>
-							            	<div id="googleMapsAddBeacon" class="panel-body">
-							            	</div>
-							            	<h5 class="panel-body zeroPadding">Click a position on the map to the determine the beacon's location.</h5>
-							            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circles indicates a beacon's maximum service range.</h6>
-							            </div>
-							            <button type="submit" class="btn btn-success btn-block" ng-click="addBeacon(addBeaconName, addBeaconType)" data-dismiss="modal">Create</button>
-							          </form>
-							        </div>
-							        <div class="modal-footer">
-							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
-							        </div>
-							      </div>
-							    </div>
-							</div>
-
-
 			 				<!-- Modal for creating an object-->
 							<div class="modal fade" id="addObjectModal" role="dialog">
 							    <div class="modal-dialog">
@@ -917,6 +915,48 @@
 			 			</div>
 			 		</div>
 			 	</div>
+
+			 	<!-- Global Modals -->
+
+			 	<!-- Modal for creating an beacon-->
+				  <div class="modal fade" id="addBeaconModal" role="dialog">
+				    <div class="modal-dialog">
+				    
+				      <!-- Modal content-->
+				      <div class="modal-content">
+				        <div class="modal-header text-primary text-center" style="padding:2em 3em;">
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <h3><b>Beacon creation for {{curOrg.name}}</b></h3>
+				        </div>
+				        <div class="modal-body" style="padding:2em 3em;">
+				          <form role="form">
+				            <div class="form-group">
+				              <label>Name:</label>
+				              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconName" required>
+				            </div>
+				            <div class="form-group form-group-sm">
+				            	<label>Type:</label>
+							    <select ng-model="addBeaconType" class="form-control input-sm" required>
+							    	<option value="" disabled selected hidden>Select beacon type</option>
+							    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
+							    </select>
+				            </div> 
+				            <div class="form-group panel panel-default text-center">
+				            	<h4><label>Location:</label></h4>
+				            	<div id="googleMapsAddBeacon" class="panel-body">
+				            	</div>
+				            	<h5 class="panel-body zeroPadding">Click a position on the map to the determine the beacon's location.</h5>
+				            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circles indicates a beacon's maximum service range.</h6>
+				            </div>
+				            <button type="submit" class="btn btn-success btn-block" ng-click="addBeacon(addBeaconName, addBeaconType)" data-dismiss="modal">Create</button>
+				          </form>
+				        </div>
+				        <div class="modal-footer">
+				          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+				        </div>
+				      </div>
+				    </div>
+				</div>
 			</div>
 			<footer class="text-center footer text-muted">
 				<h6>© 2017 Aura Technologies Inc.</h6>

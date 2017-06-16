@@ -150,10 +150,25 @@ h6{
 	  background-color: white !important;
 	 }
 
+	.thumbnailGalleryItem{
+		position:relative;
+		width: 8.5em;
+		height: 8.5em;
+		margin-top: 0.5em;
+	}
+
 	.thumbnailGallerySrc{
 		opacity: 1;
 		transition: .5s ease;
 		backface-visibility: hidden;
+		width: 8.5em;
+		height: 8.5em;
+		position: absolute;
+	    margin: auto;
+	    top: 0;
+	    left: 0;
+	    right: 0;
+	    bottom: 0;
 	}
 
 	 .thumbnailGalleryOverlay{
@@ -166,13 +181,14 @@ h6{
 		-ms-transform: translate(-50%, -50%);
 	 }
 
-	 .thumbnailGalleryItem:hover .thumbnailGallerySrc{
+	 .thumbnailGalleryItem:hover > .thumbnailGallerySrc{
 	 	opacity: 0.3;
 	 	cursor:pointer;
 	 }
 
-	 .thumbnailGalleryItem:hover .thumbnailGalleryOverlay{
+	 .thumbnailGalleryItem:hover > .thumbnailGalleryOverlay{
 	 	opacity: 1;
+	 	cursor:pointer;
 	 }
 
 	.zeroPadding{
@@ -285,12 +301,6 @@ h6{
 	#fileLabel{
 		margin-top: 0.5em;
 	}
-
-	#liveDisplay{
-		height: auto;
-		max-height: 10000000px;
-		overflow: hidden;
-	}
 }
 
 /* --------------------------Portrait tablets and small desktops--------------------------------- */
@@ -305,11 +315,6 @@ h6{
 
 	#fileLabel{
 		margin-top: 0.75em;
-	}
-	#liveDisplay{
-		height: auto;
-		max-height: 10000000px;
-		overflow: hidden;
 	}
 }	
 
@@ -336,6 +341,11 @@ h6{
     #liveDisplay, #MAIN, #mainContentContainer, #mobileOrgMenu, #orgMenu{
 		padding-left: 0;
 		padding-right: 0;
+	}
+
+	.thumbnailGalleryItem, .thumbnailGallerySrc{
+		width: 6em;
+		height: 6em;
 	}
 }	
 
@@ -378,8 +388,10 @@ h6{
 		max-width: 10em;
 	}
 
-
-
+	.thumbnailGalleryItem, .thumbnailGallerySrc{
+		width: 5em;
+		height: 5em;
+	}
 
 }	
 

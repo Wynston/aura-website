@@ -117,8 +117,7 @@ app.controller('myCtrl', function($scope, $http) {
 
 	//updates the current files to be uploaded
 	//	NOTE: JS array methods don't work with FileList objects
-    $scope.uploadFile = function(event){
-    	var files = event.target.files;
+    $scope.uploadFile = function(files){
         if($scope.files.length == 0){
         	$scope.files = files;
         }
@@ -1885,8 +1884,15 @@ app.directive('customOnChange', function() {
   return {
     restrict: 'A',
     link: function (scope, element, attrs) {
-      var onChangeHandler = scope.$eval(attrs.customOnChange);
-      element.bind('change', onChangeHandler);
+      var onChangeFunc = scope.$eval(attrs.customOnChange);
+      element.bind('change', function(event){
+		var files = event.target.files;
+		onChangeFunc(files);
+      });
+        
+      element.bind('click', function(){
+      	element.val('');
+      });
     }
   };
 });

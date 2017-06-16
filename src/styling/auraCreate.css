@@ -41,7 +41,14 @@ h6{
 	/*--------------------------------------------Classes--------------------------------------------*/
 	.btn{
 		font-size: 0.75em;
-		white-space: normal;
+		max-width: 15em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.btn-block{
+		min-width: 100%;
 	}
 
 	.cancelFile{
@@ -271,8 +278,18 @@ h6{
 		font-size: 14px;
 	}
 
+	.btn{
+		max-width: 12em;
+	}
+
 	#fileLabel{
 		margin-top: 0.5em;
+	}
+
+	#liveDisplay{
+		height: auto;
+		max-height: 10000000px;
+		overflow: hidden;
 	}
 }
 
@@ -282,8 +299,17 @@ h6{
 		font-size: 12px;
 	}
 
+	.btn{
+		max-width: 12em;
+	}
+
 	#fileLabel{
 		margin-top: 0.75em;
+	}
+	#liveDisplay{
+		height: auto;
+		max-height: 10000000px;
+		overflow: hidden;
 	}
 }	
 
@@ -291,6 +317,10 @@ h6{
 @media (max-width: 767px) {
 	body{
 		font-size: 10px;
+	}
+
+	.btn{
+		max-width: 10em;
 	}
 
 	#fileLabel{
@@ -303,7 +333,7 @@ h6{
 		overflow: hidden;
 	}
 
-    #liveTitle, #liveDisplay, #MAIN, #mainContentContainer, #mobileOrgMenu, #orgMenu{
+    #liveDisplay, #MAIN, #mainContentContainer, #mobileOrgMenu, #orgMenu{
 		padding-left: 0;
 		padding-right: 0;
 	}
@@ -317,6 +347,7 @@ h6{
 
 	.btn{
 		padding: 0.5em 0.75em;
+		max-width: 7em;
 	}
 
 	.dropdown-menu{
@@ -338,10 +369,16 @@ h6{
 		overflow: hidden;
 	}
 
-    #liveTitle, #liveDisplay, #MAIN, #mainContentContainer, #mobileOrgMenu, #orgMenu{
+    #liveDisplay, #MAIN, #mainContentContainer, #mobileOrgMenu, #orgMenu{
 		padding-left: 0;
 		padding-right: 0;
 	}
+
+	#objectsViewFilterTitle{
+		max-width: 10em;
+	}
+
+
 
 
 }	

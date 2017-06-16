@@ -53,14 +53,6 @@ h6{
 		color: #1646CB;
 	}
 
-	.caption{
-		text-overflow: ellipsis; 
-		overflow-x: none;
-		overflow-y: none;
-		max-height: 50px; 
-		width: 100%;
-	}
-
 	.carouselBody{
 		min-height: 10vh;
 	}
@@ -151,10 +143,30 @@ h6{
 	  background-color: white !important;
 	 }
 
-	.thumbnail{
-		height: 3em;
-		width: 4em;
+	.thumbnailGallerySrc{
+		opacity: 1;
+		transition: .5s ease;
+		backface-visibility: hidden;
 	}
+
+	 .thumbnailGalleryOverlay{
+	 	transition: .5s ease;
+		opacity: 0;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+	 }
+
+	 .thumbnailGalleryItem:hover .thumbnailGallerySrc{
+	 	opacity: 0.3;
+	 	cursor:pointer;
+	 }
+
+	 .thumbnailGalleryItem:hover .thumbnailGalleryOverlay{
+	 	opacity: 1;
+	 }
 
 	.zeroPadding{
 		padding: 0;

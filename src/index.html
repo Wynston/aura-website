@@ -437,7 +437,7 @@
 						 				<tbody>
 						 					<tr ng-repeat="arObject in objectsArray | filterByBeacon: beaconsFilter | orderBy: 'beacon_name'">
 						 						<td class="menuItem" ng-click="displaythumbNailModal(arObject)">
-						 							<img ng-src="{{arObject.thumbnail}}" class="thumbnail" alt="{{arObject.name}}"></img>
+						 							<img ng-src="{{arObject.thumbnail}}" class="thumbnail" alt="{{arObject.name}}" style="height:3em; width: 3em;"></img>
 						 						</td>
 						 						<td ng-click="displayObject(arObject)" class="menuItem">{{arObject.name}}</td>
 						 						<td ng-click="loadBeacon(arObject.beacon_name)" class="menuItem">{{arObject.beacon_name}}</td>
@@ -453,16 +453,15 @@
 						 			</table>
 								 	<!-- Thumbnail Modal -->
 						 			<div class="modal fade" id="thumbnailModal" role="dialog" data-backdrop="true">
-									    <div class="modal-dialog">
-									    
+									    <div class="modal-dialog modal-sm">
 									      <!-- Thumbnail Modal content-->
 									      <div class="modal-content">
-									        <div class="modal-header">
+									        <div class="modal-header text-primary text-center">
 									          <button type="button" class="close" data-dismiss="modal">&times;</button>
 									          <h3 class="modal-title"><strong>{{modalHeader}}</strong></h3>
 									        </div>
-									        <div class="modal-body text-center">
-									          <img class="img-rounded" ng-src={{modalImgSrc}}></img>
+									        <div class="modal-body text-center" style="background-color: black;">
+									        	<img class="img-rounded" ng-src={{modalImgSrc}}></img>
 									        </div>
 									        <div class="modal-footer">
 									        	<ul class="list-inline text-center">
@@ -471,7 +470,7 @@
 									        		<li>#Video: {{curObj.numVideo}}</li>
 									        		<li>#3D: {{curObj.num3D}}</h4></li>				
 									        	</ul>
-									          <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+									          <button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 									        </div>
 									      </div>  
 									    </div>
@@ -570,7 +569,7 @@
 							        <div class="modal-body" style="padding:2em 3em;">
 							          <form role="form" class="form">
 							            <div class="form-group well well-sm">
-						            		<h4 class="text-primary">Import image, audio, or video files:</h4>
+						            		<h4 class="text-primary">Import image, audio, video, or 3D files:</h4>
 						            		<label class="btn btn-info" for="assetFiles">
 											    <input id="assetFiles" type="file" style="display:none;" accept="image/*|audio/*|video*" custom-on-change="uploadFile" required multiple="true"></input>
 											    Browse
@@ -610,19 +609,21 @@
 										</div>
 										<div class="modal-body" style="background-color: black;">
 											<!-- Media Content -->
-											<ul class="list list-unstyled row">
-												<li ng-repeat="asset in assets" class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
-													<div class="thumbnail menuItem" style="width: 100%; height: 100%;">
-														<span class="glyphicon glyphicon-remove deleteIcon pull-right" ng-click="removeAsset(asset)"></span>
-														<div ng-click="displaySingleAssetModal(asset)" class="text-center" style="height: 100%;">
-												        	<img class="img-circle text-center" ng-src={{assets[$index].thumbnail}} alt="alt={{assets[$index].name}}" style="height: 150px; width: 150px;"></img>
-												            <div class="zeroPadding caption">
-												            	<h4>{{asset.name}}</h4>
-												            </div>
+											<div class="row">
+												<div ng-repeat="asset in assets" class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+													<div class="thumbnail thumbnailGalleryItem">
+														<span class="glyphicon glyphicon-remove deleteIcon pull-right" ng-click="removeAsset(asset)" style="margin-bottom: 0.5em;"></span>
+														<img class="img-responsive thumbnailGallerySrc" ng-src={{asset.value}} alt="{{asset.name}}" ng-click="displaySingleAssetModal(asset)"></img>
+														<div class="thumbnailGalleryOverlay">
+											            	<span ng-if="asset.content_type == 'image'" class="glyphicon glyphicon-picture"></span>
+											            	<span ng-if="asset.content_type == 'audio'" class="glyphicon glyphicon-music"></span>
+											            	<span ng-if="asset.content_type == 'video'" class="glyphicon glyphicon-film"></span>
+											            	<span ng-if="asset.content_type == '3D'" class="glyphicon glyphicon-picture">3D</span>
 												    	</div>
+												    	<h5 style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">{{asset.name}}</h5>
 													</div>
-												</li>
-											</ul>
+												</div>
+											</div>
 										</div>
 										<div class="modal-footer container-fluid">
 											<div class="row" style="padding-left: 1em; padding-right: 1em;">
@@ -671,7 +672,10 @@
 										<!-- 3D Placeholder -->
 							        </div>
 							        <div class="modal-footer">
-							          <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+							        	<button type="button" class="btn btn-danger pull-left" ng-click="removeAsset(curAsset)">Delete
+							        		&nbsp;<span class="glyphicon glyphicon-remove pull-right"></span>
+							        	</button>
+							          <button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 							        </div>
 							      </div>
 							    </div>
@@ -687,9 +691,6 @@
 
 			 						<!-- Creating a beacon -->
 			 						<button type="button" class="btn btn-lg btn-success" data-toggle="modal" data-target="#addBeaconModal" ng-click="loadGoogleScript()">Add Beacon</button>
-
-			 						<!-- Removing a beacon -->
-									<button type="button" class="btn btn-lg btn-danger" data-toggle="modal" data-target="#removeBeaconModal">Delete Beacons</button>
 			 					</div>
 
 			 					<!-- Object Management -->
@@ -698,9 +699,6 @@
 
 			 						<!-- Creating a object -->
 			 						<button type="button" class="btn btn-lg btn-success" data-toggle="modal" data-target="#addObjectModal" ng-click="displayAddObjectModal()">Add Object</button>
-
-			 						<!-- Removing an object -->
-									<button type="button" class="btn btn-lg btn-danger" data-toggle="modal" data-target="#removeObjectModal">Delete Objects</button>
 			 					</div>
 			 				</div>
 
@@ -710,11 +708,11 @@
 							    
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header text-primary" style="padding:2em 3em;">
+							        <div class="modal-header text-primary" style="padding:1em 1em;">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3><b>Object creation for {{curOrg.name}}</b></h3>
 							        </div>
-							        <div class="modal-body" style="padding:2em 3em;">
+							        <div class="modal-body" style="padding:1em 2em;">
 							          <form role="form">
 							            <div class="form-group">
 							              <label>Name:</label>
@@ -759,11 +757,11 @@
 							    
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header text-primary" style="padding:2em 3em;">
+							        <div class="modal-header text-primary" style="padding:1em 1em;">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3><b>Beacon creation for {{curOrg.name}}</b></h3>
 							        </div>
-							        <div class="modal-body" style="padding:2em 3em;">
+							        <div class="modal-body" style="padding:1em 2em;">
 							          <form role="form">
 							            <div class="form-group">
 							              <label>Name</label>
@@ -787,87 +785,6 @@
 							    </div>
 							</div>
 
-							<!-- Modal for removing a beacon -->
-							  <div class="modal fade" id="removeBeaconModal" role="dialog">
-							    <div class="modal-dialog">
-							    
-							      <!-- Modal content-->
-							      <div class="modal-content">
-							        <div class="modal-header text-primary" style="padding:2em 3em;">
-							          <button type="button" class="close" data-dismiss="modal">&times;</button>
-							          <h3><b>Beacon deletion for {{curOrg.name}}</b></h3>
-							        </div>
-							        <div class="modal-body" style="padding:2em 7em;">
-							          <form role="form">
-							          	<div class="form-group">
-							          		<ul class="list list-unstyled">
-								        		<li ng-repeat="beacon in beaconsArray" class="panel panel-primary">
-							        				<h4 class="panel-heading" style="margin-top: 0; cursor:pointer;" ng-click="displayBeacon(beacon)" data-dismiss="modal">{{beacon.beacon_name}}</h4>
-							        				<div class="panel-body center-block">
-							        					<h4 class="text-left"><label class="label label-info">Type:</label> {{beacon.beacon_type}}</h4>
-							        					<h4 class="text-left"><label class="label label-info">Associated:</label> {{beacon.associated}}</h4>
-							        					<h4 class="text-left"><label class="label label-info">Altitude:</label> {{beacon.altitude | number: 3}}</h4>
-								        				<h4 class="text-left"><label class="label label-info">Latitude:</label> {{beacon.latitude | number: 3}}</h4>
-								        				<h4 class="text-left"><label class="label label-info">Longitude:</label> {{beacon.longitude | number: 3}}</h4>
-							        				</div>
-							        				<div class="panel-footer text-center">
-							        					<label class="btn btn-danger text-center" ng-click="removeBeacon(beacon)">Delete <span class="glyphicon glyphicon-remove"></span></label>
-							        				</div>
-								        		</li>
-								        	</ul>
-							          	</div>
-							          </form>
-							        </div>
-							        <div class="modal-footer">
-							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</span></button>
-							        </div>
-							      </div>
-							    </div>
-							</div>
-
-							<!-- Modal for removing an object -->
-							  <div class="modal fade" id="removeObjectModal" role="dialog">
-							    <div class="modal-dialog">
-							    
-							      <!-- Modal content-->
-							      <div class="modal-content">
-							        <div class="modal-header" style="padding:2em 3em;">
-							          <button type="button" class="close" data-dismiss="modal">&times;</button>
-							          <h3><b>Object deletion for {{curOrg.name}}</b></h3>
-							        </div>
-							        <div class="modal-body" style="padding:2em 3em;">
-							          <form role="form">
-							          	<div class="form-group text-primary">
-							          		<ul class="list list-unstyled">
-								        		<li ng-repeat="object in objectsArray" class="panel panel-primary">
-							        				<h4 class="panel-heading" style="margin-top: 0; cursor:pointer;" ng-click="displayObject(object)" data-dismiss="modal">{{object.name}}</h4>
-							        				<div class="panel-body row">
-							        					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pull-left">
-							        						<img class="img-thumbnail" src="{{object.thumbnail}}" alt="{{object.name}}" style="margin-bottom: 0.5em;"></img>
-							        					</div>
-							        					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pull-right text-left">
-							        						<h4><label class="label label-info">#Images:</label> {{object.numImage}}</h4>
-									        				<h4><label class="label label-info">#Audio:</label> {{object.numAudio}}</h4>
-									        				<h4><label class="label label-info">#Video:</label> {{object.numVideo}}</h4>
-									        				<h4><label class="label label-info">#3D:</label> {{object.num3D}}</h4>
-							        					</div>
-							        				</div>
-
-							        				<div class="panel-footer">
-							        					<label class="btn btn-danger text-center" ng-click="removeObject(object)">Delete <span class="glyphicon glyphicon-remove"></span></label>
-							        				</div>
-								        		</li>
-								        	</ul>
-							          	</div>
-							          </form>
-							        </div>
-							        <div class="modal-footer">
-							        	<label class="label label-warning pull-left">Warning: All media associated with the object will also be removed.</label>
-							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</span></button>
-							        </div>
-							      </div>
-							    </div>
-							</div>
 			 			</div>
 
 			 			<!-- Stats -->
@@ -885,11 +802,11 @@
 				    
 				      <!-- Modal content-->
 				      <div class="modal-content">
-				        <div class="modal-header text-primary text-center" style="padding:2em 3em;">
+				        <div class="modal-header text-primary text-center" style="padding:1em 1em;">
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
 				          <h3><b>Beacon creation for {{curOrg.name}}</b></h3>
 				        </div>
-				        <div class="modal-body" style="padding:2em 3em;">
+				        <div class="modal-body" style="padding:1em 2em;">
 				          <form role="form">
 				            <div class="form-group">
 				              <label>Name:</label>

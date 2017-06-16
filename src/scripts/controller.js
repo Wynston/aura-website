@@ -63,11 +63,21 @@ app.controller('myCtrl', function($scope, $http) {
 	//shows a success alert of a given message
 	$scope.alertSuccess = function(msg){
 		$('#alert').html('<div class="alert alert-success alert-dismissable fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+msg+'</span></div>');
+		
+		//automatically fades out
+		$("#alert").fadeTo(2000, 500).slideUp(500, function(){
+		    $("#alert").slideUp(500);
+		});
 	}
 
 	//shows a fail alert of a given message
 	$scope.alertFailure = function(msg){
 		$('#alert').html('<div class="alert alert-danger alert-dismissable fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+msg+'</span></div>');
+		
+		//automatically fades out
+		$("#alert").fadeTo(2000, 500).slideUp(500, function(){
+		    $("#alert").slideUp(500);
+		});
 	}
 
 	//prompts a yes/no question to the user in bootstrap modal and returns a boolean value in the callback
@@ -1496,20 +1506,20 @@ app.controller('myCtrl', function($scope, $http) {
 	
 	//removes an organization and all of its beacons, objects, and assets from the database and storage bucket
 	$scope.removeOrganization = function(organization){
-		$scope.confirm("Are you sure you want to remove " + organization.name + " and all of its beacons, objects, and media?", function(result){
+		$scope.confirm("Are you sure you want to permanently delete " + organization.name + " and all of its beacons, objects, and media?", function(result){
 			if(result){
 				//Delete the organization
-				// $http({
-			 //        method: 'Delete',
-			 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
-			 //        headers: {
-			 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-				// 	}
-				// }).then(function mySuccess(response) {
-				// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
-				// }, function myError(response) {
-				    
-				// });	
+				$http({
+			        method: 'Delete',
+			        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
+			        headers: {
+			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+					}
+				}).then(function mySuccess(response) {
+					$scope.alertSuccess("SUCCESS: " + organization.name + " has been successfully deleted!");
+				}, function myError(response) {
+				   	$scope.alertFailure("ERROR: failed to delete " + organization.name + ".");
+				});	
 
 				//Delete all beacons, objects, and assets for the organization
 				$scope.safeApply();
@@ -1519,7 +1529,7 @@ app.controller('myCtrl', function($scope, $http) {
 
 	//deletes a beacon from the server and local
 	$scope.removeBeacon = function(beacon){
-		$scope.confirm("Are you sure you want to remove " + beacon.beacon_name + "?", function(result){
+		$scope.confirm("Are you sure you want to permanently delete " + beacon.beacon_name + "?", function(result){
 			if(result){
 				//Delete the beacon
 				$http({
@@ -1529,11 +1539,10 @@ app.controller('myCtrl', function($scope, $http) {
 			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 					}
 				}).then(function mySuccess(response) {
-					$scope.alertSuccess(beacon.beacon_name + " has been successfully deleted!");
+					$scope.alertSuccess("SUCCESS: " + beacon.beacon_name + " has been successfully deleted!");
 				}, function myError(response){
 				    $scope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
 				});
-
 				$scope.safeApply();
 			}
 		});
@@ -1541,7 +1550,7 @@ app.controller('myCtrl', function($scope, $http) {
 
 	//deletes an object and all of its assetschange
 	$scope.removeObject = function(object){
-		$scope.confirm("Are you sure you want to remove " + object.name + " and all of its assets?", function(result){
+		$scope.confirm("Are you sure you want to permanently delete " + object.name + " and all of its assets?", function(result){
 			if(result){
 				//Delete all assets associated with the object from firebase
 				for(var i = 0; i < object.assets.length; i++){
@@ -1558,9 +1567,9 @@ app.controller('myCtrl', function($scope, $http) {
 			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 					}
 				}).then(function mySuccess(response) {
-					$scope.alertSuccess(organization.name + " has been successfully deleted!");
+					$scope.alertSuccess("SUCCESS: " + object.name + " has been successfully deleted!");
 				}, function myError(response) {
-				    
+				    $scope.alertFailure("ERROR: failed to delete " + object.name + ".");
 				});
 
 				//refresh the bindings
@@ -1571,24 +1580,24 @@ app.controller('myCtrl', function($scope, $http) {
 
 	//deletes an asset from an objects assets and from firebase
 	$scope.removeAsset = function(asset){
-		$scope.confirm("Are you sure you want to remove " + asset.name + "?", function(result){
+		$scope.confirm("Are you sure you want to permanently delete " + asset.name + "?", function(result){
 			if(result){
 				//remove the asset thumbnail from firebase
 
 				//remove the asset url from firebase
 
 				//Delete the asset
-				// $http({
-			 //        method: 'Delete',
-			 //        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
-			 //        headers: {
-			 //        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-				// 	}
-				// }).then(function mySuccess(response) {
-				// 	$scope.alertSuccess(organization.name + " has been successfully deleted!");
-				// }, function myError(response) {
-				    
-				// });
+				$http({
+			        method: 'Delete',
+			        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
+			        headers: {
+			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+					}
+				}).then(function mySuccess(response) {
+					    $scope.alertSuccess("SUCCESS: " + asset.name + " has been successfully deleted!");
+				}, function myError(response) {
+						$scope.alertFailure("ERROR: failed to delete " + asset.name + ".");
+				});
 
 				//refresh the bindings
 				$scope.safeApply();

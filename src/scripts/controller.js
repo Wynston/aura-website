@@ -1429,7 +1429,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 	
 	//updates a beacons location on the server side
 	$scope.updateBeaconLocation = function(){
-		$scope.updatedBeacon = {
+		var updatedBeacon = {
 			name: $scope.curBeacon.beacon_name,
 			beacon_type: $scope.curBeacon.beacon_rawType,
         	beacon_id: $scope.curBeacon.beacon_id, 
@@ -1439,26 +1439,24 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
         	organization_id: $scope.curBeacon.organization_id,
         	associated: $scope.curBeacon.associated_id
         }
-
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
-        data: $scope.updatedBeacon,
+        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon/' + updatedBeacon.beacon_id,
+        data: updatedBeacon,
         headers: {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$rootScope.alertSuccess($scope.curBeacon.beacon_name + " has been successfully updated!");
+			$rootScope.alertSuccess("SUCCESS: " + $scope.curBeacon.beacon_name + " has been successfully updated!");
+			$scope.displayBeacon(updatedBeacon); 	
 		}, function myError(response) {
-		    
+		    $rootScope.alertFailure("ERROR: failed to update " + $scope.curBeacon.beacon_name + "!");
 		});
-		$scope.displayBeacon($scope.curBeacon);
-		$rootScope.safeApply();
 	}
 
 	//updates a beacons type on the server side
 	$scope.updateBeaconType = function(updatedType){
-		$scope.updatedBeacon = {
+		var updatedBeacon = {
 			name: $scope.curBeacon.beacon_name,
 			beacon_type: updatedType.toLowerCase(),
         	beacon_id: $scope.curBeacon.beacon_id, 
@@ -1471,25 +1469,24 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
-        data: $scope.updatedBeacon,
+        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon/' + updatedBeacon.beacon_type,
+        data: updatedBeacon,
         headers: {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$rootScope.alertSuccess($scope.curBeacon.beacon_name + " has been successfully updated!");
+			$rootScope.alertSuccess("SUCCESS: " + $scope.curBeacon.beacon_name + " has been successfully updated!");
+			$scope.displayBeacon(updatedBeacon);
 		}, function myError(response) {
-		    
+		    $rootScope.alertFailure("ERROR: failed to update " + $scope.curBeacon.beacon_name + "!");
 		});
-		$scope.displayBeacon($scope.curBeacon);
-		$rootScope.safeApply();
 	}
 
 	//updates the location of an object on the server side
 	$scope.updateObjectLocation = function(){
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
+        url: 'https://website-155919.appspot.com/api/v1.0/arobj/' + $scope.curObj.arobj_id,
         data: {
         	name: $scope.curObj.name, 
         	desc: $scope.curObj.description,
@@ -1506,19 +1503,20 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$rootScope.alertSuccess($scope.curObj.name + " has been successfully updated!");
+			$rootScope.alertSuccess("SUCCESS: " + $scope.curObj.name + " has been successfully updated!");
+			//reload the object change
+			$scope.displayObject($scope.curObj);
+			$rootScope.safeApply();
 		}, function myError(response) {
+			$rootScope.alertFailure("ERROR: failed to update " + $scope.curObj.name + "!");
 		});
-		//reload the object change
-		$scope.displayObject($scope.curObj);
-		$rootScope.safeApply();
 	}
 
 	//updates the service beacon of an object
 	$scope.updateBeacForObject = function(beacon){
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
+        url: 'https://website-155919.appspot.com/api/v1.0/arobj/' + $scope.curObj.arobj_id,
         data: {
         	name: $scope.curObj.name, 
         	desc: $scope.curObj.description,
@@ -1535,12 +1533,13 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$rootScope.alertSuccess($scope.curObj.name + " has been successfully updated!");
+			$rootScope.alertSuccess("SUCCESS: " + $scope.curObj.name + " has been successfully updated!");
+			//reload the object change
+			$scope.displayObject($scope.curObj);
+			$rootScope.safeApply();
 		}, function myError(response) {
+				$rootScope.alertFailure("ERROR: failed to update " + $scope.curObj.name + "!");
 		});
-		//reload the object change
-		$scope.displayObject($scope.curObj);
-		$rootScope.safeApply();
 	}
 //-------------------------------------- End of update functions----------------------------------------
 
@@ -1566,9 +1565,6 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 				//Delete all beacons, objects, and assets for the organization
 				$rootScope.safeApply();
 			}
-			else{
-				$scope.destroy();
-			}
 		});
 	}
 
@@ -1589,9 +1585,6 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 				    $rootScope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
 				});
 				$rootScope.safeApply();
-			}
-			else{
-				$scope.destroy();
 			}
 		});
 	}
@@ -1623,9 +1616,6 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 				//refresh the bindings
 				$rootScope.safeApply();
 			}
-			else{
-				$scope.destroy();
-			}
 		});
 	}
 
@@ -1637,10 +1627,10 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 
 				//remove the asset url from firebase
 
-				//Delete the asset
+				//Delete the asset by updating the object its associated with
 				$http({
-			        method: 'Delete',
-			        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
+			        method: 'Put',
+			        url: 'https://website-155919.appspot.com/api/v1.0/arobj/' + $scope.curObj.arobj_id,
 			        headers: {
 			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 					}
@@ -1652,9 +1642,6 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 
 				//refresh the bindings
 				$rootScope.safeApply();
-			}
-			else{
-				$scope.destroy();
 			}
 		});	
 	}

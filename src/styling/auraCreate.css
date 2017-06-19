@@ -344,8 +344,8 @@ h6{
 	}
 
 	.thumbnailGalleryItem, .thumbnailGallerySrc{
-		width: 6em;
-		height: 6em;
+		width: 8em;
+		height: 8em;
 	}
 }	
 

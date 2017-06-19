@@ -83,6 +83,7 @@ app.controller('myCtrl', function($scope, $http) {
 	//prompts a yes/no question to the user in bootstrap modal and returns a boolean value in the callback
 	$scope.confirm = function(msg, callback){
 		$scope.confirmMessage = msg;
+		$scope.safeApply();
 		$("#confirmModal").modal({
 			show:true,
         	backdrop:false,
@@ -590,6 +591,7 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.curView = "beacon";
 		sessionStorage.curView = "beacon";
 		$scope.loadGoogleScript(); 
+		$scope.safeApply();
 	}
 
 	//used to show a specified beacon's objects when selected from the beacons page
@@ -608,6 +610,7 @@ app.controller('myCtrl', function($scope, $http) {
 		sessionStorage.curView = "object";
 		$scope.filterTitle = "objectPrivacy";
 		$scope.loadGoogleScript(); 
+		$scope.safeApply();
 	}
 
 	//activates the modal with a given image
@@ -697,6 +700,7 @@ app.controller('myCtrl', function($scope, $http) {
 
 	//adds a object for an organization onto the database
 	$scope.addObject = function(name, objDesc, objID){
+		$scope.closestBeaconID = $scope.randID();
 		$scope.findClosestBeacon();
 		$http({
         method: 'PUT',
@@ -1499,6 +1503,35 @@ app.controller('myCtrl', function($scope, $http) {
 		//reload the object change
 		$scope.displayObject($scope.curObj);
 	}
+
+	//updates the service beacon of an object
+	$scope.updateBeacForObject = function(beacon){
+		$http({
+        method: 'PUT',
+        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
+        data: {
+        	name: $scope.curObj.name, 
+        	desc: $scope.curObj.description,
+        	beacon_id: beacon.beacon_id, 
+        	arobj_id: $scope.curObj.arobj_id, 
+        	organization_id: $scope.curObj.organization_id,
+        	altitude: $scope.curObj.altitude, 
+        	latitude: $scope.curObj.latitude, 
+        	longitude: $scope.curObj.longitude,
+        	thumbnail: $scope.curObj.thumbnail,
+        	contents: $scope.curObj.assets
+        },
+        headers: {
+        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		}
+		}).then(function mySuccess(response) {
+			$scope.alertSuccess($scope.curObj.name + " has been successfully updated!");
+		}, function myError(response) {
+		});
+		//reload the object change
+		$scope.displayObject($scope.curObj);
+		$scope.safeApply();
+	}
 //-------------------------------------- End of update functions----------------------------------------
 
 //--------------------------------------Start of Delete Functions---------------------------------------
@@ -1732,7 +1765,6 @@ app.controller('myCtrl', function($scope, $http) {
 	  		$scope.confirm("No beacons within range. Create a new one at this location?", function(result){
 	  			if(result){
 	  				$('#beaconForObjectModal').modal('show'); 
-			   		$scope.closestBeaconID = $scope.randID();
 	  			}
 	  			else{
 	  				$scope.closestBeaconID = null;
@@ -2020,7 +2052,7 @@ function initMap(){
 	    for (var i = 0; i < beacons.length; i++ ) {
 	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
           // Adds a 100m radius circle around each beacon
-          var cityCircle = new google.maps.Circle({
+          var beaconCircle = new google.maps.Circle({
             strokeColor: '#00FFE4',
             strokeOpacity: 0.8,
             strokeWeight: 4,
@@ -2051,6 +2083,45 @@ function initMap(){
             	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
 			}
 		});
+	});
+
+	$('#editBeacForObjModal').on('shown.bs.modal', function () {
+		var beacons = JSON.parse(sessionStorage.beaconsArray);
+	    var map = new google.maps.Map(document.getElementById('googleMapsEditBeacForObj'), {
+	      zoom: 11,
+	      center: findDPCenter(beacons)
+	    });
+	    for (var i = 0; i < beacons.length; i++ ) {
+		      var beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
+	          // Adds a 100m radius circle around each beacon
+	          var beaconCircle = new google.maps.Circle({
+	            strokeColor: '#00FFE4',
+	            strokeOpacity: 0.8,
+	            strokeWeight: 4,
+	            fillColor: '#00FFE4',
+	            fillOpacity: 0.35,
+	            map: map,
+	            center: beaconCenter,
+	            radius: 100,
+	            clickable: false
+	          });
+	          var marker = new google.maps.Marker({
+			      position: beaconCenter,
+			      map: map,
+			      draggable: false,
+		    	  animation: google.maps.Animation.DROP,
+		    	  beacon: beacons[i]
+			  });
+	    	  google.maps.event.addListener(marker, 'click', function(){
+	    	  	var curObj = angular.element(document.getElementById('MAIN')).scope().curObj;
+	    	  	var beacon = this.beacon;
+	    	  	angular.element(document.getElementById('MAIN')).scope().confirm("Are you sure you want to change " + curObj.name + "'s service beacon to " + this.beacon.beacon_name + "?", function(result){
+	    	  		if(result){
+	    	  			angular.element(document.getElementById('MAIN')).scope().updateBeacForObject(beacon);
+	    	  		}
+	    	  	});
+	    	  });
+        }
 	});
 
 	if(sessionStorage.curView == "beacon"){
@@ -2090,45 +2161,103 @@ function initMap(){
 		});
 	}
 	else if(sessionStorage.curView == "beaconsList"){
+		var beacons = JSON.parse(sessionStorage.beaconsArray);
 		map = new google.maps.Map(document.getElementById('googleMapsBeacons'), {
-          zoom: 7,
+          zoom: 11,
           center: findDPCenter(JSON.parse(sessionStorage.beaconsArray))
         });
-
-        heatmap = new google.maps.visualization.HeatmapLayer({
-          data: getDataPoints(JSON.parse(sessionStorage.beaconsArray)),
-          map: map,
-          radius: 30
-        });
-		heatmap.setMap(map);
+        for (var i = 0; i < beacons.length; i++ ) {
+		      var beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
+	          // Adds a 100m radius circle around each beacon
+	          var beaconCircle = new google.maps.Circle({
+	            strokeColor: '#00FFE4',
+	            strokeOpacity: 0.8,
+	            strokeWeight: 4,
+	            fillColor: '#00FFE4',
+	            fillOpacity: 0.35,
+	            map: map,
+	            center: beaconCenter,
+	            radius: 100,
+	            clickable: false
+	          });
+	          var marker = new google.maps.Marker({
+			      position: beaconCenter,
+			      map: map,
+			      draggable: false,
+		    	  animation: google.maps.Animation.DROP,
+		    	  beacon: beacons[i]
+			  });
+	    	  google.maps.event.addListener(marker, 'click', function(){
+	    	  	angular.element(document.getElementById('MAIN')).scope().displayBeacon(this.beacon);
+	    	  });
+        }
+  //       heatmap = new google.maps.visualization.HeatmapLayer({
+  //         data: getDataPoints(JSON.parse(sessionStorage.beaconsArray)),
+  //         map: map,
+  //         radius: 30
+  //       });
+		// heatmap.setMap(map);
 	}
 	else if(sessionStorage.curView == "objectsList"){
+		var objects = JSON.parse(sessionStorage.arObjectsList);
 		map = new google.maps.Map(document.getElementById('googleMapsObjects'), {
           zoom: 11,
           center: findDPCenter(JSON.parse(sessionStorage.arObjectsList))
         });
-        heatmap = new google.maps.visualization.HeatmapLayer({
-          data: getDataPoints(JSON.parse(sessionStorage.arObjectsList)),
-          map: map,
-          radius: 30
-        });
-		heatmap.setMap(map);
+        for (var i = 0; i < objects.length; i++ ) {
+		      var objectCenter = new google.maps.LatLng(objects[i].latitude, objects[i].longitude);
+	          // Adds a 100m radius circle around each beacon
+	          var objectCircle = new google.maps.Circle({
+	            strokeColor: '#00FF42',
+	            strokeOpacity: 0.8,
+	            strokeWeight: 4,
+	            fillColor: '#00FF42',
+	            fillOpacity: 0.35,
+	            map: map,
+	            center: objectCenter,
+	            radius: 100,
+	            clickable: false
+	          });
+	          var marker = new google.maps.Marker({
+			      position: objectCenter,
+			      map: map,
+			      draggable: false,
+		    	  animation: google.maps.Animation.DROP,
+		    	  object: objects[i]
+			  });
+	    	  google.maps.event.addListener(marker, 'click', function(){
+	    	  	angular.element(document.getElementById('MAIN')).scope().displayObject(this.object);
+	    	  });
+        }
+  //       heatmap = new google.maps.visualization.HeatmapLayer({
+  //         data: getDataPoints(JSON.parse(sessionStorage.arObjectsList)),
+  //         map: map,
+  //         radius: 30
+  //       });
+		// heatmap.setMap(map);
 	}
 	else if(sessionStorage.curView == "stats"){
+		var beacons = JSON.parse(sessionStorage.beaconsArray);
 		var stats = JSON.parse(sessionStorage.statsArray);
 		map = new google.maps.Map(document.getElementById('googleMapsStats'), {
           zoom: 11,
           center: findDPCenter(stats),
         });
-      // Markers of traffic flow
-      //   for(var i = 0; i < stats.length; i++){
-      //   	var loc = {lat: stats[i].latitude, lng: stats[i].longitude};
-      //   	var marker = new google.maps.Marker({
-		    //   position: loc,
-		    //   map: map,
-	    	//   animation: google.maps.Animation.DROP
-		    // });
-      //   }
+        for (var i = 0; i < beacons.length; i++ ) {
+	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
+          // Adds a 100m radius circle around each beacon
+          var cityCircle = new google.maps.Circle({
+            strokeColor: '#00FFE4',
+            strokeOpacity: 0.8,
+            strokeWeight: 4,
+            fillColor: '#00FFE4',
+            fillOpacity: 0.35,
+            map: map,
+            center: beaconCenter,
+            radius: 100,
+            clickable: false
+          });
+        }
         heatmap = new google.maps.visualization.HeatmapLayer({
           data: getDataPoints(stats),
           map: map,

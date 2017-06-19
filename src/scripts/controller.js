@@ -27,10 +27,12 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		];
 
 		//media carousel filters preset to true
-		$scope.imageFilter = true;
-		$scope.audioFilter = true;
-		$scope.videoFilter = true;
-		$scope.threeDFilter = true;
+		$scope.galleryFilter = {
+			image: true,
+			audio: true,
+			video: true,
+			threeD: true
+		}
 
 		//initiates the arrays for file input
 		$scope.resetAssetsForm();
@@ -668,6 +670,8 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		    
 		});
 		$scope.loadOrganizations();
+		$rootScope.safeApply();
+		$scope.destroy();
 	}
 
 	//adds a beacon to an organization onto the database
@@ -695,6 +699,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		}, function myError(response) {
 		    
 		});
+		$scope.loadBeacons();
 		$rootScope.safeApply();
 	}
 
@@ -724,6 +729,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		}, function myError(response) {
 		});
 		$scope.loadObjects();
+		$rootScope.safeApply();
 	}
 
 	//adding a beacon at an objects location 
@@ -752,7 +758,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		}, function myError(response) {
 		});
 		$scope.loadBeacons();
-
+		$rootScope.safeApply();
 	}
 
 
@@ -781,6 +787,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		}, function myError(response) {
 		});
 		$scope.displayObject($scope.curObj);
+		$rootScope.safeApply();
 	}
 //---------------------------------------end of upload functions----------------------------------------
 
@@ -1446,6 +1453,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		    
 		});
 		$scope.displayBeacon($scope.curBeacon);
+		$rootScope.safeApply();
 	}
 
 	//updates a beacons type on the server side
@@ -1474,6 +1482,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		    
 		});
 		$scope.displayBeacon($scope.curBeacon);
+		$rootScope.safeApply();
 	}
 
 	//updates the location of an object on the server side
@@ -1502,6 +1511,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		});
 		//reload the object change
 		$scope.displayObject($scope.curObj);
+		$rootScope.safeApply();
 	}
 
 	//updates the service beacon of an object
@@ -1743,6 +1753,12 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
     $scope.setAssets = function(){
     	$scope.curAssets = $scope.curObj.assets;
     }
+
+
+    //returns whether or not an asset is to be displayed based on the filters and media type
+    $scope.galleryMediaFilter = function(asset){
+		return($scope.galleryFilter[asset.content_type]);
+	}
 
     //finds the beacon associated with an object
     $scope.getBeaconName = function(beacon_id){
@@ -2130,6 +2146,7 @@ function initMap(){
 	    	  	angular.element(document.getElementById('MAIN')).scope().confirm("Are you sure you want to change " + curObj.name + "'s service beacon to " + this.beacon.beacon_name + "?", function(result){
 	    	  		if(result){
 	    	  			angular.element(document.getElementById('MAIN')).scope().updateBeacForObject(beacon);
+	    	  			$('#editBeacForObjModal').modal('hide');
 	    	  		}
 	    	  	});
 	    	  });
@@ -2332,7 +2349,7 @@ function getElevation(latLng)
 			// Retrieve the first result
 			if (results[0]) 
 			{
-				angular.element(document.getElementById('MAIN')).rootScope().newAlt = results[0].elevation.toFixed(3);
+				angular.element(document.getElementById('MAIN')).scope().newAlt = results[0].elevation.toFixed(3);
 			} 
 			else 
 			{

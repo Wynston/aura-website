@@ -41,7 +41,7 @@ h6{
 	/*--------------------------------------------Classes--------------------------------------------*/
 	.btn{
 		font-size: 0.75em;
-		max-width: 15em;
+		max-width: 16em;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -295,7 +295,7 @@ h6{
 	}
 
 	.btn{
-		max-width: 12em;
+		max-width: 14em;
 	}
 
 	#fileLabel{
@@ -310,7 +310,7 @@ h6{
 	}
 
 	.btn{
-		max-width: 12em;
+		max-width: 13em;
 	}
 
 	#fileLabel{
@@ -325,7 +325,7 @@ h6{
 	}
 
 	.btn{
-		max-width: 10em;
+		max-width: 11em;
 	}
 
 	#fileLabel{
@@ -357,7 +357,7 @@ h6{
 
 	.btn{
 		padding: 0.5em 0.75em;
-		max-width: 7em;
+		max-width: 8em;
 	}
 
 	.dropdown-menu{

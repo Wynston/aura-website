@@ -370,13 +370,18 @@
 			 					<div class="panel-heading container-fluid">
 			 						<div class="row">
 			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary"> 
-			 								<label class="btn btn-info" type="button" data-toggle="modal" data-target="#typeEditModal" style="margin-top: 0.5em;">Type: {{curBeacon.beacon_type}}</label>						
+			 								<button class="btn btn-info" type="button" ng-click="displayBeaconObjects()" style="margin-top: 0.5em;">Objects Served</button>					
 			 							</div>
 			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">
 			 								<h4 class="text-primary">Associated: {{curBeacon.associated}}</h4>
 			 							</div>
 				 						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right">
-				 							<label class="btn btn-info" type="button" ng-click="displayBeaconObjects()" style="margin-top: 0.5em;">Objects Served</label>
+				 							<div class="btn-group">
+				 								<label class="btn btn-info disabled" style="margin-top: 0.5em; cursor: default;">Type: {{curBeacon.beacon_type}}</label>
+					 							<button class="btn btn-warning" type="button" data-toggle="modal" data-target="#typeEditModal" style="margin-top: 0.5em;">
+					 								<span class="glyphicon glyphicon-pencil"></span>
+					 							</button>
+				 							</div>
 				 						</div>
 				 					</div>
 			 					</div>
@@ -614,7 +619,7 @@
 										<div class="modal-body" style="background-color: black;">
 											<!-- Media Content -->
 											<div class="row">
-												<div ng-repeat="asset in assets" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+												<div ng-repeat="asset in assets | filter: galleryMediaFilter" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
 													<div class="thumbnail">
 														<span class="glyphicon glyphicon-remove deleteIcon pull-right" ng-click="removeAsset(asset)" style="margin-bottom: 0.5em;"></span>
 														<div class="thumbnailGalleryItem center-block" ng-click="displaySingleAssetModal(asset)">
@@ -623,10 +628,11 @@
 												            	<span ng-if="asset.content_type == 'image'" class="glyphicon glyphicon-picture"></span>
 												            	<span ng-if="asset.content_type == 'audio'" class="glyphicon glyphicon-music"></span>
 												            	<span ng-if="asset.content_type == 'video'" class="glyphicon glyphicon-film"></span>
-												            	<span ng-if="asset.content_type == '3D'" class="glyphicon glyphicon-picture">3D</span>
+												            	<span ng-if="asset.content_type == 'threeD'" class="glyphicon glyphicon-picture">3D</span>
 													    	</div>
 													    </div>
-												    	<h5 class="text-center" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;"><kbd>{{asset.name}}</kbd></h5>
+												    	<h5 class="text-center" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;"><kbd>{{asset.name}}</kbd>
+												    	</h5>
 													</div>
 												</div>
 											</div>
@@ -634,18 +640,18 @@
 										<div class="modal-footer container-fluid">
 											<form class="pull-left text-primary">
 												Filter:
-												    <label class="checkbox-inline">
-												      <input type="checkbox"  ng-model="imageFilter">Image
-												    </label>
-												    <label class="checkbox-inline">
-												      <input type="checkbox" ng-model="audioFilter">Audio
-												    </label>
-												    <label class="checkbox-inline">
-												      <input type="checkbox" ng-model="videoFilter">Video
-												    </label>
-												    <label class="checkbox-inline">
-												      <input type="checkbox" ng-model="threeDFilter">3D
-												    </label>
+											    <label class="checkbox-inline">
+											      <input type="checkbox" ng-model="galleryFilter['image']">Image
+											    </label>
+											    <label class="checkbox-inline">
+											      <input type="checkbox" ng-model="galleryFilter['audio']">Audio
+											    </label>
+											    <label class="checkbox-inline">
+											      <input type="checkbox" ng-model="galleryFilter['video']">Video
+											    </label>
+											    <label class="checkbox-inline">
+											      <input type="checkbox" ng-model="galleryFilter['threeD']">3D
+											    </label>
 										   </form>
 										   <button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 										</div>

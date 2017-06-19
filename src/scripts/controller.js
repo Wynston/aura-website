@@ -1,8 +1,8 @@
 //-------------------------------Angular Controller---------------------------------------
 var app = angular.module('auraCreate', []);
-app.controller('myCtrl', function($scope, $http) {
+app.controller('myCtrl', function($rootScope, $scope, $http) {
 	//initializer function when the window is loaded
-	$scope.init = function(){
+	$rootScope.init = function(){
 		$scope.userName = "Wynston Ramsay";
 		$scope.loadOrganizations();
 		$scope.changeView("dashboard");
@@ -46,7 +46,7 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.storageRef = $scope.storage.ref();
 
 		//replacement of the $apply to safely reload DOM
-		$scope.safeApply = function(fn) {
+		$rootScope.safeApply = function(fn) {
 		  var phase = this.$root.$$phase;
 		  if(phase == '$apply' || phase == '$digest') {
 		    if(fn && (typeof(fn) === 'function')) {
@@ -61,7 +61,7 @@ app.controller('myCtrl', function($scope, $http) {
 	//------------------Start of Bootstrap Alert/Confirm System-------------------------
 
 	//shows a success alert of a given message
-	$scope.alertSuccess = function(msg){
+	$rootScope.alertSuccess = function(msg){
 		$('#alert').html('<div class="alert alert-success alert-dismissable fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+msg+'</span></div>');
 		
 		//automatically fades out
@@ -71,7 +71,7 @@ app.controller('myCtrl', function($scope, $http) {
 	}
 
 	//shows a fail alert of a given message
-	$scope.alertFailure = function(msg){
+	$rootScope.alertFailure = function(msg){
 		$('#alert').html('<div class="alert alert-danger alert-dismissable fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+msg+'</span></div>');
 		
 		//automatically fades out
@@ -81,9 +81,9 @@ app.controller('myCtrl', function($scope, $http) {
 	}
 
 	//prompts a yes/no question to the user in bootstrap modal and returns a boolean value in the callback
-	$scope.confirm = function(msg, callback){
+	$rootScope.confirm = function(msg, callback){
 		$scope.confirmMessage = msg;
-		$scope.safeApply();
+		$rootScope.safeApply();
 		$("#confirmModal").modal({
 			show:true,
         	backdrop:false,
@@ -153,7 +153,7 @@ app.controller('myCtrl', function($scope, $http) {
 			}
         	$scope.files = temp2;
         }
-        $scope.safeApply();
+        $rootScope.safeApply();
     }; 
 
     //removes a file from the currently upload files
@@ -591,7 +591,7 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.curView = "beacon";
 		sessionStorage.curView = "beacon";
 		$scope.loadGoogleScript(); 
-		$scope.safeApply();
+		$rootScope.safeApply();
 	}
 
 	//used to show a specified beacon's objects when selected from the beacons page
@@ -610,7 +610,7 @@ app.controller('myCtrl', function($scope, $http) {
 		sessionStorage.curView = "object";
 		$scope.filterTitle = "objectPrivacy";
 		$scope.loadGoogleScript(); 
-		$scope.safeApply();
+		$rootScope.safeApply();
 	}
 
 	//activates the modal with a given image
@@ -634,7 +634,7 @@ app.controller('myCtrl', function($scope, $http) {
 			$("#assetsModal").modal();
 		}
 		else{
-			$scope.alertFailure("Error: " + $scope.curObj.name + " has no media.");
+			$rootScope.alertFailure("Error: " + $scope.curObj.name + " has no media.");
 		}
 	}
 
@@ -663,7 +663,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$scope.alertSuccess(name + " has been successfully added!");
+			$rootScope.alertSuccess(name + " has been successfully added!");
 		}, function myError(response) {
 		    
 		});
@@ -691,11 +691,11 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$scope.alertSuccess(name + " has been successfully added!");
+			$rootScope.alertSuccess(name + " has been successfully added!");
 		}, function myError(response) {
 		    
 		});
-		$scope.safeApply();r
+		$rootScope.safeApply();
 	}
 
 	//adds a object for an organization onto the database
@@ -720,7 +720,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$scope.alertSuccess(name + " has been successfully added!");
+			$rootScope.alertSuccess(name + " has been successfully added!");
 		}, function myError(response) {
 		});
 		$scope.loadObjects();
@@ -748,7 +748,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$scope.alertSuccess(name + " has been successfully added!");
+			$rootScope.alertSuccess(name + " has been successfully added!");
 		}, function myError(response) {
 		});
 		$scope.loadBeacons();
@@ -777,7 +777,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$scope.alertSuccess($scope.uploadCount +  " assets have been successfully added to " + $scope.curObj.name + "!");
+			$rootScope.alertSuccess($scope.uploadCount +  " assets have been successfully added to " + $scope.curObj.name + "!");
 		}, function myError(response) {
 		});
 		$scope.displayObject($scope.curObj);
@@ -896,7 +896,7 @@ app.controller('myCtrl', function($scope, $http) {
     		}
     	}
     	if(!found){
-    		$scope.alertFailure("Error: beacon not found.");
+    		$rootScope.alertFailure("Error: beacon not found.");
     	}
     }
 
@@ -1441,7 +1441,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$scope.alertSuccess($scope.curBeacon.beacon_name + " has been successfully updated!");
+			$rootScope.alertSuccess($scope.curBeacon.beacon_name + " has been successfully updated!");
 		}, function myError(response) {
 		    
 		});
@@ -1469,7 +1469,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$scope.alertSuccess($scope.curBeacon.beacon_name + " has been successfully updated!");
+			$rootScope.alertSuccess($scope.curBeacon.beacon_name + " has been successfully updated!");
 		}, function myError(response) {
 		    
 		});
@@ -1497,7 +1497,7 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$scope.alertSuccess($scope.curObj.name + " has been successfully updated!");
+			$rootScope.alertSuccess($scope.curObj.name + " has been successfully updated!");
 		}, function myError(response) {
 		});
 		//reload the object change
@@ -1525,12 +1525,12 @@ app.controller('myCtrl', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			$scope.alertSuccess($scope.curObj.name + " has been successfully updated!");
+			$rootScope.alertSuccess($scope.curObj.name + " has been successfully updated!");
 		}, function myError(response) {
 		});
 		//reload the object change
 		$scope.displayObject($scope.curObj);
-		$scope.safeApply();
+		$rootScope.safeApply();
 	}
 //-------------------------------------- End of update functions----------------------------------------
 
@@ -1548,13 +1548,16 @@ app.controller('myCtrl', function($scope, $http) {
 			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 					}
 				}).then(function mySuccess(response) {
-					$scope.alertSuccess("SUCCESS: " + organization.name + " has been successfully deleted!");
+					$rootScope.alertSuccess("SUCCESS: " + organization.name + " has been successfully deleted!");
 				}, function myError(response) {
-				   	$scope.alertFailure("ERROR: failed to delete " + organization.name + ".");
+				   	$rootScope.alertFailure("ERROR: failed to delete " + organization.name + ".");
 				});	
 
 				//Delete all beacons, objects, and assets for the organization
-				$scope.safeApply();
+				$rootScope.safeApply();
+			}
+			else{
+				$scope.destroy();
 			}
 		});
 	}
@@ -1571,11 +1574,14 @@ app.controller('myCtrl', function($scope, $http) {
 			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 					}
 				}).then(function mySuccess(response) {
-					$scope.alertSuccess("SUCCESS: " + beacon.beacon_name + " has been successfully deleted!");
+					$rootScope.alertSuccess("SUCCESS: " + beacon.beacon_name + " has been successfully deleted!");
 				}, function myError(response){
-				    $scope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
+				    $rootScope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
 				});
-				$scope.safeApply();
+				$rootScope.safeApply();
+			}
+			else{
+				$scope.destroy();
 			}
 		});
 	}
@@ -1599,13 +1605,16 @@ app.controller('myCtrl', function($scope, $http) {
 			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 					}
 				}).then(function mySuccess(response) {
-					$scope.alertSuccess("SUCCESS: " + object.name + " has been successfully deleted!");
+					$rootScope.alertSuccess("SUCCESS: " + object.name + " has been successfully deleted!");
 				}, function myError(response) {
-				    $scope.alertFailure("ERROR: failed to delete " + object.name + ".");
+				    $rootScope.alertFailure("ERROR: failed to delete " + object.name + ".");
 				});
 
 				//refresh the bindings
-				$scope.safeApply();
+				$rootScope.safeApply();
+			}
+			else{
+				$scope.destroy();
 			}
 		});
 	}
@@ -1626,13 +1635,16 @@ app.controller('myCtrl', function($scope, $http) {
 			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 					}
 				}).then(function mySuccess(response) {
-					    $scope.alertSuccess("SUCCESS: " + asset.name + " has been successfully deleted!");
+					    $rootScope.alertSuccess("SUCCESS: " + asset.name + " has been successfully deleted!");
 				}, function myError(response) {
-						$scope.alertFailure("ERROR: failed to delete " + asset.name + ".");
+						$rootScope.alertFailure("ERROR: failed to delete " + asset.name + ".");
 				});
 
 				//refresh the bindings
-				$scope.safeApply();
+				$rootScope.safeApply();
+			}
+			else{
+				$scope.destroy();
 			}
 		});	
 	}
@@ -1885,12 +1897,12 @@ app.controller('myCtrl', function($scope, $http) {
 				} 
 				else 
 				{
-					angular.element(document.getElementById('MAIN')).scope().alertFailure("No results found");
+					angular.element(document.getElementById('MAIN')).rootScope().alertFailure("No results found");
 				}
 		  	} 
 		  	else 
 		  	{
-		  		angular.element(document.getElementById('MAIN')).scope().alertFailure("Elevation service failed due to: " + status);
+		  		angular.element(document.getElementById('MAIN')).rootScope().alertFailure("Elevation service failed due to: " + status);
 			}
 		});
 	}
@@ -2206,18 +2218,6 @@ function initMap(){
         });
         for (var i = 0; i < objects.length; i++ ) {
 		      var objectCenter = new google.maps.LatLng(objects[i].latitude, objects[i].longitude);
-	          // Adds a 100m radius circle around each beacon
-	          var objectCircle = new google.maps.Circle({
-	            strokeColor: '#00FF42',
-	            strokeOpacity: 0.8,
-	            strokeWeight: 4,
-	            fillColor: '#00FF42',
-	            fillOpacity: 0.35,
-	            map: map,
-	            center: objectCenter,
-	            radius: 100,
-	            clickable: false
-	          });
 	          var marker = new google.maps.Marker({
 			      position: objectCenter,
 			      map: map,
@@ -2332,16 +2332,16 @@ function getElevation(latLng)
 			// Retrieve the first result
 			if (results[0]) 
 			{
-				angular.element(document.getElementById('MAIN')).scope().newAlt = results[0].elevation.toFixed(3);
+				angular.element(document.getElementById('MAIN')).rootScope().newAlt = results[0].elevation.toFixed(3);
 			} 
 			else 
 			{
-				angular.element(document.getElementById('MAIN')).scope().alertFailure("No results found");
+				angular.element(document.getElementById('MAIN')).rootScope().alertFailure("No results found");
 			}
 	  	} 
 	  	else 
 	  	{
-	  		angular.element(document.getElementById('MAIN')).scope().alertFailure("Elevation service failed due to: " + status);
+	  		angular.element(document.getElementById('MAIN')).rootScope().alertFailure("Elevation service failed due to: " + status);
 		}
 	});
 }

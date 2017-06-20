@@ -1,6 +1,5 @@
 //-------------------------------Angular Controller---------------------------------------
-var app = angular.module('auraCreate', []);
-app.controller('myCtrl', function($rootScope, $scope, $http) {
+app.controller('mainController', function($rootScope, $scope, $http) {
 	//initializer function when the window is loaded
 	$rootScope.init = function(){
 		$scope.userName = "Wynston Ramsay";
@@ -46,18 +45,24 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		// Root reference to the storage
 		$scope.storage = $scope.firebaseApp.storage("gs://auraalert-21339.appspot.com/");
 		$scope.storageRef = $scope.storage.ref();
+	}
 
-		//replacement of the $apply to safely reload DOM
-		$rootScope.safeApply = function(fn) {
-		  var phase = this.$root.$$phase;
-		  if(phase == '$apply' || phase == '$digest') {
-		    if(fn && (typeof(fn) === 'function')) {
-		      fn();
-		    }
-		  } else {
-		    this.$apply(fn);
-		  }
-		};
+	//replacement of the $apply to safely reload DOM
+	$rootScope.safeApply = function(fn){
+		var phase = this.$root.$$phase;
+		if(phase == '$apply' || phase == '$digest') {
+			if(fn && (typeof(fn) === 'function')) {
+			  fn();
+			}
+		} 
+		else{
+			if(fn){
+		    	$scope.$apply(fn);
+			} 
+			else{
+		    	$scope.$apply();
+			}
+		}
 	}
 
 	//------------------Start of Bootstrap Alert/Confirm System-------------------------
@@ -530,7 +535,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 				sessionStorage.curView = view;
 				$scope.curView = view;
 				$scope.loadStats();
-				$scope.loadGoogleScript();
+				loadGoogleScript();
 				break;
 		}
 	}
@@ -548,12 +553,6 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
     	else{
     		document.getElementById("filterTitle").style.visibility = "hidden";
     	}
-	}
-
-	$scope.cacheOrgData = function(org){
-		$scope.curOrg = org;
-		$scope.loadBeacons();
-		$scope.loadObjects();
 	}
 
 	//helps the carousel notify the controller what the current organization is
@@ -592,8 +591,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		$scope.changeLiveTitle("Beacon: " + $scope.curBeacon.beacon_name, "", false);
 		$scope.curView = "beacon";
 		sessionStorage.curView = "beacon";
-		$scope.loadGoogleScript(); 
-		$rootScope.safeApply();
+		loadGoogleScript(); 
 	}
 
 	//used to show a specified beacon's objects when selected from the beacons page
@@ -611,8 +609,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		$scope.curView = "object";
 		sessionStorage.curView = "object";
 		$scope.filterTitle = "objectPrivacy";
-		$scope.loadGoogleScript(); 
-		$rootScope.safeApply();
+		loadGoogleScript(); 
 	}
 
 	//activates the modal with a given image
@@ -625,7 +622,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 
 	//activates the modal, loads the google scripts and resets any forms necessary
 	$scope.displayAddObjectModal = function(){
-		$scope.loadGoogleScript();
+		loadGoogleScript();
 		$scope.resetThumbnailForm();
 	}
 
@@ -636,7 +633,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 			$("#assetsModal").modal();
 		}
 		else{
-			$rootScope.alertFailure("Error: " + $scope.curObj.name + " has no media.");
+			$rootScope.alertFailure("ERROR: " + $scope.curObj.name + " has no media.");
 		}
 	}
 
@@ -1406,22 +1403,6 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 		  // });
     }
 
-    //must load in script when the object view is first loaded in html
-    $scope.loadGoogleScript = function(){
-    	if(document.getElementById("googleScript")){
-    		document.getElementById("googleScript").remove();
-    		var googleMapsScript = document.createElement('script');
-			googleMapsScript.id = "googleScript";
-			googleMapsScript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCq80g8ye8MQaNGW3BOVaj0VY3m7jpomoY&callback=initMap&libraries=visualization";
-			document.getElementById("MAIN").appendChild(googleMapsScript);
-		}
-		else{
-			var googleMapsScript = document.createElement('script');
-			googleMapsScript.id = "googleScript";
-			googleMapsScript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCq80g8ye8MQaNGW3BOVaj0VY3m7jpomoY&callback=initMap&libraries=visualization";
-			document.getElementById("MAIN").appendChild(googleMapsScript);
-		}
-	}
 //--------------------------------------end of loader functions----------------------------------------
 
 
@@ -1506,7 +1487,6 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 			$rootScope.alertSuccess("SUCCESS: " + $scope.curObj.name + " has been successfully updated!");
 			//reload the object change
 			$scope.displayObject($scope.curObj);
-			$rootScope.safeApply();
 		}, function myError(response) {
 			$rootScope.alertFailure("ERROR: failed to update " + $scope.curObj.name + "!");
 		});
@@ -1536,7 +1516,6 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 			$rootScope.alertSuccess("SUCCESS: " + $scope.curObj.name + " has been successfully updated!");
 			//reload the object change
 			$scope.displayObject($scope.curObj);
-			$rootScope.safeApply();
 		}, function myError(response) {
 				$rootScope.alertFailure("ERROR: failed to update " + $scope.curObj.name + "!");
 		});
@@ -1563,30 +1542,44 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 				});	
 
 				//Delete all beacons, objects, and assets for the organization
-				$rootScope.safeApply();
 			}
 		});
 	}
 
 	//deletes a beacon from the server and local
 	$scope.removeBeacon = function(beacon){
-		$scope.confirm("Are you sure you want to permanently delete " + beacon.beacon_name + "?", function(result){
-			if(result){
-				//Delete the beacon
-				$http({
-			        method: 'Delete',
-			        url: 'https://website-155919.appspot.com/api/v1.0/beacon/' + beacon.beacon_id,
-			        headers: {
-			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-					}
-				}).then(function mySuccess(response) {
-					$rootScope.alertSuccess("SUCCESS: " + beacon.beacon_name + " has been successfully deleted!");
-				}, function myError(response){
-				    $rootScope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
-				});
-				$rootScope.safeApply();
-			}
-		});
+		if(confirm("Are you sure you want to permanently delete " + beacon.beacon_name + "?")){
+			//Delete the beacon
+			$http({
+		        method: 'Delete',
+		        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon/' + beacon.beacon_id,
+		        headers: {
+		        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+				}
+			}).then(function mySuccess(response) {
+				$rootScope.alertSuccess("SUCCESS: " + beacon.beacon_name + " has been successfully deleted!");
+				$scope.loadBeacons();
+			}, function myError(response){
+			    $rootScope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
+			});
+		}
+		// $scope.confirm("Are you sure you want to permanently delete " + beacon.beacon_name + "?", function(result){
+		// 	if(result){
+		// 		//Delete the beacon
+		// 		$http({
+		// 	        method: 'Delete',
+		// 	        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon/' + beacon.beacon_id,
+		// 	        headers: {
+		// 	        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		// 			}
+		// 		}).then(function mySuccess(response) {
+		// 			$rootScope.alertSuccess("SUCCESS: " + beacon.beacon_name + " has been successfully deleted!");
+		// 			$scope.loadBeacons();
+		// 		}, function myError(response){
+		// 		    $rootScope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
+		// 		});
+		// 	}
+		// });
 	}
 
 	//deletes an object and all of its assetschange
@@ -1612,9 +1605,6 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 				}, function myError(response) {
 				    $rootScope.alertFailure("ERROR: failed to delete " + object.name + ".");
 				});
-
-				//refresh the bindings
-				$rootScope.safeApply();
 			}
 		});
 	}
@@ -1793,7 +1783,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 
     //finds the distance between two latlng points in meters
     $scope.findDistanceBetweenLatLng = function(lat1,lon1,lat2,lon2) {
-	  var R = 6371000; // Radius of the earth in mm
+	  var R = 6371000; // Radius of the earth in m
 	  var dLat = $scope.deg2rad(lat2-lat1);  // deg2rad below
 	  var dLon = $scope.deg2rad(lon2-lon1); 
 	  var a = 
@@ -1806,7 +1796,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 	  return d;
 	}
 	//helper function for findDistanceBetweenLatLng
-	$scope.deg2rad = function(deg) {
+	$scope.deg2rad = function(deg){
 	  return deg * (Math.PI/180)
 	}
 
@@ -1815,7 +1805,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
     	$scope.beaconsFilter = filter;
     	if($scope.viewType == "Map"){
     		$scope.filterObjectsByBeacon(filter);
-    		$scope.loadGoogleScript();
+    		loadGoogleScript();
     	}
     }
 
@@ -1842,7 +1832,7 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
     		if($scope.curView == "objectsList"){
     			$scope.filterObjectsByBeacon($scope.beaconsFilter);
     		}
-    		$scope.loadGoogleScript();
+    		loadGoogleScript();
     	}
     }
 
@@ -1900,12 +1890,12 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 				} 
 				else 
 				{
-					angular.element(document.getElementById('MAIN')).rootScope().alertFailure("No results found");
+					$rootScope.alertFailure("No results found");
 				}
 		  	} 
 		  	else 
 		  	{
-		  		angular.element(document.getElementById('MAIN')).rootScope().alertFailure("Elevation service failed due to: " + status);
+		  		$rootScope.alertFailure("Elevation service failed due to: " + status);
 			}
 		});
 	}
@@ -1925,84 +1915,6 @@ app.controller('myCtrl', function($rootScope, $scope, $http) {
 
 //-------------------------------------end of helper functions-----------------------------------
 
-//-------------------------------------Custom Directives begins----------------------------------
-
-app.directive('customOnChange', function() {
-  return {
-    restrict: 'A',
-    link: function (scope, element, attrs) {
-      var onChangeFunc = scope.$eval(attrs.customOnChange);
-      element.bind('change', function(event){
-		var files = event.target.files;
-		onChangeFunc(files);
-      });
-        
-      element.bind('click', function(){
-      	element.val('');
-      });
-    }
-  };
-});
-
-//-------------------------------------End of Custom Directives----------------------------------
-
-
-//-------------------------------------custom filters begins-------------------------------------
-
-//filters an object list by beacon
-app.filter('filterByBeacon', function() {
-
-	return function(objectsArray, beaconsFilter) {
-	    var filteredObjects = [];
-	    angular.forEach(objectsArray, function(obj) {
-	      if(beaconsFilter == 'All') {
-	        filteredObjects.push(obj);
-	      }
-	      else{
-	      	if(obj.beacon_name == beaconsFilter){
-    			filteredObjects.push(obj);
-    		}
-    		else{
-    			//object is not associated to the beacon
-    		}
-	      }
-	    });
-	    return filteredObjects;
-  	}
-});
-
-//remove duplicate items from a dropdown menu
-app.filter('removeDuplicates', function() {
-	return function(objectsArray) {
-	    var filteredItems = [];
-	    angular.forEach(objectsArray, function(obj) {
-	    	var duplicate = false;
-	    	for(var i = 0; i < filteredItems.length; i++){
-	    		if(filteredItems[i].beacon_name == obj.beacon_name){
-	    			duplicate = true;
-	    			break;
-	    		}
-	    		else{
-	    			//not a duplicate in this comparison
-	    		}
-	    	}
-	    	if(duplicate){
-	    		//don't add it to the list
-	    	}
-	    	else{
-	    		//add it to the list since it is not a duplicate
-	    		filteredItems.push(obj);
-	    	}
-	    });
-	    return filteredItems.sort(function(a, b){
-		    if(a.beacon_name < b.beacon_name) return -1;
-		    if(a.beacon_name > b.beacon_name) return 1;
-		    return 0;
-		});
-  	}
-});
-
-//-------------------------------------end of custom filters-------------------------------------
 
 //allows modals to stack based on z-index
 $(document).on('show.bs.modal', '.modal', function () {
@@ -2013,341 +1925,3 @@ $(document).on('show.bs.modal', '.modal', function () {
     }, 0);
 });
 
-//-------------------------------------google maps handling begins-------------------------------
-//initMap function for google maps api
-function initMap(){
-	$('#addBeaconModal').on('shown.bs.modal', function (){
-		var beacons = JSON.parse(sessionStorage.beaconsArray);
-	    var map = new google.maps.Map(document.getElementById('googleMapsAddBeacon'), {
-	      zoom: 11,
-	      center: findDPCenter(beacons)
-	    });
-	    for (var i = 0; i < beacons.length; i++ ) {
-	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-          // Adds a 100m radius circle around each beacon
-          var cityCircle = new google.maps.Circle({
-            strokeColor: '#00FFE4',
-            strokeOpacity: 0.8,
-            strokeWeight: 4,
-            fillColor: '#00FFE4',
-            fillOpacity: 0.35,
-            map: map,
-            center: beaconCenter,
-            radius: 100,
-            clickable: false
-          });
-        }
-	    google.maps.event.addListener(map, 'click', function(event) {
-		   placeMarker(event.latLng);
-		   //places a marker at a given location, used for onclick triggers
-			//places a marker at a given location, used for onclick triggers
-			function placeMarker(location) {
-				if ( marker ) {
-			    	marker.setPosition(location);
-			  	} 
-			  	else{
-			    	marker = new google.maps.Marker({
-				    	position: location,
-				    	map: map
-			    	});
-			  	}
-			  	var pos = (JSON.parse(JSON.stringify(location)));
-			  	getElevation(location);
-			  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
-            	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
-			}
-		});
-	});
-	$('#addObjectModal').on('shown.bs.modal', function () {
-		var beacons = JSON.parse(sessionStorage.beaconsArray);
-	    var map = new google.maps.Map(document.getElementById('googleMapsAddObject'), {
-	      zoom: 11,
-	      center: findDPCenter(beacons)
-	    });
-	    for (var i = 0; i < beacons.length; i++ ) {
-	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-          // Adds a 100m radius circle around each beacon
-          var beaconCircle = new google.maps.Circle({
-            strokeColor: '#00FFE4',
-            strokeOpacity: 0.8,
-            strokeWeight: 4,
-            fillColor: '#00FFE4',
-            fillOpacity: 0.35,
-            map: map,
-            center: beaconCenter,
-            radius: 100,
-            clickable: false
-          });
-        }
-	    google.maps.event.addListener(map, 'click', function(event) {
-		   placeMarker(event.latLng);
-		   //places a marker at a given location, used for onclick triggers
-			function placeMarker(location) {
-				if ( marker ) {
-			    	marker.setPosition(location);;
-			  	} 
-			  	else{
-			    	marker = new google.maps.Marker({
-			    	position: location,
-			    	map: map
-			    	});
-			  	}
-			  	var pos = (JSON.parse(JSON.stringify(location)));
-			  	getElevation(location);
-			  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
-            	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
-			}
-		});
-	});
-
-	$('#editBeacForObjModal').on('shown.bs.modal', function () {
-		var beacons = JSON.parse(sessionStorage.beaconsArray);
-	    var map = new google.maps.Map(document.getElementById('googleMapsEditBeacForObj'), {
-	      zoom: 11,
-	      center: findDPCenter(beacons)
-	    });
-	    for (var i = 0; i < beacons.length; i++ ) {
-		      var beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-	          // Adds a 100m radius circle around each beacon
-	          var beaconCircle = new google.maps.Circle({
-	            strokeColor: '#00FFE4',
-	            strokeOpacity: 0.8,
-	            strokeWeight: 4,
-	            fillColor: '#00FFE4',
-	            fillOpacity: 0.35,
-	            map: map,
-	            center: beaconCenter,
-	            radius: 100,
-	            clickable: false
-	          });
-	          var marker = new google.maps.Marker({
-			      position: beaconCenter,
-			      map: map,
-			      draggable: false,
-		    	  animation: google.maps.Animation.DROP,
-		    	  beacon: beacons[i]
-			  });
-	    	  google.maps.event.addListener(marker, 'click', function(){
-	    	  	var curObj = angular.element(document.getElementById('MAIN')).scope().curObj;
-	    	  	var beacon = this.beacon;
-	    	  	angular.element(document.getElementById('MAIN')).scope().confirm("Are you sure you want to change " + curObj.name + "'s service beacon to " + this.beacon.beacon_name + "?", function(result){
-	    	  		if(result){
-	    	  			angular.element(document.getElementById('MAIN')).scope().updateBeacForObject(beacon);
-	    	  			$('#editBeacForObjModal').modal('hide');
-	    	  		}
-	    	  	});
-	    	  });
-        }
-	});
-
-	if(sessionStorage.curView == "beacon"){
-		var curBeacon = JSON.parse(sessionStorage.curBeacon);
-	    var loc = {lat: curBeacon.latitude, lng: curBeacon.longitude };
-	    var map = new google.maps.Map(document.getElementById("googleMapsBeacon"), {
-	      zoom: 15,
-	      center: loc
-	    });
-	    var marker = new google.maps.Marker({
-	      position: loc,
-	      map: map,
-	      draggable:true,
-   		  animation: google.maps.Animation.DROP
-	    });
-	    google.maps.event.addListener(marker, 'dragend', function() 
-		{
-		    geocodePosition(JSON.stringify(marker.getPosition()), "beacon");
-		});
-	}
-	else if(sessionStorage.curView == "object"){
-		var curObj = JSON.parse(sessionStorage.curObj);
-	    var loc = {lat: curObj.latitude, lng: curObj.longitude };
-	    var map = new google.maps.Map(document.getElementById("googleMapsObject"), {
-	      zoom: 15,
-	      center: loc
-	    });
-	    var marker = new google.maps.Marker({
-	      position: loc,
-	      map: map,
-	      draggable:true,
-    	  animation: google.maps.Animation.DROP
-	    });
-	    google.maps.event.addListener(marker, 'dragend', function() 
-		{
-		    geocodePosition(JSON.stringify(marker.getPosition()), "object");
-		});
-	}
-	else if(sessionStorage.curView == "beaconsList"){
-		var beacons = JSON.parse(sessionStorage.beaconsArray);
-		map = new google.maps.Map(document.getElementById('googleMapsBeacons'), {
-          zoom: 11,
-          center: findDPCenter(JSON.parse(sessionStorage.beaconsArray))
-        });
-        for (var i = 0; i < beacons.length; i++ ) {
-		      var beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-	          // Adds a 100m radius circle around each beacon
-	          var beaconCircle = new google.maps.Circle({
-	            strokeColor: '#00FFE4',
-	            strokeOpacity: 0.8,
-	            strokeWeight: 4,
-	            fillColor: '#00FFE4',
-	            fillOpacity: 0.35,
-	            map: map,
-	            center: beaconCenter,
-	            radius: 100,
-	            clickable: false
-	          });
-	          var marker = new google.maps.Marker({
-			      position: beaconCenter,
-			      map: map,
-			      draggable: false,
-		    	  animation: google.maps.Animation.DROP,
-		    	  beacon: beacons[i]
-			  });
-	    	  google.maps.event.addListener(marker, 'click', function(){
-	    	  	angular.element(document.getElementById('MAIN')).scope().displayBeacon(this.beacon);
-	    	  });
-        }
-  //       heatmap = new google.maps.visualization.HeatmapLayer({
-  //         data: getDataPoints(JSON.parse(sessionStorage.beaconsArray)),
-  //         map: map,
-  //         radius: 30
-  //       });
-		// heatmap.setMap(map);
-	}
-	else if(sessionStorage.curView == "objectsList"){
-		var objects = JSON.parse(sessionStorage.arObjectsList);
-		map = new google.maps.Map(document.getElementById('googleMapsObjects'), {
-          zoom: 11,
-          center: findDPCenter(JSON.parse(sessionStorage.arObjectsList))
-        });
-        for (var i = 0; i < objects.length; i++ ) {
-		      var objectCenter = new google.maps.LatLng(objects[i].latitude, objects[i].longitude);
-	          var marker = new google.maps.Marker({
-			      position: objectCenter,
-			      map: map,
-			      draggable: false,
-		    	  animation: google.maps.Animation.DROP,
-		    	  object: objects[i]
-			  });
-	    	  google.maps.event.addListener(marker, 'click', function(){
-	    	  	angular.element(document.getElementById('MAIN')).scope().displayObject(this.object);
-	    	  });
-        }
-  //       heatmap = new google.maps.visualization.HeatmapLayer({
-  //         data: getDataPoints(JSON.parse(sessionStorage.arObjectsList)),
-  //         map: map,
-  //         radius: 30
-  //       });
-		// heatmap.setMap(map);
-	}
-	else if(sessionStorage.curView == "stats"){
-		var beacons = JSON.parse(sessionStorage.beaconsArray);
-		var stats = JSON.parse(sessionStorage.statsArray);
-		map = new google.maps.Map(document.getElementById('googleMapsStats'), {
-          zoom: 11,
-          center: findDPCenter(stats),
-        });
-        for (var i = 0; i < beacons.length; i++ ) {
-	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-          // Adds a 100m radius circle around each beacon
-          var cityCircle = new google.maps.Circle({
-            strokeColor: '#00FFE4',
-            strokeOpacity: 0.8,
-            strokeWeight: 4,
-            fillColor: '#00FFE4',
-            fillOpacity: 0.35,
-            map: map,
-            center: beaconCenter,
-            radius: 100,
-            clickable: false
-          });
-        }
-        heatmap = new google.maps.visualization.HeatmapLayer({
-          data: getDataPoints(stats),
-          map: map,
-          radius: 30
-        });
-		heatmap.setMap(map);
-	}
-}
-
-//gathers the co-ordinates of all the elements of an array to display in a heat map
-function getDataPoints(dataArray){
-	var dataPoints = []
-	for(var i = 0; i < dataArray.length; i++){
-		dataPoints[i] = new google.maps.LatLng(dataArray[i].latitude, dataArray[i].longitude);
-	}
-	return dataPoints;
-}
-
-//finds the center of given datapoints
-function findDPCenter(dataArray){
-	var avgLat = 0;
-	var avgLong = 0;
-	for(var i = 0; i < dataArray.length; i++){
-		avgLat += dataArray[i].latitude;
-		avgLong += dataArray[i].longitude;
-	}
-	var center = {lat: avgLat / dataArray.length, lng: avgLong / dataArray.length};
-	return center;
-}
-
-
-//updates the location of a marker when moved (by mouse)
-function geocodePosition(loc, type) {
-   var pos = JSON.parse(loc);
-   geocoder = new google.maps.Geocoder();
-   geocoder.geocode({
-        latLng: pos
-   }, 
-        function(results, status) 
-        {
-            if (status == google.maps.GeocoderStatus.OK) 
-            {
-                $("#mapSearchInput").val(results[0].formatted_address);
-                $("#mapErrorMsg").hide(100);
-               	angular.element(document.getElementById('MAIN')).scope().changeLocation(pos, type);
-
-            } 
-            else 
-            {
-                $("#mapErrorMsg").html('Cannot determine address at this location.'+ status).show(100);
-            }
-        }
-    );
-}
-
-
-//finds the altitude of a latlng location using elevation service
-function getElevation(latLng) 
-{
-	var locations = [];
-		
-	locations.push(latLng);
-	
-	// Create a LocationElevationRequest object using the array's one value
-	var positionalRequest = {'locations': locations};
-	
-	elevator = new google.maps.ElevationService();
-	// Initiate the location request
-	elevator.getElevationForLocations(positionalRequest, function(results, status){
-		if (status == google.maps.ElevationStatus.OK) 
-		{
-			// Retrieve the first result
-			if (results[0]) 
-			{
-				angular.element(document.getElementById('MAIN')).scope().newAlt = results[0].elevation.toFixed(3);
-			} 
-			else 
-			{
-				angular.element(document.getElementById('MAIN')).rootScope().alertFailure("No results found");
-			}
-	  	} 
-	  	else 
-	  	{
-	  		angular.element(document.getElementById('MAIN')).rootScope().alertFailure("Elevation service failed due to: " + status);
-		}
-	});
-}
-
-//-------------------------------------end of google maps handling-------------------------------

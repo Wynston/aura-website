@@ -1,0 +1,41 @@
+/*Padding options for modal body and headers*/
+
+.modalPadding-1-0{
+	padding: 1em 0;
+}
+
+.modalPadding-1-1{
+	padding: 1em 1em;
+}
+
+.modalPadding-1-2{
+	padding: 1em 2em;
+}
+
+.modalPadding-2-1{
+	padding: 2em 1em;
+}
+
+.modalPadding-2-2{
+	padding: 2em 2em;
+}
+
+.modalPadding-2-3{
+	padding: 2em 3em;
+}
+
+.modalPadding-2-4{
+	padding: 2em 4em;
+}
+
+.modalPadding-2-5{
+	padding: 2em 5em;
+}
+
+.modalPadding-2-6{
+	padding: 2em 6em;
+}
+
+.modalPadding-2-7{
+	padding: 2em 7em;
+}

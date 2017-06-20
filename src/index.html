@@ -8,21 +8,22 @@
 		<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
 		<link rel="stylesheet" type="text/css" href="styling/auraCreate.css">
 		<link rel="stylesheet" type="text/css" href="styling/toggleSwitch.css">
+		<link rel="stylesheet" type="text/css" href="styling/modalPadding.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 	</head>
 	<body>
-		<div class="container-fluid" ng-app="auraCreate" ng-controller="myCtrl" ng-init="init()" ng-cloak id="MAIN">
+		<div class="container-fluid" ng-app="auraCreate" ng-controller="mainController" ng-init="init()" ng-cloak id="MAIN">
 			<div id="alert"></div>
 			<!-- Modal for asking user confirmation-->
 			<div class="modal fade" id="confirmModal" role="dialog">
 				<div class="modal-dialog modal-sm">
 				  <!-- Modal content-->
 				  <div class="modal-content">
-				    <div class="modal-header bg-danger text-center" style="padding:1em 2em;">
+				    <div class="modal-header bg-danger text-center modalPadding-1-2">
 				      <button type="button" class="close" data-dismiss="modal">&times;</button>
 				      <h3><b>Attention</b></h3>
 				    </div>
-				    <div class="modal-body text-left" style="padding:1em 1em;">
+				    <div class="modal-body text-left modalPadding-1-1">
 				    	<h4>&nbsp;&nbsp;&nbsp;&nbsp;{{confirmMessage}}</h4>
 				    </div>
 				    <div class="modal-footer">
@@ -36,7 +37,7 @@
 			<div class="row page-header" id="banner">
 				<div class="col-xs-9 col-sm-6 col-md-6 col-lg-6">
 					<img ng-src="images/aura_logo.png" alt="Aura Logo" class="img-responsive pull-left logo" ng-click="changeView('dashboard', '')"/>
-					<h1 id="pageTitle"><b style="cursor: pointer;" ng-click="changeView('dashboard', '')">Create</b></h1>
+					<h1 id="pageTitle"><b ng-click="changeView('dashboard', '')">Create</b></h1>
 				</div>
 				<div class="col-xs-3 col-sm-6 col-md-6 col-lg-6">
 					<a ng-click="changeView('profileSettings', '' )" class="btn btn-info btn-sm pull-right" id="profileButton">
@@ -55,7 +56,7 @@
 				 		<div ng-repeat="organization in organizationsArray| orderBy: name" class="panel panel-success">
 						    <div class="panel-heading">
 						      <h4 class="panel-title">
-						        <a data-toggle="collapse" data-parent="#accordion" href="#{{$index}}" ng-click="cacheOrgData(organization)">
+						        <a data-toggle="collapse" data-parent="#accordion" href="#{{$index}}">
 						        	<h2><strong>{{organization.name}}</strong></h2>
 						        </a>
 						      </h4>
@@ -243,11 +244,11 @@
 							    <div class="modal-dialog modal-lg">
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header text-center text-primary" style="padding:1em 1em;">
+							        <div class="modal-header text-center text-primary modalPadding-1-1">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3><b>Will's Webcam</b></h3>
 							        </div>
-							        <div class="modal-body embed-responsive embed-responsive-16by9" style="padding:1em 2em; background-color: black;">
+							        <div class="modal-body embed-responsive embed-responsive-16by9 modalPadding-1-2" style="background-color: black;">
 							        	<iframe class="embed-responsive-item" src="http://10.0.1.1:8009?action=stream">
 			 							</iframe>
 							        </div>
@@ -264,11 +265,11 @@
 							    
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header text-primary text-center" style="padding:1em 1em;">
+							        <div class="modal-header text-primary text-center modalPadding-1-1">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3><b>Organization creation for {{userName}}</b></h3>
 							        </div>
-							        <div class="modal-body" style="padding:1em 1em;">
+							        <div class="modal-body modalPadding-1-1">
 							          <form role="form">
 							            <div class="form-group">
 							              <label>Name</label>
@@ -294,11 +295,11 @@
 							    
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header text-primary text-center" style="padding:2em 3em;">
+							        <div class="modal-header text-primary text-center modalPadding-2-3">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3><b>Organization deletion for {{userName}}</b></h3>
 							        </div>
-							        <div class="modal-body" style="padding:2em 7em;">
+							        <div class="modal-body modalPadding-2-7">
 							          <form role="form">
 							            <div class="form-group">
 							            	<ul class="list list-unstyled">
@@ -341,8 +342,8 @@
 						 						<th></th>
 						 					</tr>
 						 				</thead>
-						 				<tbody ng-repeat="beacon in beaconsArray | orderBy:'beacon_name'">
-						 					<tr class="row">
+						 				<tbody>
+						 					<tr class="row" ng-repeat="beacon in beaconsArray | orderBy:'beacon_name'">
 						 						<td ng-click="displayBeacon(beacon)" class="menuItem">{{beacon.beacon_name}}</td>
 						 						<td class="menuItem">{{beacon.associated}}</td>
 						 						<td class="menuItem">{{beacon.beacon_type}}</td>
@@ -400,11 +401,11 @@
 							    <div class="modal-dialog">
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header text-primary text-center" style="padding:2em 3em;">
+							        <div class="modal-header text-primary text-center modalPadding-2-3">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3><b>Type Editing for {{curBeacon.beacon_name}}</b></h3>
 							        </div>
-							        <div class="modal-body" style="padding:2em 5em;">
+							        <div class="modal-body modalPadding-2-5">
 							          <form role="form">
 							          	<div class="form-group form-group-sm">
 							            	<label>Type:</label>
@@ -530,11 +531,11 @@
 							    <div class="modal-dialog">
 							      <!-- Edit Beacon for Object Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header text-primary text-center" style="padding:1em 1em;">
+							        <div class="modal-header text-primary text-center modalPadding-1-1">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3 class="modal-title"><strong>Change {{curObj.name}}'s service beacon</strong></h3>
 							        </div>
-							        <div class="modal-body text-center" style="padding:1em 2em;">
+							        <div class="modal-body text-center modalPadding-1-2">
 							        	<div class="panel-default panel-body" id="googleMapsEditBeacForObj"></div>
 						        		<h5 class="panel-body zeroPadding">Click a marker to determine the object's new service beacon.</h5>
 			            				<h6 class="panel-body text-muted zeroPadding">Note: circles indicates a beacon's maximum service range.</h6>
@@ -551,11 +552,11 @@
 							    <div class="modal-dialog" >
 							      <!-- Description Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header text-primary text-center" style="padding:1em 2em;">
+							        <div class="modal-header text-primary text-center modalPadding-1-2">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3 class="modal-title"><strong>{{curObj.name}}</strong></h3>
 							        </div>
-							        <div class="modal-body text-left" style="padding: 1em 1em; line-height: 1.6;">
+							        <div class="modal-body text-left modalPadding-1-1" style="line-height: 1.6;">
 							        	<p contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;{{curObj.description}}</p>
 							        </div>
 							        <div class="modal-footer">
@@ -571,11 +572,11 @@
 							    
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header text-center" style="padding:2em 3em;">
+							        <div class="modal-header text-center modalPadding-2-3">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h3 class="text-primary"><b>New Media Content for {{curObj.name}}</b></h3>
 							        </div>
-							        <div class="modal-body text-center" style="padding:2em 3em;">
+							        <div class="modal-body text-center modalPadding-2-3">
 							          <form role="form" class="form">
 							            <div class="form-group well well-sm">
 						            		<h4 class="text-primary">Import image, audio, video, or 3D files:</h4>
@@ -612,11 +613,11 @@
 								<div class="modal-dialog modal-lg">
 									<!-- Assets/Media Modal content-->
 									<div class="modal-content">
-										<div class="modal-header text-primary text-center" style="padding: 2em 1em">
+										<div class="modal-header text-primary text-center modalPadding-2-1">
 										  <button type="button" class="close" data-dismiss="modal">&times;</button>
 										  <h2 class="modal-title"><strong>{{curObj.name}}</strong></h2>
 										</div>
-										<div class="modal-body" style="background-color: black;">
+										<div class="modal-body" style="background-color: black; height: 60vh;">
 											<!-- Media Content -->
 											<div class="row">
 												<div ng-repeat="asset in assets | filter: galleryMediaFilter" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
@@ -668,7 +669,7 @@
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h2 class="modal-title"><strong>{{curAsset.name}}</strong></h2>
 							        </div>
-							        <div class="modal-body text-center" style="padding: 1em 0; background-color: black;">
+							        <div class="modal-body text-center modalPadding-1-0" style="background-color: black;">
 							        	<!-- Image -->
 										<img ng-if="curAsset.content_type == 'image'" ng-src={{curAsset.value}} alt={{curAsset.name}} class="img-rounded" style="max-width: 50vh;"></img>
 
@@ -712,11 +713,11 @@
 				    
 				      <!-- Modal content-->
 				      <div class="modal-content">
-				        <div class="modal-header text-primary text-center" style="padding:1em 1em;">
+				        <div class="modal-header text-primary text-center modalPadding-1-1">
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
 				          <h3><b>Beacon creation for {{curOrg.name}}</b></h3>
 				        </div>
-				        <div class="modal-body" style="padding:1em 2em;">
+				        <div class="modal-body modalPadding-1-2">
 				          <form role="form">
 				            <div class="form-group">
 				              <label>Name:</label>
@@ -752,11 +753,11 @@
 				    
 				      <!-- Modal content-->
 				      <div class="modal-content">
-				        <div class="modal-header text-primary text-center" style="padding:1em 1em;">
+				        <div class="modal-header text-primary text-center modalPadding-1-1">
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
 				          <h3><b>Object creation for {{curOrg.name}}</b></h3>
 				        </div>
-				        <div class="modal-body text-center" style="padding:1em 2em;">
+				        <div class="modal-body text-center modalPadding-1-2">
 				          <form role="form">
 				            <div class="form-group">
 				              <label>Name:</label>
@@ -801,11 +802,11 @@
 				    
 				      <!-- Modal content-->
 				      <div class="modal-content">
-				        <div class="modal-header text-primary text-center" style="padding:1em 1em;">
+				        <div class="modal-header text-primary text-center modalPadding-1-1">
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
 				          <h3><b>Beacon creation for {{curOrg.name}}</b></h3>
 				        </div>
-				        <div class="modal-body text-center" style="padding:1em 2em;">
+				        <div class="modal-body text-center modalPadding-1-2">
 				          <form role="form">
 				            <div class="form-group">
 				              <label>Name</label>
@@ -841,6 +842,10 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
+		<script src="scripts/appModule.js"></script>
 		<script src="scripts/controller.js"></script>
+		<script src="scripts/directives.js"></script>
+		<script src="scripts/filters.js"></script>
+		<script src="scripts/googleMapsController.js"></script>
 	</body>
 </html>

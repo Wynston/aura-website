@@ -65,7 +65,7 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 		}
 	}
 
-	//------------------Start of Bootstrap Alert/Confirm System-------------------------
+	//------------------Start of Bootstrap Alert System-------------------------
 
 	//shows a success alert of a given message
 	$rootScope.alertSuccess = function(msg){
@@ -87,27 +87,7 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 		});
 	}
 
-	//prompts a yes/no question to the user in bootstrap modal and returns a boolean value in the callback
-	$rootScope.confirm = function(msg, callback){
-		$scope.confirmMessage = msg;
-		$rootScope.safeApply();
-		$("#confirmModal").modal({
-			show:true,
-        	backdrop:false,
-            keyboard: false,
-    	});
-
-	    $('#cancelConfirm').click(function(){
-	        $('#confirmModal').modal('hide');
-	        if (callback) callback(false);
-
-	    });
-	    $('#acceptConfirm').click(function(){
-	        $('#confirmModal').modal('hide');
-	        if (callback) callback(true);
-	    });
-	}
-	//------------------End of Bootstrap Alert/Confirm System---------------------------
+	//------------------End of Bootstrap Alert System---------------------------
 
 //---------------------------------------Firebase functions begin---------------------------------------
 
@@ -1526,114 +1506,151 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 	
 	//removes an organization and all of its beacons, objects, and assets from the database and storage bucket
 	$scope.removeOrganization = function(organization){
-		$scope.confirm("Are you sure you want to permanently delete " + organization.name + " and all of its beacons, objects, and media?", function(result){
-			if(result){
-				//Delete the organization
-				$http({
-			        method: 'Delete',
-			        url: 'https://website-155919.appspot.com/api/v1.0/orgnization',
-			        headers: {
-			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-					}
-				}).then(function mySuccess(response) {
-					$rootScope.alertSuccess("SUCCESS: " + organization.name + " has been successfully deleted!");
-				}, function myError(response) {
-				   	$rootScope.alertFailure("ERROR: failed to delete " + organization.name + ".");
-				});	
-
-				//Delete all beacons, objects, and assets for the organization
-			}
+		bootbox.confirm({
+		    title: "Delete " + organization.name + "?",
+		    message: "Are you sure you want to permanently delete " + organization.name + "?",
+		    buttons: {
+		        cancel: {
+		            label: '<i class="fa fa-times"></i> Cancel',
+		            className: 'btn-danger'
+		        },
+		        confirm: {
+		            label: '<i class="fa fa-check"></i> Confirm',
+		            className: 'btn-success'
+		        }
+		    },
+		    callback: function (result) {
+		        if(result){
+		        	//Delete the organization and any beacon, object, and media associated
+					$http({
+				        method: 'Delete',
+				        url: 'https://website-155919.appspot.com/api/v1.0/orgnization/' + organization_id.organization_id,
+				        headers: {
+				        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+						}
+					}).then(function mySuccess(response) {
+						$rootScope.alertSuccess("SUCCESS: " + beacon.beacon_name + " has been successfully deleted!");
+						$scope.loadOrganizations();
+					}, function myError(response){
+					    $rootScope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
+					});
+		        }
+		    }
 		});
 	}
 
 	//deletes a beacon from the server and local
 	$scope.removeBeacon = function(beacon){
-		if(confirm("Are you sure you want to permanently delete " + beacon.beacon_name + "?")){
-			//Delete the beacon
-			$http({
-		        method: 'Delete',
-		        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon/' + beacon.beacon_id,
-		        headers: {
-		        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-				}
-			}).then(function mySuccess(response) {
-				$rootScope.alertSuccess("SUCCESS: " + beacon.beacon_name + " has been successfully deleted!");
-				$scope.loadBeacons();
-			}, function myError(response){
-			    $rootScope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
-			});
-		}
-		// $scope.confirm("Are you sure you want to permanently delete " + beacon.beacon_name + "?", function(result){
-		// 	if(result){
-		// 		//Delete the beacon
-		// 		$http({
-		// 	        method: 'Delete',
-		// 	        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon/' + beacon.beacon_id,
-		// 	        headers: {
-		// 	        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-		// 			}
-		// 		}).then(function mySuccess(response) {
-		// 			$rootScope.alertSuccess("SUCCESS: " + beacon.beacon_name + " has been successfully deleted!");
-		// 			$scope.loadBeacons();
-		// 		}, function myError(response){
-		// 		    $rootScope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
-		// 		});
-		// 	}
-		// });
+		bootbox.confirm({
+		    title: "Delete " + beacon.beacon_name + "?",
+		    message: "Are you sure you want to permanently delete " + beacon.beacon_name + "?",
+		    buttons: {
+		        cancel: {
+		            label: '<i class="fa fa-times"></i> Cancel',
+		            className: 'btn-danger'
+		        },
+		        confirm: {
+		            label: '<i class="fa fa-check"></i> Confirm',
+		            className: 'btn-success'
+		        }
+		    },
+		    callback: function (result) {
+		        if(result){
+		        	//Delete the beacon
+					$http({
+				        method: 'Delete',
+				        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon/' + beacon.beacon_id,
+				        headers: {
+				        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+						}
+					}).then(function mySuccess(response) {
+						$rootScope.alertSuccess("SUCCESS: " + beacon.beacon_name + " has been successfully deleted!");
+						$scope.loadBeacons();
+					}, function myError(response){
+					    $rootScope.alertFailure("ERROR: failed to delete " + beacon.beacon_name + ".");
+					});
+		        }
+		    }
+		});
 	}
 
 	//deletes an object and all of its assetschange
 	$scope.removeObject = function(object){
-		$scope.confirm("Are you sure you want to permanently delete " + object.name + " and all of its assets?", function(result){
-			if(result){
-				//Delete all assets associated with the object from firebase
-				for(var i = 0; i < object.assets.length; i++){
-					$scope.removeAsset(object.assets[i]);
-				}
-
-				//remove the object thumbnail from firebase
-
-				//Delete the object
-				$http({
-			        method: 'Delete',
-			        url: 'https://website-155919.appspot.com/api/v1.0/arobj/object.arobj_id',
-			        headers: {
-			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		bootbox.confirm({
+		    title: "Delete " + object.name + "?",
+		    message: "Are you sure you want to permanently delete " + object.name + "?",
+		    buttons: {
+		        cancel: {
+		            label: '<i class="fa fa-times"></i> Cancel',
+		            className: 'btn-danger'
+		        },
+		        confirm: {
+		            label: '<i class="fa fa-check"></i> Confirm',
+		            className: 'btn-success'
+		        }
+		    },
+		    callback: function (result) {
+		        if(result){
+		        	//Delete all assets associated with the object from firebase
+					for(var i = 0; i < object.assets.length; i++){
+						$scope.removeAsset(object.assets[i]);
 					}
-				}).then(function mySuccess(response) {
-					$rootScope.alertSuccess("SUCCESS: " + object.name + " has been successfully deleted!");
-				}, function myError(response) {
-				    $rootScope.alertFailure("ERROR: failed to delete " + object.name + ".");
-				});
-			}
+
+					//remove the object thumbnail from firebase
+
+					//Delete the object
+					$http({
+				        method: 'Delete',
+				        url: 'https://website-155919.appspot.com/api/v1.0/arobj/object.arobj_id',
+				        headers: {
+				        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+						}
+					}).then(function mySuccess(response) {
+						$rootScope.alertSuccess("SUCCESS: " + object.name + " has been successfully deleted!");
+					}, function myError(response) {
+					    $rootScope.alertFailure("ERROR: failed to delete " + object.name + ".");
+					});
+		        }
+		    }
 		});
 	}
 
 	//deletes an asset from an objects assets and from firebase
 	$scope.removeAsset = function(asset){
-		$scope.confirm("Are you sure you want to permanently delete " + asset.name + "?", function(result){
-			if(result){
-				//remove the asset thumbnail from firebase
+		bootbox.confirm({
+		    title: "Delete " + asset.name + "?",
+		    message: "Are you sure you want to permanently delete " + asset.name + "?",
+		    buttons: {
+		        cancel: {
+		            label: '<i class="fa fa-times"></i> Cancel',
+		            className: 'btn-danger'
+		        },
+		        confirm: {
+		            label: '<i class="fa fa-check"></i> Confirm',
+		            className: 'btn-success'
+		        }
+		    },
+		    callback: function (result) {
+		        if(result){
+		        	//remove the asset thumbnail from firebase
 
-				//remove the asset url from firebase
+					//remove the asset url from firebase
 
-				//Delete the asset by updating the object its associated with
-				$http({
-			        method: 'Put',
-			        url: 'https://website-155919.appspot.com/api/v1.0/arobj/' + $scope.curObj.arobj_id,
-			        headers: {
-			        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
-					}
-				}).then(function mySuccess(response) {
-					    $rootScope.alertSuccess("SUCCESS: " + asset.name + " has been successfully deleted!");
-				}, function myError(response) {
-						$rootScope.alertFailure("ERROR: failed to delete " + asset.name + ".");
-				});
-
-				//refresh the bindings
-				$rootScope.safeApply();
-			}
-		});	
+					//Delete the asset by updating the object its associated with
+					$http({
+				        method: 'Put',
+				        url: 'https://website-155919.appspot.com/api/v1.0/arobj/' + $scope.curObj.arobj_id,
+				        headers: {
+				        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+						}
+					}).then(function mySuccess(response) {
+						    $rootScope.alertSuccess("SUCCESS: " + asset.name + " has been successfully deleted!");
+					}, function myError(response) {
+							$rootScope.alertFailure("ERROR: failed to delete " + asset.name + ".");
+					});
+		        }
+		    }
+		});
 	}
 //--------------------------------------End of Delete Function------------------------------------------
 
@@ -1767,14 +1784,27 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 	  	if(closest > 100){
 	  		$('#addObjectModal').modal('hide');
 	  		//prompt user to make a new beacon within range
-	  		$scope.confirm("No beacons within range. Create a new one at this location?", function(result){
-	  			if(result){
+	  		bootbox.confirm({
+			    title: "Create new beacon?",
+			    message: "No beacons within range. Create a new one at this location?",
+			    buttons: {
+			        cancel: {
+			            label: '<i class="fa fa-times"></i> Cancel',
+			            className: 'btn-danger'
+			        },
+			        confirm: {
+			            label: '<i class="fa fa-check"></i> Confirm',
+			            className: 'btn-success'
+			        }
+			    },
+			    callback: function (result) {
+			       if(result){
 	  				$('#beaconForObjectModal').modal('show'); 
 	  			}
 	  			else{
 	  				$scope.closestBeaconID = null;
-	  			}	
-	  		});
+	  			} 			    }
+			});
 	  	}
 	  	else{
 	  		$scope.closestBeaconID = closestBeacon.beacon_id;
@@ -1842,22 +1872,50 @@ app.controller('mainController', function($rootScope, $scope, $http) {
     $scope.changeLocation = function(pos, type){
     	switch(type){
     		case "beacon":
-    			$scope.confirm("Are you sure you want to change " + $scope.curBeacon.beacon_name + "'s location?", function(result){
-    				if(result){
-    					$scope.curBeacon.latitude = pos.lat;
-	    				$scope.curBeacon.longitude = pos.lng;
-	    				$scope.calcAltitude(pos, type);
-    				}
-    			});
+    			bootbox.confirm({
+				    title: "Change " + $scope.curBeacon.beacon_name + "?",
+				    message: "Are you sure you want to change " + $scope.curBeacon.beacon_name + "'s location?",
+				    buttons: {
+				        cancel: {
+				            label: '<i class="fa fa-times"></i> Cancel',
+				            className: 'btn-danger'
+				        },
+				        confirm: {
+				            label: '<i class="fa fa-check"></i> Confirm',
+				            className: 'btn-success'
+				        }
+				    },
+				    callback: function (result) {
+				        if(result){
+				        	$scope.curBeacon.latitude = pos.lat;
+	    					$scope.curBeacon.longitude = pos.lng;
+	    					$scope.calcAltitude(pos, type);
+				        }
+				    }
+				});
     			break;
     		case "object":
-    			$scope.confirm("Are you sure you want to change " + $scope.curObj.name + "'s location?", function(result){
-    				if(result){
-    					$scope.curObj.latitude = pos.lat;
-		    			$scope.curObj.longitude = pos.lng;
-		    			$scope.calcAltitude(pos, type);
-    				}
-    			});
+    			bootbox.confirm({
+				    title: "Change " + $scope.curObj.name +"?",
+				    message: "Are you sure you want to change " + $scope.curObj.name + "'s location?",
+				    buttons: {
+				        cancel: {
+				            label: '<i class="fa fa-times"></i> Cancel',
+				            className: 'btn-danger'
+				        },
+				        confirm: {
+				            label: '<i class="fa fa-check"></i> Confirm',
+				            className: 'btn-success'
+				        }
+				    },
+				    callback: function (result) {
+				        if(result){
+				        	$scope.curObj.latitude = pos.lat;
+		    				$scope.curObj.longitude = pos.lng;
+		    				$scope.calcAltitude(pos, type);
+				        }
+				    }
+				});
     			break;
         }
     }
@@ -1914,14 +1972,4 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 });
 
 //-------------------------------------end of helper functions-----------------------------------
-
-
-//allows modals to stack based on z-index
-$(document).on('show.bs.modal', '.modal', function () {
-    var zIndex = 1040 + (10 * $('.modal:visible').length);
-    $(this).css('z-index', zIndex);
-    setTimeout(function() {
-        $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
-    }, 0);
-});
 

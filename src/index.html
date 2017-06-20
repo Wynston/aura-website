@@ -14,26 +14,6 @@
 	<body>
 		<div class="container-fluid" ng-app="auraCreate" ng-controller="mainController" ng-init="init()" ng-cloak id="MAIN">
 			<div id="alert"></div>
-			<!-- Modal for asking user confirmation-->
-			<div class="modal fade" id="confirmModal" role="dialog">
-				<div class="modal-dialog modal-sm">
-				  <!-- Modal content-->
-				  <div class="modal-content">
-				    <div class="modal-header bg-danger text-center modalPadding-1-2">
-				      <button type="button" class="close" data-dismiss="modal">&times;</button>
-				      <h3><b>Attention</b></h3>
-				    </div>
-				    <div class="modal-body text-left modalPadding-1-1">
-				    	<h4>&nbsp;&nbsp;&nbsp;&nbsp;{{confirmMessage}}</h4>
-				    </div>
-				    <div class="modal-footer">
-				    	<label id="acceptConfirm" type="button" class="btn btn-success pull-right" data-dismiss="modal" style="margin-left: 1em;">Accept</label>
-				    	<label id="cancelConfirm" type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</label>
-				    </div>
-				  </div>
-				</div>
-			</div>
-
 			<div class="row page-header" id="banner">
 				<div class="col-xs-9 col-sm-6 col-md-6 col-lg-6">
 					<img ng-src="images/aura_logo.png" alt="Aura Logo" class="img-responsive pull-left logo" ng-click="changeView('dashboard', '')"/>
@@ -148,7 +128,7 @@
 								    	</li>
 								    </ul>
 							    </div>
-							    <label type="button" class="btn btn-success" data-toggle="modal" data-target="#addObjectModal" ng-click="loadGoogleScript()">
+							    <label type="button" class="btn btn-success" data-toggle="modal" data-target="#addObjectModal" onclick="loadGoogleScript()">
 						    			<span class=" glyphicon glyphicon-plus"></span>
 						    			<span>Object</span>
 							    </label>
@@ -194,7 +174,7 @@
 									    	</li>
 									    </ul>
 							    	</div>
-							    	<label type="button" class="btn btn-success" data-toggle="modal" data-target="#addBeaconModal" ng-click="loadGoogleScript()">
+							    	<label type="button" class="btn btn-success" data-toggle="modal" data-target="#addBeaconModal" onclick="loadGoogleScript()">
 						    			<span class=" glyphicon glyphicon-plus"></span>
 						    			<span>Beacon</span>
 							    	</label>
@@ -847,5 +827,6 @@
 		<script src="scripts/directives.js"></script>
 		<script src="scripts/filters.js"></script>
 		<script src="scripts/googleMapsController.js"></script>
+		<script src="scripts/bootbox.min.js"></script>
 	</body>
 </html>

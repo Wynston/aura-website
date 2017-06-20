@@ -116,12 +116,26 @@ function initMap(){
 	    	  google.maps.event.addListener(marker, 'click', function(){
 	    	  	var curObj = angular.element(document.getElementById('MAIN')).scope().curObj;
 	    	  	var beacon = this.beacon;
-	    	  	angular.element(document.getElementById('MAIN')).scope().confirm("Are you sure you want to change " + curObj.name + "'s service beacon to " + this.beacon.beacon_name + "?", function(result){
-	    	  		if(result){
-	    	  			angular.element(document.getElementById('MAIN')).scope().updateBeacForObject(beacon);
-	    	  			$('#editBeacForObjModal').modal('hide');
-	    	  		}
-	    	  	});
+	    	  	bootbox.confirm({
+				    title: "Change " + curObj.name + "?",
+				    message: "Are you sure you want to change " + curObj.name + "'s service beacon to " + this.beacon.beacon_name + "?",
+				    buttons: {
+				        cancel: {
+				            label: '<i class="fa fa-times"></i> Cancel',
+				            className: 'btn-danger'
+				        },
+				        confirm: {
+				            label: '<i class="fa fa-check"></i> Confirm',
+				            className: 'btn-success'
+				        }
+				    },
+				    callback: function (result) {
+				        if(result){
+				        	angular.element(document.getElementById('MAIN')).scope().updateBeacForObject(beacon);
+	    	  				$('#editBeacForObjModal').modal('hide');
+				        }
+				    }
+				});
 	    	  });
         }
 	});

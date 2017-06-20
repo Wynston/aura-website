@@ -146,15 +146,6 @@ h6{
 	    overflow-y: auto;
 	}
 
-	.modalPadding-1-1{
-		padding: 1em 1em;
-	}
-
-	.modalPadding-1-2{
-		padding: 1em 2em;
-	}
-
-
 	.panel-default > .panel-heading, .panel-footer{
 	  background-color: white !important;
 	 }

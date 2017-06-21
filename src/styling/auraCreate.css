@@ -40,7 +40,7 @@ h6{
 /* ----------------------------Large desktops and laptops (DEFAULT)----------------------------- */
 	/*--------------------------------------------Classes--------------------------------------------*/
 	.btn{
-		font-size: 0.75em;
+		font-size: 1em;
 		max-width: 16em;
 		white-space: nowrap;
 		overflow: hidden;
@@ -49,6 +49,14 @@ h6{
 
 	.btn-block{
 		min-width: 100%;
+		font-size: 1.15em;
+	}
+
+	.btn-group-vertical{
+		font-size: 1em;
+		max-width: 20em;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	.cancelFile{
@@ -142,7 +150,7 @@ h6{
 	}
 	.modal-body{
 		height: auto;
-		max-height: 72vh;
+		max-height: inherit;
 	    overflow-y: auto;
 	}
 
@@ -261,7 +269,7 @@ h6{
 	}
 
 	#liveTitle{
-		margin: 0.5em 0.1em 0.5em 0.1em;
+		margin: 0.5em 0 0.5em 0;
 	}
 
 	#orgsCarousel{
@@ -273,7 +281,6 @@ h6{
 		overflow: auto;
 		padding: 0;
 	}
-
 
 	#pageTitle{
 		color: #A8A8A8;
@@ -298,7 +305,7 @@ h6{
 		font-size: 14px;
 	}
 
-	.btn{
+	.btn, .btn-group-vertical{
 		max-width: 14em;
 	}
 
@@ -313,7 +320,7 @@ h6{
 		font-size: 12px;
 	}
 
-	.btn{
+	.btn, .btn-group-vertical{
 		max-width: 13em;
 	}
 
@@ -332,13 +339,17 @@ h6{
 		max-width: 11em;
 	}
 
+	.btn-group-vertical{
+		max-width: 18em;
+	}
+
 	#fileLabel{
 		margin-top: 0.75em;
 	}
 
 	#liveDisplay{
 		height: auto;
-		max-height: 10000000px;
+		max-height: inherit;
 		overflow: hidden;
 	}
 
@@ -364,6 +375,10 @@ h6{
 		max-width: 8em;
 	}
 
+	.btn-group-vertical{
+		max-width: 11em;
+	}
+
 	.dropdown-menu{
 		line-height: 0.5
 	}
@@ -379,7 +394,7 @@ h6{
 
 	#liveDisplay{
 		height: auto;
-		max-height: 10000000px;
+		max-height: inherit;
 		overflow: hidden;
 	}
 

@@ -109,7 +109,7 @@
 			 		<div class="row text-center panel panel-heading" id="liveTitle">
 			 			<!-- Primary title -->
 			 			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary zeroPadding">
-			 				<h3><b>{{primTitle}}</b></h3>
+			 				<h2><b>{{primTitle}}</b></h2>
 			 			</div>
 					    <div ng-switch="filterTitle" id="filterTitle" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center zeroPadding">
 					    	<!-- Objects View Filter -->
@@ -536,11 +536,18 @@
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
 							          <h2 class="modal-title"><b>{{curObj.name}}</b></h2>
 							        </div>
-							        <div class="modal-body text-left modalPadding-1-1" style="line-height: 1.6;">
-							        	<p contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;{{curObj.description}}</p>
+							        <div class="modal-body text-left modalPadding-1-2" style="line-height: 1.5;">
+							    		<form role="form" class="form">
+							        		<div class="form-group">
+							        			<textarea ng-hide="showObjDescEdit" rows="10" class="form-control" disabled style="cursor:default; resize: none; background-color: white;">{{curObj.description}}</textarea>
+							        			<textarea ng-show="showObjDescEdit" class="form-control" rows="10" style="resize: none;" ng-model="editObjDesc"></textarea>
+							        		</div>
+							        		<button ng-show="showObjDescEdit" type="button" class="btn btn-block btn-success" ng-click="updateObjectDescription(editObjDesc)">Update</button>
+							        	</form>
 							        </div>
 							        <div class="modal-footer">
-							          <button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+							       		<button type="button" class="btn btn-warning pull-left" ng-click="toggleObjectDescriptionEdit()">Edit <span class="glyphicon glyphicon-pencil"></span></button>
+							        	<button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 							        </div>
 							      </div>
 							    </div>

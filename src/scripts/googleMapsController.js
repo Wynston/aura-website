@@ -147,7 +147,7 @@ function initMap(){
         }
 	});
 
-	if(sessionStorage.curView == "beacon"){
+	if(sessionStorage.curView == "beacon" && document.getElementById("googleMapsBeacon")){
 		var curBeacon = JSON.parse(sessionStorage.curBeacon);
 	    var loc = {lat: curBeacon.latitude, lng: curBeacon.longitude };
 	    var map = new google.maps.Map(document.getElementById("googleMapsBeacon"), {
@@ -165,7 +165,7 @@ function initMap(){
 		    geocodePosition(JSON.stringify(marker.getPosition()), "beacon");
 		});
 	}
-	else if(sessionStorage.curView == "object"){
+	else if(sessionStorage.curView == "object" && document.getElementById('googleMapsObject')){
 		var curObj = JSON.parse(sessionStorage.curObj);
 	    var loc = {lat: curObj.latitude, lng: curObj.longitude };
 	    var map = new google.maps.Map(document.getElementById("googleMapsObject"), {
@@ -208,10 +208,13 @@ function initMap(){
 			      map: map,
 			      draggable: false,
 		    	  animation: google.maps.Animation.DROP,
-		    	  beacon: beacons[i]
+		    	  beacon: beacons[i],
+		    	  icon: 'images/auro_logo.png'
 			  });
 	    	  google.maps.event.addListener(marker, 'click', function(){
-	    	  	angular.element(document.getElementById('MAIN')).scope().displayBeacon(this.beacon);
+	    	  	if(document.getElementById('googleMapsBeacons')){
+	    	  		angular.element(document.getElementById('MAIN')).scope().displayBeacon(this.beacon);
+	    	  	}
 	    	  });
         }
   //       heatmap = new google.maps.visualization.HeatmapLayer({
@@ -223,7 +226,7 @@ function initMap(){
 	}
 	else if(sessionStorage.curView == "objectsList" && document.getElementById('googleMapsObjects')){
 		var objects = JSON.parse(sessionStorage.objectsArray);
-		var map = new google.maps.Map(document.getElementById('googleMapsObjects'), {
+		var map = new google.maps.Map(document.getElementById('googleMapsObjects'),{
           zoom: 11,
           center: findDPCenter(JSON.parse(sessionStorage.objectsArray))
         });
@@ -247,7 +250,7 @@ function initMap(){
   //       });
 		// heatmap.setMap(map);
 	}
-	else if(sessionStorage.curView == "stats"){
+	else if(sessionStorage.curView == "stats" && document.getElementById('googleMapsStats')){
 		var beacons = JSON.parse(sessionStorage.beaconsArray);
 		var stats = JSON.parse(sessionStorage.statsArray);
 		var map = new google.maps.Map(document.getElementById('googleMapsStats'), {

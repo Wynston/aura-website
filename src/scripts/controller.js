@@ -33,9 +33,10 @@ app.controller('mainController', function($scope, $http) {
 			threeD: true
 		}
 
-		//initiates the arrays for file input
+		//initiate functions
 		$scope.resetAssetsForm();
 		$scope.resetThumbnailForm();
+		$scope.resetObjectDescriptionModal();
 
 		//-------------------------------------- Initialize Firebase ------------------------------------------
 		var config = {
@@ -547,6 +548,7 @@ app.controller('mainController', function($scope, $http) {
 		$scope.changeLiveTitle("Beacon: " + $scope.curBeacon.beacon_name, "", false);
 		$scope.curView = "beacon";
 		sessionStorage.curView = "beacon";
+		$scope.safeApply();
 		loadGoogleScript(); 
 	}
 
@@ -565,6 +567,7 @@ app.controller('mainController', function($scope, $http) {
 		$scope.curView = "object";
 		sessionStorage.curView = "object";
 		$scope.filterTitle = "objectPrivacy";
+		$scope.safeApply();
 		loadGoogleScript(); 
 	}
 
@@ -601,8 +604,26 @@ app.controller('mainController', function($scope, $http) {
 
 	//display an objects assets in a modal
 	$scope.displayDescriptionModal = function(){
+		$scope.resetObjectDescriptionModal();
+		$scope.editObjDesc = $scope.curObj.description;
 		$("#descriptionModal").modal();
 	}
+
+	//toggles the description content editable on demand feature
+	$scope.toggleObjectDescriptionEdit = function(){
+		if($scope.showObjDescEdit){
+			$scope.showObjDescEdit = false;
+		}
+		else{
+			$scope.showObjDescEdit = true;
+		}
+	}
+
+	//resets the object description modal for editing
+	$scope.resetObjectDescriptionModal = function(){
+		$scope.showObjDescEdit = false;
+	}
+
 
 //-------------------------------end of display functions-----------------------------------
 
@@ -933,7 +954,7 @@ app.controller('mainController', function($scope, $http) {
         }
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon/' + updatedBeacon.beacon_id,
+        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
         data: updatedBeacon,
         headers: {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
@@ -961,7 +982,7 @@ app.controller('mainController', function($scope, $http) {
 
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon/' + updatedBeacon.beacon_type,
+        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
         data: updatedBeacon,
         headers: {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
@@ -978,7 +999,7 @@ app.controller('mainController', function($scope, $http) {
 	$scope.updateObjectLocation = function(){
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/arobj/' + $scope.curObj.arobj_id,
+        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
         data: {
         	name: $scope.curObj.name, 
         	desc: $scope.curObj.description,
@@ -997,6 +1018,7 @@ app.controller('mainController', function($scope, $http) {
 		}).then(function mySuccess(response) {
 			alertSuccess("SUCCESS: " + $scope.curObj.name + " has been successfully updated!");
 			//reload the object change
+			$scope.loadObjects();
 			$scope.displayObject($scope.curObj);
 		}, function myError(response) {
 			alertFailure("ERROR: failed to update " + $scope.curObj.name + "!");
@@ -1007,7 +1029,7 @@ app.controller('mainController', function($scope, $http) {
 	$scope.updateBeacForObject = function(beacon){
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/arobj/' + $scope.curObj.arobj_id,
+        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
         data: {
         	name: $scope.curObj.name, 
         	desc: $scope.curObj.description,
@@ -1026,11 +1048,44 @@ app.controller('mainController', function($scope, $http) {
 		}).then(function mySuccess(response) {
 			alertSuccess("SUCCESS: " + $scope.curObj.name + " has been successfully updated!");
 			//reload the object change
+			$scope.loadObjects();
 			$scope.displayObject($scope.curObj);
 		}, function myError(response) {
 				alertFailure("ERROR: failed to update " + $scope.curObj.name + "!");
 		});
 	}
+
+
+	//updates an objects description on the server side
+	$scope.updateObjectDescription = function(description){
+		$scope.curObj.description = description;
+		$http({
+        method: 'PUT',
+        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
+        data: {
+        	name: $scope.curObj.name, 
+        	desc: $scope.curObj.description,
+        	beacon_id: $scope.curObj.beacon_id, 
+        	arobj_id: $scope.curObj.arobj_id, 
+        	organization_id: $scope.curObj.organization_id,
+        	altitude: $scope.curObj.altitude, 
+        	latitude: $scope.curObj.latitude, 
+        	longitude: $scope.curObj.longitude,
+        	thumbnail: $scope.curObj.thumbnail,
+        	contents: $scope.curObj.assets
+        },
+        headers: {
+        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		}
+		}).then(function mySuccess(response) {
+			alertSuccess("SUCCESS: " + $scope.curObj.name + " has been successfully updated!");
+			//reload the object change
+			$scope.loadObjects();
+		}, function myError(response) {
+			alertFailure("ERROR: failed to update " + $scope.curObj.name + "!");
+		});
+	}
+
 //-------------------------------------- End of update functions----------------------------------------
 
 //--------------------------------------Start of Delete Functions---------------------------------------

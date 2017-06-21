@@ -1,5 +1,12 @@
 //-------------------------------------google maps handling begins-------------------------------
 
+//dynamically load in google maps
+function loadGoogleScript(){
+	$( document ).ready(function() {
+		google.load("visualization", "1", {"callback" : initMap});
+	});
+}
+
 //initMap function for google maps api
 function initMap(){
 	$('#addBeaconModal').on('shown.bs.modal', function (){
@@ -176,9 +183,9 @@ function initMap(){
 		    geocodePosition(JSON.stringify(marker.getPosition()), "object");
 		});
 	}
-	else if(sessionStorage.curView == "beaconsList"){
+	else if(sessionStorage.curView == "beaconsList" && document.getElementById('googleMapsBeacons')){
 		var beacons = JSON.parse(sessionStorage.beaconsArray);
-		map = new google.maps.Map(document.getElementById('googleMapsBeacons'), {
+		var map = new google.maps.Map(document.getElementById('googleMapsBeacons'), {
           zoom: 11,
           center: findDPCenter(JSON.parse(sessionStorage.beaconsArray))
         });
@@ -214,9 +221,9 @@ function initMap(){
   //       });
 		// heatmap.setMap(map);
 	}
-	else if(sessionStorage.curView == "objectsList"){
+	else if(sessionStorage.curView == "objectsList" && document.getElementById('googleMapsObjects')){
 		var objects = JSON.parse(sessionStorage.objectsArray);
-		map = new google.maps.Map(document.getElementById('googleMapsObjects'), {
+		var map = new google.maps.Map(document.getElementById('googleMapsObjects'), {
           zoom: 11,
           center: findDPCenter(JSON.parse(sessionStorage.objectsArray))
         });
@@ -243,7 +250,7 @@ function initMap(){
 	else if(sessionStorage.curView == "stats"){
 		var beacons = JSON.parse(sessionStorage.beaconsArray);
 		var stats = JSON.parse(sessionStorage.statsArray);
-		map = new google.maps.Map(document.getElementById('googleMapsStats'), {
+		var map = new google.maps.Map(document.getElementById('googleMapsStats'), {
           zoom: 11,
           center: findDPCenter(stats),
         });
@@ -282,13 +289,18 @@ function getDataPoints(dataArray){
 
 //finds the center of given datapoints
 function findDPCenter(dataArray){
-	var avgLat = 0;
-	var avgLong = 0;
-	for(var i = 0; i < dataArray.length; i++){
-		avgLat += dataArray[i].latitude;
-		avgLong += dataArray[i].longitude;
-	}
-	var center = {lat: avgLat / dataArray.length, lng: avgLong / dataArray.length};
+	// var avgLat = 0;
+	// var avgLong = 0;
+	// for(var i = 0; i < dataArray.length; i++){
+	// 	avgLat += dataArray[i].latitude;
+	// 	avgLong += dataArray[i].longitude;
+	// }
+	// var center = {lat: avgLat / dataArray.length, lng: avgLong / dataArray.length};
+
+
+	//saskatoon hardcoded in as the center
+	var center ={lat: 52.1332, lng: -106.6700};
+
 	return center;
 }
 
@@ -340,31 +352,14 @@ function getElevation(latLng)
 			} 
 			else 
 			{
-				angular.element(document.getElementById('MAIN')).rootScope().alertFailure("No results found");
+				angular.element(document.getElementById('MAIN')).scope().alertFailure("No results found");
 			}
 	  	} 
 	  	else 
 	  	{
-	  		angular.element(document.getElementById('MAIN')).rootScope().alertFailure("Elevation service failed due to: " + status);
+	  		angular.element(document.getElementById('MAIN')).scope().alertFailure("Elevation service failed due to: " + status);
 		}
 	});
 }
 
 //-------------------------------------end of google maps handling-------------------------------
-
-//must load in script when the object view is first loaded in html
-function loadGoogleScript(){
-	if(document.getElementById("googleScript")){
-		document.getElementById("googleScript").remove();
-		var googleMapsScript = document.createElement('script');
-		googleMapsScript.id = "googleScript";
-		googleMapsScript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCq80g8ye8MQaNGW3BOVaj0VY3m7jpomoY&callback=initMap&libraries=visualization";
-		document.getElementById("MAIN").appendChild(googleMapsScript);
-	}
-	else{
-		var googleMapsScript = document.createElement('script');
-		googleMapsScript.id = "googleScript";
-		googleMapsScript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCq80g8ye8MQaNGW3BOVaj0VY3m7jpomoY&callback=initMap&libraries=visualization";
-		document.getElementById("MAIN").appendChild(googleMapsScript);
-	}
-}

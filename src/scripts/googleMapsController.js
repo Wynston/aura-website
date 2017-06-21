@@ -215,10 +215,10 @@ function initMap(){
 		// heatmap.setMap(map);
 	}
 	else if(sessionStorage.curView == "objectsList"){
-		var objects = JSON.parse(sessionStorage.arObjectsList);
+		var objects = JSON.parse(sessionStorage.objectsArray);
 		map = new google.maps.Map(document.getElementById('googleMapsObjects'), {
           zoom: 11,
-          center: findDPCenter(JSON.parse(sessionStorage.arObjectsList))
+          center: findDPCenter(JSON.parse(sessionStorage.objectsArray))
         });
         for (var i = 0; i < objects.length; i++ ) {
 		      var objectCenter = new google.maps.LatLng(objects[i].latitude, objects[i].longitude);
@@ -234,7 +234,7 @@ function initMap(){
 	    	  });
         }
   //       heatmap = new google.maps.visualization.HeatmapLayer({
-  //         data: getDataPoints(JSON.parse(sessionStorage.arObjectsList)),
+  //         data: getDataPoints(JSON.parse(sessionStorage.objectsArray)),
   //         map: map,
   //         radius: 30
   //       });

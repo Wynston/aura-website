@@ -1,7 +1,7 @@
 //-------------------------------Angular Controller---------------------------------------
-app.controller('mainController', function($rootScope, $scope, $http) {
+app.controller('mainController', function($scope, $http) {
 	//initializer function when the window is loaded
-	$rootScope.init = function(){
+	$scope.init = function(){
 		$scope.userName = "Wynston Ramsay";
 		$scope.loadOrganizations();
 		$scope.changeView("dashboard");
@@ -48,7 +48,7 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 	}
 
 	//replacement of the $apply to safely reload DOM
-	$rootScope.safeApply = function(fn){
+	$scope.safeApply = function(fn){
 		var phase = this.$root.$$phase;
 		if(phase == '$apply' || phase == '$digest') {
 			if(fn && (typeof(fn) === 'function')) {
@@ -116,7 +116,7 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 			}
         	$scope.files = temp2;
         }
-        $rootScope.safeApply();
+        $scope.safeApply();
     }; 
 
     //removes a file from the currently upload files
@@ -623,7 +623,7 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 		    
 		});
 		$scope.loadOrganizations();
-		$rootScope.safeApply();
+		$scope.safeApply();
 		$scope.destroy();
 	}
 
@@ -653,7 +653,7 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 		    
 		});
 		$scope.loadBeacons();
-		$rootScope.safeApply();
+		$scope.safeApply();
 	}
 
 	//adds a object for an organization onto the database
@@ -682,7 +682,7 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 		}, function myError(response) {
 		});
 		$scope.loadObjects();
-		$rootScope.safeApply();
+		$scope.safeApply();
 	}
 
 	//adding a beacon at an objects location 
@@ -711,7 +711,7 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 		}, function myError(response) {
 		});
 		$scope.loadBeacons();
-		$rootScope.safeApply();
+		$scope.safeApply();
 	}
 
 
@@ -740,7 +740,7 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 		}, function myError(response) {
 		});
 		$scope.displayObject($scope.curObj);
-		$rootScope.safeApply();
+		$scope.safeApply();
 	}
 //---------------------------------------end of upload functions----------------------------------------
 
@@ -896,24 +896,22 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 		  		};
 		  		$scope.objectsArray[i] = $scope.arObject;
 		  	}
-		  	sessionStorage.arObjectsList = JSON.stringify($scope.objectsArray);
+		  	sessionStorage.objectsArray = JSON.stringify($scope.objectsArray);
 		    }, function myError(response) {
 		  });
     }
 
     //loads in stats about an organization to be displayed
     $scope.loadStats = function(){
-    	$.getJSON("stats/willStats.json", function(json) {
-			$scope.statsArray = [];
-			for(var i = 0; i < json.latlong.length; i++){
-				$scope.stat = {
-					latitude: json.latlong[i].lat,
-					longitude: json.latlong[i].long
-				}
-				$scope.statsArray[i] = $scope.stat;
+		$scope.statsArray = [];
+		for(var i = 0; i < willStats.latlong.length; i++){
+			$scope.stat = {
+				latitude: willStats.latlong[i].lat,
+				longitude: willStats.latlong[i].long
 			}
-	    	sessionStorage.statsArray = JSON.stringify($scope.statsArray);
-		});;
+			$scope.statsArray[i] = $scope.stat;
+		}
+    	sessionStorage.statsArray = JSON.stringify($scope.statsArray);
     }
 
 //--------------------------------------end of loader functions----------------------------------------
@@ -1269,7 +1267,7 @@ app.controller('mainController', function($rootScope, $scope, $http) {
 	    		}
 	    	}
 	    }
-	    sessionStorage.arObjectsList = JSON.stringify(tempArray);
+	    sessionStorage.objectsArray = JSON.stringify(tempArray);
     }
 
     //changes the view type between list or map

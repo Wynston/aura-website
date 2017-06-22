@@ -6,6 +6,11 @@ app.controller('mainController', function($scope, $http) {
 		$scope.loadOrganizations();
 		$scope.changeView("dashboard");
 		$scope.curOrg = "";
+		$scope.curBeacon;
+		$scope.curObj;
+		$scope.curAsset;
+		$scope.curAssetIndex;
+		$scope.curGalleryIndex;
 		$scope.beaconTypes = [
 			"Airport",
 			"Art",
@@ -519,17 +524,6 @@ app.controller('mainController', function($scope, $http) {
 	}
 
 	//when a new organization is selected reload the current view of that organization
-	$scope.carouselLeft = function(){
-		var index = $('div.active').index() - 1;
-		if(index >= 0){
-			$scope.changeView($scope.curView, $scope.organizationsArray[index]);
-		}
-		else{
-			$scope.changeView($scope.curView, $scope.organizationsArray[$scope.organizationsArray.length - 1]);
-		}
-	}
-
-	//when a new organization is selected reload the current view of that organization
 	$scope.carouselRight = function(){
 		var index = $('div.active').index() + 1;
 		if(index < $scope.organizationsArray.length){
@@ -537,6 +531,17 @@ app.controller('mainController', function($scope, $http) {
 		}
 		else{
 			$scope.changeView($scope.curView, $scope.organizationsArray[0]);
+		}
+	}
+
+	//when a new organization is selected reload the current view of that organization
+	$scope.carouselLeft = function(){
+		var index = $('div.active').index() - 1;
+		if(index >= 0){
+			$scope.changeView($scope.curView, $scope.organizationsArray[index]);
+		}
+		else{
+			$scope.changeView($scope.curView, $scope.organizationsArray[$scope.organizationsArray.length - 1]);
 		}
 	}
 
@@ -597,9 +602,11 @@ app.controller('mainController', function($scope, $http) {
 	}
 
 	//displays a single asset in a modal
-	$scope.displaySingleAssetModal = function(asset){
+	$scope.displayAssetCarouselModal = function(asset){
 		$scope.curAsset = asset;
-		$("#singleAssetModal").modal();
+		$scope.curAssetIndex = $scope.assets.map(function(asset) {return asset.content_id; }).indexOf(asset.content_id);
+		$("#galleryCarousel").carousel($scope.curAssetIndex);
+		$("#assetCarouselModal").modal();
 	}
 
 	//display an objects assets in a modal
@@ -1361,6 +1368,9 @@ app.controller('mainController', function($scope, $http) {
 	    					$scope.curBeacon.longitude = pos.lng;
 	    					$scope.calcAltitude(pos, type);
 				        }
+				        else{
+				        	$scope.displayBeacon($scope.curBeacon);
+				        }
 				    }
 				});
     			break;
@@ -1383,6 +1393,9 @@ app.controller('mainController', function($scope, $http) {
 				        	$scope.curObj.latitude = pos.lat;
 		    				$scope.curObj.longitude = pos.lng;
 		    				$scope.calcAltitude(pos, type);
+				        }
+				        else{
+				        	$scope.displayObject($scope.curObj);
 				        }
 				    }
 				});

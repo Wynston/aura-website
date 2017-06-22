@@ -64,10 +64,10 @@
 				 	</div>
 			 		<div class="container-fluid visible-xs text-center">
 			 			<div class="container-fluid" id="mobileOrgMenu">
-			 				<h4>Organizations</h4>
+			 				<h3><b>Organizations</b></h3>
 			 			</div>
  						<!-- Carousel of organizations -->
-		 				<div id="orgsCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+		 				<div id="orgsCarousel" class="carousel" data-ride="carousel" data-interval="false">
 							 <!-- Indicators -->
 							  <ol class="carousel-indicators">
 							    <li data-target="#orgsCarousel" data-slide-to="0" class="active"></li>
@@ -76,12 +76,12 @@
 
 							  <!-- Organization -->
 							  <div class="carousel-inner">
-							  	<div class="item active text-center text-info">
-									<h3>{{organizationsArray[0].name}}</h3>
+							  	<div class="item active text-center text-success">
+									<h1><b>{{organizationsArray[0].name}}</b></h2>
 							    </div>
 
-							    <div class="item text-center text-info" ng-repeat="organization in organizationsArray | orderBy: name" ng-if="$index > 0">
-									<h3>{{organization.name}}</h3>
+							    <div class="item text-center text-success" ng-repeat="organization in organizationsArray | orderBy: name" ng-if="$index > 0">
+									<h1><b>{{organization.name}}</b></h1>
 							    </div>
 							  </div>
 							  <!-- Left and right controls -->
@@ -95,10 +95,10 @@
 							  </a>
 						</div>
 						<div class="btn-group btn-group-justified" style="font-size: 10px;">
-							<a class="btn btn-info" ng-click="carouselViewController('beaconsList')" style="border-radius: 0;">Beacons</a>
-							<a class="btn btn-info" ng-click="carouselViewController('objectsList')" style="border-radius: 0;">Objects</a>
-							<a class="btn btn-info" ng-click="carouselViewController('settings')" style="border-radius: 0;">Settings</a>
-							<a class="btn btn-info" ng-click="carouselViewController('stats')" style="border-radius: 0;">Stats</a>
+							<a class="btn btn-lightGreen" ng-click="carouselViewController('beaconsList')" style="border-radius: 0;">Beacons</a>
+							<a class="btn btn-lightGreen" ng-click="carouselViewController('objectsList')" style="border-radius: 0;">Objects</a>
+							<a class="btn btn-lightGreen" ng-click="carouselViewController('settings')" style="border-radius: 0;">Settings</a>
+							<a class="btn btn-lightGreen" ng-click="carouselViewController('stats')" style="border-radius: 0;">Stats</a>
 						</div>
 					</div>
 			 	</div>
@@ -387,7 +387,7 @@
 							        </div>
 							        <div class="modal-body modalPadding-2-5">
 							          <form role="form">
-							          	<div class="form-group form-group-sm">
+							          	<div class="form-group form-group">
 							            	<label>Type:</label>
 										    <select ng-model="newBeaconType" class="form-control" required>
 										    	<option value="" disabled selected hidden>{{curBeacon.beacon_type}}</option>
@@ -602,15 +602,15 @@
 									<div class="modal-content">
 										<div class="modal-header text-primary text-center modalPadding-2-1">
 										  <button type="button" class="close" data-dismiss="modal">&times;</button>
-										  <h2 class="modal-title"><b>{{curObj.name}}</b></h2>
+										  <h2 class="modal-title"><b>{{curObj.name}} Media Gallery</b></h2>
 										</div>
-										<div class="modal-body" style="background-color: black; height: 60vh;">
+										<div class="modal-body" style="min-height: 25vh;max-height: 70vh;">
 											<!-- Media Content -->
 											<div class="row">
 												<div ng-repeat="asset in assets | filter: galleryMediaFilter" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-													<div class="thumbnail">
+													<div class="thumbnail thumbnailGalleryContainer">
 														<span class="glyphicon glyphicon-remove deleteIcon pull-right" ng-click="removeAsset(asset)" style="margin-bottom: 0.5em;"></span>
-														<div class="thumbnailGalleryItem center-block" ng-click="displaySingleAssetModal(asset)">
+														<div class="thumbnailGalleryItem center-block" ng-click="displayAssetCarouselModal(asset)">
 															<img class="img-circle thumbnailGallerySrc center-block text-center" ng-src={{asset.value}} alt="{{asset.name}}"></img>
 															<div class="thumbnailGalleryOverlay">
 												            	<span ng-if="asset.content_type == 'image'" class="glyphicon glyphicon-picture"></span>
@@ -619,8 +619,8 @@
 												            	<span ng-if="asset.content_type == 'threeD'" class="glyphicon glyphicon-picture">3D</span>
 													    	</div>
 													    </div>
-												    	<h4 class="text-center" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-												    		<kbd>{{asset.name}}</kbd>
+												    	<h4 class="text-center text-info" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+												    		{{asset.name}}
 												    	</h4>
 													</div>
 												</div>
@@ -648,33 +648,58 @@
 							    </div>
 							</div>
 
-							<!-- Single Asset Modal -->
-				 			<div class="modal fade" id="singleAssetModal" role="dialog" data-backdrop="true">
-							    <div class="modal-dialog">
-							      <!-- Single Asset Modal content-->
+							<!-- Asset Carousel Modal -->
+				 			<div class="modal fade" id="assetCarouselModal" role="dialog" data-backdrop="true">
+							    <div class="modal-dialog modal-lg">
+							      <!-- Asset Carousel Modal content-->
 							      <div class="modal-content">
 							        <div class="modal-header text-primary text-center">
 							          <button type="button" class="close" data-dismiss="modal">&times;</button>
-							          <h2 class="modal-title"><b>{{curAsset.name}}</b></h2>
+							          <h2 class="modal-title"><b>{{curObj.name}} Media Carousel</b></h2>
 							        </div>
-							        <div class="modal-body text-center modalPadding-1-0" style="background-color: black;">
-							        	<!-- Image -->
-										<img ng-if="curAsset.content_type == 'image'" ng-src={{curAsset.value}} alt={{curAsset.name}} class="img-rounded" style="max-width: 50vh;"></img>
+							        <div class="modal-body text-center zeroPadding">
+							        	<div id="galleryCarousel" class="carousel" data-ride="carousel">
+											<!-- Indicators -->
+											<ol class="carousel-indicators">
+												<li ng-repeat="asset in assets track by asset.content_id" data-target="#galleryCarousel" data-slide-to={{$index}} ng-class="{'active': $index == curAssetIndex}"></li>
+											</ol>
+											
+											<!-- Wrapper for slides -->
+											<div class="carousel-inner">
+												<!-- Assets  -->
+												<div class="item media-wrap" ng-repeat="asset in assets track by asset.content_id" ng-class="{'active': $index == curAssetIndex}">
+													<!-- Image -->
+													<img ng-if="asset.content_type == 'image'" ng-src={{asset.value}} alt={{asset.name}} class="img-responsive">
+													</img>
 
-										<!-- Audio -->
-										<audio ng-if="curAsset.content_type == 'audio'" src="" autobuffer autoloop loop controls></audio>
+													<!-- Audio -->
+													<audio ng-if="asset.content_type == 'audio'" ng-src="" autobuffer autoloop loop controls></audio>
 
-										<!-- Video -->
-										<video ng-if="curAsset.content_type == 'video'" src="" autobuffer autoloop loop controls poster=""></video>
+													<!-- Video -->
+													<video ng-if="asset.content_type == 'video'" ng-src="" autobuffer autoloop loop controls poster=""></video>
 
-										<!-- 3D -->
-										<!-- 3D Placeholder -->
+													<!-- 3D -->
+													<!-- 3D Placeholder -->
+
+													<!-- Caption for asset -->
+													<div class="carousel-caption">
+														<h2><b>{{asset.name}}</b> <span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeAsset(asset)"></span></h2>
+													</div>
+												</div>
+  											</div>
+
+											<!-- Left and right controls -->
+											<a class="left carousel-control pointer" data-target="#galleryCarousel" data-slide="prev">
+												<span class="glyphicon glyphicon-chevron-left"></span>
+												<span class="sr-only">Previous</span>
+											</a>
+											<a class="right carousel-control pointer" data-target="#galleryCarousel" data-slide="next">
+												<span class="glyphicon glyphicon-chevron-right"></span>
+												<span class="sr-only">Next</span>
+											</a>
+										</div>	
 							        </div>
 							        <div class="modal-footer">
-							        	<div class="pull-left">
-							        		<button type="button" class="btn btn-danger text-center" ng-click="removeAsset(curAsset)">Delete <span class="glyphicon glyphicon-remove"></span>
-							        		</button>
-							        	</div>
 							          <button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 							        </div>
 							      </div>
@@ -711,7 +736,7 @@
 				              <label>Name:</label>
 				              <input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconName" required>
 				            </div>
-				            <div class="form-group form-group-sm">
+				            <div class="form-group form-group">
 				            	<label>Type:</label>
 							    <select ng-model="addBeaconType" class="form-control input-sm" required>
 							    	<option value="" disabled selected hidden>Select beacon type</option>
@@ -768,7 +793,7 @@
 				            	</div>
 				            </div>
 				            <div class="form-group panel panel-default text-center">
-				            	<h4><label>Location</label></h4>
+				            	<h4><label>Location:</label></h4>
 				            	<div id="googleMapsAddObject" class="panel-body">
 				            	</div>
 				            	<h5 class="panel-body zeroPadding">Click a position on the map to the determine the object's location.</h5>

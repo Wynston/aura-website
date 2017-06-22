@@ -38,7 +38,7 @@ h6{
 
 
 /* ----------------------------Large desktops and laptops (DEFAULT)----------------------------- */
-	/*--------------------------------------------Classes--------------------------------------------*/
+	/*--------------------------------------------Classes--------------------------------------------*/'
 	.btn{
 		font-size: 1em;
 		max-width: 16em;
@@ -59,6 +59,17 @@ h6{
 		text-overflow: ellipsis;
 	}
 
+	.btn-lightGreen{
+		background-color: #d6e9c6;
+		border-color: #CDE2BB;
+		color: #3c763d;
+	}
+
+	.btn-lightGreen:hover {
+		background-color: #9CBF7E;
+		border-color: #92B673;
+	}
+
 	.cancelFile{
 		color: white;
 	}
@@ -69,22 +80,27 @@ h6{
 	}
 
 	.carouselBody{
-		min-height: 10vh;
+		min-height: 25vh;
 	}
  
 	.carousel-indicators .active {
 		background-color: #5AE2FF;
 		border-color:  #27D1F5;
-		height: 1em;
-		width: 1em;
+		height: 1.25em;
+		width: 1.25em;
 	}
 
 	.carousel-indicators li {
 		background-color: #FFFFFF;
-		height: 0.70em;
-		width: 0.70em;
+		height: 0.85em;
+		width: 0.85em;
 		-webkit-transition: width 1s, height 1s;
     	transition: width 0.75s, height 0.75s;
+	}
+
+	.carousel-inner > .item > img, audio, video{
+    	margin: 0 auto;
+    	height: 60vh;
 	}
 
 	.deleteIcon{
@@ -144,9 +160,8 @@ h6{
 		display:inline; 
 	}
 
-
 	.modal-dialog{
-	    overflow-y: initial !important
+	    overflow-y: initial !important;
 	}
 	.modal-body{
 		height: auto;
@@ -156,6 +171,14 @@ h6{
 
 	.panel-default > .panel-heading, .panel-footer{
 	  background-color: white !important;
+	 }
+
+	 .pointer{
+	 	cursor: pointer;
+	 }
+
+	 .thumbnailGalleryContainer{
+	 	background-color: #E6E6E6;
 	 }
 
 	.thumbnailGalleryItem{
@@ -255,9 +278,9 @@ h6{
 	}
 
 	#mobileOrgMenu{
-		background-color: #d6e9c6; 
-		color: #0C5602; 
-		border: 2px solid #d6e9c6;
+		background-color: #d6e9c6;
+		border: #C6DEB1;
+		color: #3c763d;
 		font-size: 1.5em;
 	}
 
@@ -274,6 +297,22 @@ h6{
 
 	#orgsCarousel{
 		height: 80px;
+		background-color: #E4E4E4;
+	}
+
+	#orgsCarousel > .carousel-indicators .active {
+		background-color: #5cb85c;
+		border-color:  #4cae4c;
+		height: 1.25em;
+		width: 1.25em;
+	}
+
+	.carousel-indicators li {
+		background-color: white;
+		height: 0.85em;
+		width: 0.85em;
+		-webkit-transition: width 1s, height 1s;
+    	transition: width 0.75s, height 0.75s;
 	}
 
 	#orgMenu{

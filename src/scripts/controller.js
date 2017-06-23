@@ -5,7 +5,7 @@ app.controller('mainController', function($scope, $http) {
 		$scope.userName = "Wynston Ramsay";
 		$scope.loadOrganizations();
 		$scope.changeView("dashboard");
-		$scope.curOrg = "";
+		$scope.curOrg;
 		$scope.curBeacon;
 		$scope.curObj;
 		$scope.curAsset;
@@ -457,18 +457,18 @@ app.controller('mainController', function($scope, $http) {
 	$scope.changeView = function(view , org){;
 		switch(view){
 			case "dashboard":
-				$scope.changeLiveTitle("Dashboard", $scope.userName, false);
+				$scope.changeLiveTitle("Dashboard", false);
 				sessionStorage.curView = view;
 				$scope.curView = view;
 				break;
 			case "profileSettings":
-				$scope.changeLiveTitle("Profile Settings", $scope.userName, false);
+				$scope.changeLiveTitle("Profile Settings", false);
 				sessionStorage.curView = view;
 				$scope.curView = view;
 				break;
 			case "beaconsList":
 				$scope.curOrg = org;
-				$scope.changeLiveTitle("Beacons", org.name, true);
+				$scope.changeLiveTitle("Beacons", true);
 				$scope.filterTitle="beaconsView";
 				$scope.changeViewType('List');
 				$scope.loadBeacons();
@@ -477,7 +477,7 @@ app.controller('mainController', function($scope, $http) {
 				break;
 			case "objectsList":
 				$scope.curOrg = org;
-				$scope.changeLiveTitle("Objects", org.name, true);
+				$scope.changeLiveTitle("Objects", true);
 				$scope.filterTitle = "objectsView";
 				$scope.changeViewType('List');
 				$scope.changeBeaconFilter('All');
@@ -487,13 +487,13 @@ app.controller('mainController', function($scope, $http) {
 				break;
 			case "settings":
 				$scope.curOrg = org;
-				$scope.changeLiveTitle("Settings", org.name, false);
+				$scope.changeLiveTitle("Settings", false);
 				sessionStorage.curView = view;
 				$scope.curView = view;
 				break;
 			case "stats":
 				$scope.curOrg = org;
-				$scope.changeLiveTitle("Stats", org.name, false);
+				$scope.changeLiveTitle("Stats", false);
 				sessionStorage.curView = view;
 				$scope.curView = view;
 				$scope.loadStats();
@@ -503,11 +503,8 @@ app.controller('mainController', function($scope, $http) {
 	}
 
 	//handles the display of all the live display titles
-	$scope.changeLiveTitle = function(primT, secondT, bool){
+	$scope.changeLiveTitle = function(primT, bool){
 		$scope.primTitle = primT;
-		if(!(secondT == "")){
-			$scope.secTitle = secondT;
-		}
 
 		if(bool){
     		document.getElementById("filterTitle").style.visibility = "visible";
@@ -550,7 +547,7 @@ app.controller('mainController', function($scope, $http) {
 		$scope.curBeacon = beacon;
 		sessionStorage.curBeacon = beacon;
 		sessionStorage.curBeacon = JSON.stringify($scope.curBeacon);
-		$scope.changeLiveTitle("Beacon: " + $scope.curBeacon.beacon_name, "", false);
+		$scope.changeLiveTitle("Beacon: " + $scope.curBeacon.beacon_name, false);
 		$scope.curView = "beacon";
 		sessionStorage.curView = "beacon";
 		$scope.safeApply();
@@ -568,7 +565,7 @@ app.controller('mainController', function($scope, $http) {
 		$scope.curObj = obj;
 		sessionStorage.curObj = obj;
 		sessionStorage.curObj = JSON.stringify($scope.curObj);
-		$scope.changeLiveTitle("Object: " + $scope.curObj.name, "", true);
+		$scope.changeLiveTitle("Object: " + $scope.curObj.name, true);
 		$scope.curView = "object";
 		sessionStorage.curView = "object";
 		$scope.filterTitle = "objectPrivacy";
@@ -584,10 +581,17 @@ app.controller('mainController', function($scope, $http) {
 		$("#thumbnailModal").modal();
 	}
 
-	//activates the modal, loads the google scripts and resets any forms necessary
+	//activates the add object modal, loads the google scripts and resets any forms necessary
 	$scope.displayAddObjectModal = function(){
 		loadGoogleScript();
 		$scope.resetThumbnailForm();
+		$("#addObjectModal").modal();
+	}
+
+	//activates the add beacon modal, loads the google scripts and resets any forms necessary
+	$scope.displayAddBeaconModal = function(){
+		loadGoogleScript();
+		$("#addBeaconModal").modal();
 	}
 
 	//display an objects assets in a modal

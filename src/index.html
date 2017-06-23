@@ -85,20 +85,20 @@
 							    </div>
 							  </div>
 							  <!-- Left and right controls -->
-							  <a class="left carousel-control" href="#orgsCarousel" data-slide="prev" ng-click="carouselLeft()">
+							  <a class="left carousel-control" data-target="#orgsCarousel" data-slide="prev" ng-click="carouselLeft()">
 							    <span class="glyphicon glyphicon-chevron-left"></span>
 							    <span class="sr-only">Previous</span>
 							  </a>
-							  <a class="right carousel-control" href="#orgsCarousel" data-slide="next" ng-click="carouselRight()">
+							  <a class="right carousel-control" data-target="#orgsCarousel" data-slide="next" ng-click="carouselRight()">
 							    <span class="glyphicon glyphicon-chevron-right"></span>
 							    <span class="sr-only">Next</span>
 							  </a>
 						</div>
-						<div class="btn-group btn-group-justified" style="font-size: 10px;">
-							<a class="btn btn-lightGreen" ng-click="carouselViewController('beaconsList')" style="border-radius: 0;">Beacons</a>
-							<a class="btn btn-lightGreen" ng-click="carouselViewController('objectsList')" style="border-radius: 0;">Objects</a>
-							<a class="btn btn-lightGreen" ng-click="carouselViewController('settings')" style="border-radius: 0;">Settings</a>
-							<a class="btn btn-lightGreen" ng-click="carouselViewController('stats')" style="border-radius: 0;">Stats</a>
+						<div class="btn-group-justified">
+							<a type="button" class="btn btn-lightGreen borderRadius0" ng-click="carouselViewController('beaconsList')">Beacons</a>
+							<a type="button" class="btn btn-lightGreen borderRadius0" ng-click="carouselViewController('objectsList')">Objects</a>
+							<a type="button" class="btn btn-lightGreen borderRadius0" ng-click="carouselViewController('settings')">Settings</a>
+							<a type="button" class="btn btn-lightGreen borderRadius0" ng-click="carouselViewController('stats')">Stats</a>
 						</div>
 					</div>
 			 	</div>
@@ -108,12 +108,16 @@
 			 		<!-- Dynamic Title -->
 			 		<div class="row text-center panel panel-heading" id="liveTitle">
 			 			<!-- Primary title -->
-			 			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary zeroPadding">
+			 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center text-primary zeroPadding">
 			 				<h2><b>{{primTitle}}</b></h2>
 			 			</div>
-					    <div ng-switch="filterTitle" id="filterTitle" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center zeroPadding">
+			 			<!-- Secondary Title -->
+			 			<div id="orgTitle">
+			 				<h4 class="text-muted">{{curOrg.name}}</h4>
+			 			</div>
+					    <div ng-switch="filterTitle" id="filterTitle" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center zeroPadding">
 					    	<!-- Objects View Filter -->
-						    <div ng-switch-when="objectsView" class="btn-group btn-group-vertical">
+						    <div ng-switch-when="objectsView" class="hidden-xs btn-group">
 					    		<div class="dropup btn-group">
 									 <button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" aria-labelledby="menu1" style="border-top-right-radius: 6px; border-top-left-radius: 6px;">
 								    	View By: {{viewType}}
@@ -128,10 +132,6 @@
 								    	</li>
 								    </ul>
 							    </div>
-							    <label type="button" class="btn btn-success" data-toggle="modal" data-target="#addObjectModal" onclick="loadGoogleScript()">
-						    			<span class=" glyphicon glyphicon-plus"></span>
-						    			<span>Object</span>
-							    </label>
 					    		<div class="btn-group" id="objectsViewFilterTitle">
 							    	<button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" aria-labelledby="menu1" style="border-bottom-right-radius: 6px; border-bottom-left-radius: 6px;">
 								    	Filter by Beacon: {{beaconsFilter}}
@@ -174,17 +174,9 @@
 									    	</li>
 									    </ul>
 							    	</div>
-							    	<label type="button" class="btn btn-success" data-toggle="modal" data-target="#addBeaconModal" onclick="loadGoogleScript()">
-						    			<span class=" glyphicon glyphicon-plus"></span>
-						    			<span>Beacon</span>
-							    	</label>
 						    	</div>
 							</div>
 						</div>
-						<!-- Organization/Username title -->
-						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right zeroPadding">
-					    	<h2><small>{{secTitle}}</small></h2>
-					    </div>
 			 		</div>
 
 			 		<!-- Live Display -->
@@ -225,7 +217,7 @@
 							      <!-- Modal content-->
 							      <div class="modal-content">
 							        <div class="modal-header text-center text-primary modalPadding-1-1">
-							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 							          <h2><b>Will's Webcam</b></h2>
 							        </div>
 							        <div class="modal-body embed-responsive embed-responsive-16by9 modalPadding-1-2" style="background-color: black;">
@@ -245,11 +237,11 @@
 							    
 							      <!-- Modal content-->
 							      <div class="modal-content">
-							        <div class="modal-header text-primary text-center modalPadding-1-1">
-							          <button type="button" class="close" data-dismiss="modal">&times;</button>
-							          <h2><b>Organization creation for {{userName}}</b></h2>
+							        <div class="modal-header text-primary text-center modalPadding-2-3">
+							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+							          <h2><b>Organization creation</b></h2>
 							        </div>
-							        <div class="modal-body modalPadding-1-1">
+							        <div class="modal-body modalPadding-2-4">
 							          <form role="form">
 							            <div class="form-group">
 							              <label>Name</label>
@@ -276,8 +268,8 @@
 							      <!-- Modal content-->
 							      <div class="modal-content">
 							        <div class="modal-header text-primary text-center modalPadding-2-3">
-							          <button type="button" class="close" data-dismiss="modal">&times;</button>
-							          <h2><b>Organization deletion for {{userName}}</b></h2>
+							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+							          <h2><b>Organization deletion</b></h2>
 							        </div>
 							        <div class="modal-body modalPadding-2-7">
 							          <form role="form">
@@ -308,8 +300,8 @@
 
 			 			<!-- Beacons List -->
 			 			<div ng-switch-when="beaconsList">
-			 				<div ng-switch="viewType" class="panel-body">
-			 					<div ng-switch-when="List" class="table-responsive">
+			 				<div ng-switch="viewType">
+			 					<div ng-switch-when="List" class="table-responsive panel-body">
 					 				<table class="table table-condensed">
 						 				<thead>
 						 					<tr class="row">
@@ -330,17 +322,17 @@
 						 						<td class="menuItem hidden-sm hidden-xs">{{beacon.altitude | number: 3}}</td>
 						 						<td class="menuItem hidden-sm hidden-xs">{{beacon.latitude | number: 3}}</td>
 						 						<td class="menuItem hidden-sm hidden-xs">{{beacon.longitude | number: 3}}</td>
-						 						<td>
+						 						<td class="text-center">
+						 							<span class="glyphicon glyphicon-plus addIcon" ng-click="displayAddBeaconModal()"></span>
+						 							<span class="glyphicon glyphicon-pencil editIcon"></span>
 						 							<span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeBeacon(beacon)"></span>
 						 						</td>
 						 					</tr>
 						 				</tbody>
 						 			</table>
 						 		</div>
-					 			<div ng-switch-when="Map" class="center-block panel-default text-center">
-					 				<!-- Google Maps API -->
-					 				<div class="panel-body" id="googleMapsBeacons"></div>
-					 			</div>
+						 		<!-- Google Maps API -->
+					 			<div ng-switch-when="Map" id="googleMapsBeacons" class=""></div>
 					 		</div>
 			 			</div>
 
@@ -348,7 +340,7 @@
 		 				<!-- Google Maps API -->
 		 				<div ng-switch-when="beacon">
 		 					<div class="text-center center-block panel-body">
-			 					<div class="panel-heading container-fluid">
+			 					<div class="panel-heading">
 			 						<div class="row">
 			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary zeroPadding"> 
 			 								<button class="btn btn-info" type="button" ng-click="displayBeaconObjects()" style="margin-top: 0.5em;">Objects Served</button>					
@@ -358,8 +350,8 @@
 			 							</div>
 				 						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right zeroPadding">
 				 							<div class="btn-group">
-				 								<label class="btn btn-info disabled" style="margin-top: 0.5em; cursor: default;">Type: {{curBeacon.beacon_type}}</label>
-					 							<button class="btn btn-warning" type="button" data-toggle="modal" data-target="#typeEditModal" style="margin-top: 0.5em;">
+				 								<label class="btn btn-sm btn-info disabled" style="margin-top: 0.5em; cursor: default;">Type: {{curBeacon.beacon_type}}</label>
+					 							<button class="btn btn-sm btn-warning" type="button" data-toggle="modal" data-target="#typeEditModal" style="margin-top: 0.5em;">
 					 								<span class="glyphicon glyphicon-pencil"></span>
 					 							</button>
 				 							</div>
@@ -382,7 +374,7 @@
 							      <!-- Modal content-->
 							      <div class="modal-content">
 							        <div class="modal-header text-primary text-center modalPadding-2-3">
-							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 							          <h2><b>Type Editing for {{curBeacon.beacon_name}}</b></h2>
 							        </div>
 							        <div class="modal-body modalPadding-2-5">
@@ -412,28 +404,30 @@
 					 				<table class="table table-condensed table-responsive">
 						 				<thead>
 						 					<tr>
-						 						<th>Thumbnail</th>
+						 						<th></th>
 						 						<th>Name</th>
 						 						<th>Beacon Name</th>
-						 						<th class="hidden-xs hidden-sm">#Images</th>
-						 						<th class="hidden-xs hidden-sm">#Audio</th>
-						 						<th class="hidden-xs hidden-sm">#Video</th>
-						 						<th class="hidden-xs hidden-sm">#3D</th>
+						 						<th class="hidden-xs hidden-sm columnSm">#Images</th>
+						 						<th class="hidden-xs hidden-sm columnSm">#Audio</th>
+						 						<th class="hidden-xs hidden-sm columnSm">#Video</th>
+						 						<th class="hidden-xs hidden-sm columnSm">#3D</th>
 						 						<th></th>
 						 					</tr>
 						 				</thead>
 						 				<tbody>
 						 					<tr ng-repeat="arObject in objectsArray | filterByBeacon: beaconsFilter | orderBy: 'beacon_name'">
-						 						<td class="menuItem" ng-click="displaythumbNailModal(arObject)">
-						 							<img ng-src="{{arObject.thumbnail}}" class="thumbnail" alt="{{arObject.name}}" style="height:3em; width: 3em;"></img>
+						 						<td class="menuItem" ng-click="displaythumbNailModal(arObject)" style="height:3em; width: 3em;">
+						 							<img ng-src="{{arObject.thumbnail}}" class="img-rounded pull-left" alt="{{arObject.name}}" style="height:3em; width: 3em; margin: 0 auto;"></img>
 						 						</td>
 						 						<td ng-click="displayObject(arObject)" class="menuItem">{{arObject.name}}</td>
 						 						<td ng-click="loadBeacon(arObject.beacon_name)" class="menuItem">{{arObject.beacon_name}}</td>
-						 						<td class="menuItem hidden-xs hidden-sm">{{arObject.numImage}}</td>
-						 						<td class="menuItem hidden-xs hidden-sm">{{arObject.numAudio}}</td>
-						 						<td class="menuItem hidden-xs hidden-sm" >{{arObject.numVideo}}</td>
-						 						<td class="menuItem hidden-xs hidden-sm">{{arObject.num3D}}</td>
-						 						<td>
+						 						<td class="menuItem hidden-xs hidden-sm columnSm"><span class="badge">{{arObject.numImage}}</span></td>
+						 						<td class="menuItem hidden-xs hidden-sm columnSm"><span class="badge">{{arObject.numAudio}}</span></td>
+						 						<td class="menuItem hidden-xs hidden-sm columnSm"><span class="badge">{{arObject.numVideo}}</span></td>
+						 						<td class="menuItem hidden-xs hidden-sm columnSm"><span class="badge">{{arObject.num3D}}</span></td>
+						 						<td class="text-center">
+						 							<span class="glyphicon glyphicon-plus addIcon" ng-click="displayAddObjectModal()"></span>
+						 							<span class="glyphicon glyphicon-pencil editIcon"></span>
 						 							<span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeObject(arObject)"></span>
 						 						</td>
 						 					</tr>
@@ -441,24 +435,24 @@
 						 			</table>
 								 	<!-- Thumbnail Modal -->
 						 			<div class="modal fade" id="thumbnailModal" role="dialog" data-backdrop="true">
-									    <div class="modal-dialog modal-sm">
+									    <div class="modal-dialog">
 									      <!-- Thumbnail Modal content-->
 									      <div class="modal-content">
 									        <div class="modal-header text-primary text-center">
-									          <button type="button" class="close" data-dismiss="modal">&times;</button>
+									          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 									          <h2 class="modal-title"><b>{{modalHeader}}</b></h2>
 									        </div>
-									        <div class="modal-body text-center" style="background-color: black;">
-									        	<img class="img-rounded" ng-src={{modalImgSrc}}></img>
+									        <div class="modal-body text-center">
+									        	<img class="img-rounded thumbnail150x150" ng-src={{modalImgSrc}}></img>
 									        </div>
 									        <div class="modal-footer">
-									        	<ul class="list-inline text-center">
-									        		<li>#Images: {{curObj.numImage}}</li>
-									        		<li>#Audio: {{curObj.numAudio}}</li>
-									        		<li>#Video: {{curObj.numVideo}}</li>
-									        		<li>#3D: {{curObj.num3D}}</h4></li>				
+									        	<ul class="list-inline pull-left text-muted d-inline">
+									        		<li>#Images <span class="badge">{{curObj.numImage}}</span></li>
+									        		<li>#Audio <span class="badge">{{curObj.numAudio}}</span></li>
+									        		<li>#Video <span class="badge">{{curObj.numVideo}}</span></li>
+									        		<li>#3D <span class="badge">{{curObj.num3D}}</span></li>				
 									        	</ul>
-									          <button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+									          <button type="button" class="btn btn-info pull-right d-inline" data-dismiss="modal">Close</button>
 									        </div>
 									      </div>  
 									    </div>
@@ -512,7 +506,7 @@
 							      <!-- Edit Beacon for Object Modal content-->
 							      <div class="modal-content">
 							        <div class="modal-header text-primary text-center modalPadding-1-1">
-							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 							          <h2 class="modal-title"><b>Change {{curObj.name}}'s service beacon</b></h2>
 							        </div>
 							        <div class="modal-body text-center modalPadding-1-2">
@@ -533,7 +527,7 @@
 							      <!-- Description Modal content-->
 							      <div class="modal-content">
 							        <div class="modal-header text-primary text-center modalPadding-1-2">
-							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 							          <h2 class="modal-title"><b>{{curObj.name}}</b></h2>
 							        </div>
 							        <div class="modal-body text-left modalPadding-1-2" style="line-height: 1.5;">
@@ -560,7 +554,7 @@
 							      <!-- Modal content-->
 							      <div class="modal-content">
 							        <div class="modal-header text-center modalPadding-2-3">
-							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 							          <h2 class="text-primary"><b>New Media Content for {{curObj.name}}</b></h2>
 							        </div>
 							        <div class="modal-body text-center modalPadding-2-3">
@@ -601,7 +595,7 @@
 									<!-- Assets/Media Modal content-->
 									<div class="modal-content">
 										<div class="modal-header text-primary text-center modalPadding-2-1">
-										  <button type="button" class="close" data-dismiss="modal">&times;</button>
+										  <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 										  <h2 class="modal-title"><b>{{curObj.name}} Media Gallery</b></h2>
 										</div>
 										<div class="modal-body" style="min-height: 25vh;max-height: 70vh;">
@@ -611,7 +605,7 @@
 													<div class="thumbnail thumbnailGalleryContainer">
 														<span class="glyphicon glyphicon-remove deleteIcon pull-right" ng-click="removeAsset(asset)" style="margin-bottom: 0.5em;"></span>
 														<div class="thumbnailGalleryItem center-block" ng-click="displayAssetCarouselModal(asset)">
-															<img class="img-circle thumbnailGallerySrc center-block text-center" ng-src={{asset.value}} alt="{{asset.name}}"></img>
+															<img class="img-circle thumbnailGallerySrc center-block text-center" ng-src={{asset.thumbnail}} alt="{{asset.name}}"></img>
 															<div class="thumbnailGalleryOverlay">
 												            	<span ng-if="asset.content_type == 'image'" class="glyphicon glyphicon-picture"></span>
 												            	<span ng-if="asset.content_type == 'audio'" class="glyphicon glyphicon-music"></span>
@@ -654,7 +648,7 @@
 							      <!-- Asset Carousel Modal content-->
 							      <div class="modal-content">
 							        <div class="modal-header text-primary text-center">
-							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 							          <h2 class="modal-title"><b>{{curObj.name}} Media Carousel</b></h2>
 							        </div>
 							        <div class="modal-body text-center zeroPadding">
@@ -683,7 +677,10 @@
 
 													<!-- Caption for asset -->
 													<div class="carousel-caption">
-														<h2><b>{{asset.name}}</b> <span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeAsset(asset)"></span></h2>
+														<h2>
+															<b class="float-left" style="padding-left: 1em;">{{asset.name}}</b>
+															<span class="glyphicon glyphicon-remove deleteIcon float-right" ng-click="removeAsset(asset)"></span>
+														</h2> 
 													</div>
 												</div>
   											</div>
@@ -727,7 +724,7 @@
 				      <!-- Modal content-->
 				      <div class="modal-content">
 				        <div class="modal-header text-primary text-center modalPadding-1-1">
-				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 				          <h2><b>Beacon creation for {{curOrg.name}}</b></h2>
 				        </div>
 				        <div class="modal-body modalPadding-1-2">
@@ -767,7 +764,7 @@
 				      <!-- Modal content-->
 				      <div class="modal-content">
 				        <div class="modal-header text-primary text-center modalPadding-1-1">
-				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 				          <h2><b>Object creation for {{curOrg.name}}</b></h2>
 				        </div>
 				        <div class="modal-body text-center modalPadding-1-2">
@@ -816,7 +813,7 @@
 				      <!-- Modal content-->
 				      <div class="modal-content">
 				        <div class="modal-header text-primary text-center modalPadding-1-1">
-				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 				          <h2><b>Beacon creation for {{curOrg.name}}</b></h2>
 				        </div>
 				        <div class="modal-body text-center modalPadding-1-2">
@@ -846,11 +843,11 @@
 				</div>
 
 			</div>
-			<footer class="text-center footer text-muted">
-				<h6>© 2017 Aura Technologies Inc.</h6>
-				<a href="http://www.auracr.io/" class="text-info" target="_blank">auracr.io</a>
-			</footer>
 		</div>
+		<footer class="text-center footer text-muted margin0">
+			<h4 class="margin0">© 2017 Aura Technologies Inc.</h4>
+			<a href="http://www.auracr.io/" class="text-info" target="_blank" style="text-decoration: none;"><h4 class="margin0" style="padding-top: 0.4em;">auracr.io</h4></a>
+		</footer>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type='text/javascript'></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous" type='text/javascript'></script>

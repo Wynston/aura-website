@@ -50,22 +50,11 @@ h6{
 
 	.btn{
 		font-size: 1em;
-		max-width: 16em;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 
 	.btn-block{
 		min-width: 100%;
 		font-size: 1.15em;
-	}
-
-	.btn-group-vertical{
-		font-size: 1em;
-		max-width: 20em;
-		white-space: nowrap;
-		text-overflow: ellipsis;
 	}
 
 	.btn-lightGreen{
@@ -94,21 +83,6 @@ h6{
 
 	.carouselBody{
 		min-height: 25vh;
-	}
- 
-	.carousel-indicators .active {
-		background-color: #5AE2FF;
-		border-color:  #27D1F5;
-		height: 1.25em;
-		width: 1.25em;
-	}
-
-	.carousel-indicators li {
-		background-color: #FFFFFF;
-		height: 0.85em;
-		width: 0.85em;
-		-webkit-transition: width 1s, height 1s;
-    	transition: width 0.75s, height 0.75s;
 	}
 
 	.carousel-inner > .item > img, audio, video{
@@ -165,6 +139,12 @@ h6{
 
 	.editIcon:hover{
 		color: #C68A36;
+	}
+
+	.ellipsisWrap{
+		white-space: nowrap; 
+		text-overflow: ellipsis; 
+		overflow: hidden;
 	}
 
 	.footer {
@@ -293,6 +273,10 @@ h6{
 		margin-top: 0.5em;
 	}
 
+	#filterTitle{
+		margin-top: 1em;
+	}
+
 	#googleMapsAddBeacon, #googleMapsAddObject, #googleMapsEditBeacForObj{
 		height: 35vh;
 		width: 100%	;
@@ -337,6 +321,12 @@ h6{
 		position: relative;
 	}
 
+	#objectsViewFilter{
+		text-overflow: none;
+		white-space: normal;
+		text-overflow: ellipsis;
+	}
+
 	#orgsCarousel{
 		height: 80px;
 		background-color: #FFFFFF;
@@ -344,15 +334,8 @@ h6{
 
 	#orgTitle{
 		position: absolute;
-		top: 0.5em;
+		top: 0.25em;
 		right: 0.5em;
-	}
-
-	#orgsCarousel > .carousel-indicators .active {
-		background-color: #5cb85c;
-		border-color:  #4cae4c;
-		height: 1.25em;
-		width: 1.25em;
 	}
 
 	#orgMenu{
@@ -414,16 +397,12 @@ h6{
 		font-size: 10px;
 	}
 
-	.btn{
-		max-width: 11em;
-	}
-
-	.btn-group-vertical{
-		max-width: 18em;
-	}
-
 	#fileLabel{
 		margin-top: 0.75em;
+	}
+
+	#filterTitle{
+		margin-top: 0;
 	}
 
 	#liveDisplay{
@@ -441,26 +420,16 @@ h6{
 		width: 8em;
 		height: 8em;
 	}
+
+	#primTitle{
+		text-align: center;
+	}
 }	
 
 /* ---------------------------------Portrait phones and smaller--------------------------------- */
 @media (max-width: 480px) {
 	html, body{
 		font-size: 9px;
-	}
-
-	.btn{
-		padding: 0.5em 0.75em;
-		max-width: 8em;
-		font-size: 10px;
-	}
-
-	.btn-group-vertical{
-		max-width: 11em;
-	}
-
-	.dropdown-menu{
-		line-height: 0.5
 	}
 
 	td{
@@ -475,8 +444,7 @@ h6{
 	}
 
 	#filterTitle{
-		padding-top: 1em;
-		padding-bottom: 1em;
+		margin-top: 0;
 	}
 
 	#liveDisplay{
@@ -497,6 +465,10 @@ h6{
 	.thumbnailGalleryItem, .thumbnailGallerySrc{
 		width: 5em;
 		height: 5em;
+	}
+
+	#primTitle{
+		text-align: center;
 	}
 
 }	

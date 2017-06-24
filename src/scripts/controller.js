@@ -454,7 +454,7 @@ app.controller('mainController', function($scope, $http) {
 
 //---------------------------------display functions begin----------------------------------------
 	//controls which view is to be displayed as well as the title
-	$scope.changeView = function(view , org){;
+	$scope.changeView = function(view , org){
 		switch(view){
 			case "dashboard":
 				$scope.changeLiveTitle("Dashboard", false);
@@ -507,10 +507,10 @@ app.controller('mainController', function($scope, $http) {
 		$scope.primTitle = primT;
 
 		if(bool){
-    		document.getElementById("filterTitle").style.visibility = "visible";
+    		document.getElementById("filterTitle").style.display = "inline";
     	}
     	else{
-    		document.getElementById("filterTitle").style.visibility = "hidden";
+    		document.getElementById("filterTitle").style.display = "none";
     	}
 	}
 
@@ -524,9 +524,11 @@ app.controller('mainController', function($scope, $http) {
 	$scope.carouselRight = function(){
 		var index = $('div.active').index() + 1;
 		if(index < $scope.organizationsArray.length){
+			$scope.curOrgSlide = index + 1;
 			$scope.changeView($scope.curView, $scope.organizationsArray[index]);
 		}
 		else{
+			$scope.curOrgSlide = 1;
 			$scope.changeView($scope.curView, $scope.organizationsArray[0]);
 		}
 	}
@@ -535,9 +537,11 @@ app.controller('mainController', function($scope, $http) {
 	$scope.carouselLeft = function(){
 		var index = $('div.active').index() - 1;
 		if(index >= 0){
+			$scope.curOrgSlide = index + 1;
 			$scope.changeView($scope.curView, $scope.organizationsArray[index]);
 		}
 		else{
+			$scope.curOrgSlide = $scope.organizationsArray.length;
 			$scope.changeView($scope.curView, $scope.organizationsArray[$scope.organizationsArray.length - 1]);
 		}
 	}
@@ -608,9 +612,30 @@ app.controller('mainController', function($scope, $http) {
 	//displays a single asset in a modal
 	$scope.displayAssetCarouselModal = function(asset){
 		$scope.curAsset = asset;
-		$scope.curAssetIndex = $scope.assets.map(function(asset) {return asset.content_id; }).indexOf(asset.content_id);
-		$("#galleryCarousel").carousel($scope.curAssetIndex);
+		$scope.assetIndex = $scope.assets.map(function(asset) {return asset.content_id; }).indexOf(asset.content_id);
+		$scope.curAssetSlide = $scope.assetIndex + 1;
+		$("#galleryCarousel").carousel($scope.assetIndex);
 		$("#assetCarouselModal").modal();
+	}
+
+	//increments the current slide tracker for assets
+	$scope.assetSlideRight = function(){
+		if($scope.curAssetSlide < $scope.assets.length){
+			$scope.curAssetSlide = $scope.curAssetSlide + 1;
+		}
+		else{
+			$scope.curAssetSlide = 1;
+		}
+	}
+
+	//decrements the current slide tracker for assets
+	$scope.assetSlideLeft = function(){
+		if($scope.curAssetSlide > 1){
+			$scope.curAssetSlide = $scope.curAssetSlide - 1;
+		}
+		else{
+			$scope.curAssetSlide = $scope.assets.length;
+		}
 	}
 
 	//display an objects assets in a modal

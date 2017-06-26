@@ -588,14 +588,44 @@ app.controller('mainController', function($scope, $http) {
 	//activates the add object modal, loads the google scripts and resets any forms necessary
 	$scope.displayAddObjectModal = function(){
 		loadGoogleScript();
-		$scope.resetThumbnailForm();
+		$scope.resetAddObjectForm();
 		$("#addObjectModal").modal();
+	}
+
+	//initializes or resets the form for object creation
+	$scope.resetAddObjectForm = function(){
+		$scope.addObjectName = "";
+		$scope.addObjectDesc = "";
+		$scope.resetThumbnailForm();
 	}
 
 	//activates the add beacon modal, loads the google scripts and resets any forms necessary
 	$scope.displayAddBeaconModal = function(){
 		loadGoogleScript();
+		$scope.resetAddBeaconForm();
 		$("#addBeaconModal").modal();
+	}
+
+	//initializes or reserts the form for adding beacons
+	$scope.resetAddBeaconForm = function(){
+		$scope.addBeaconName = "";
+		$scope.addBeaconType = "";
+	}
+
+	//activates the modal form that allows for object creation within a beacon's radius
+	$scope.displayAddObjectAtBeaconModal = function(beacon){
+		$scope.curBeacon = beacon;
+		sessionStorage.curBeacon = JSON.stringify($scope.curBeacon);
+		loadGoogleScript();
+		$scope.resetAddObjectForm();
+		$("#addObjectAtBeaconModal").modal();
+	}
+
+	//activates the add assets modal
+	$scope.displayNewAssetsModal = function(obj){
+		$scope.curObj = obj;
+		$scope.resetAssetsForm();
+		$("#newAssetsModal").modal();
 	}
 
 	//display an objects assets in a modal

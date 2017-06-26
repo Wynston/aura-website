@@ -93,6 +93,46 @@ function initMap(){
 		});
 	});
 
+	$('#addObjectAtBeaconModal').on('shown.bs.modal', function(){
+		var beacon = JSON.parse(sessionStorage.curBeacon);
+		var beaconCenter = new google.maps.LatLng(beacon.latitude, beacon.longitude);
+	    var map = new google.maps.Map(document.getElementById('googleMapsAddObjectAtBeacon'), {
+	      zoom: 14,
+	      center: beaconCenter
+	    });
+      // Adds a 100m radius circle around each beacon
+      var beaconCircle = new google.maps.Circle({
+        strokeColor: '#00FFE4',
+        strokeOpacity: 0.8,
+        strokeWeight: 4,
+        fillColor: '#00FFE4',
+        fillOpacity: 0.35,
+        map: map,
+        center: beaconCenter,
+        radius: 100,
+        clickable: false
+      });
+	    google.maps.event.addListener(map, 'click', function(event) {
+		   placeMarker(event.latLng);
+		   //places a marker at a given location, used for onclick triggers
+			function placeMarker(location) {
+				if ( marker ) {
+			    	marker.setPosition(location);;
+			  	} 
+			  	else{
+			    	marker = new google.maps.Marker({
+			    	position: location,
+			    	map: map
+			    	});
+			  	}
+			  	var pos = (JSON.parse(JSON.stringify(location)));
+			  	getElevation(location);
+			  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
+            	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
+			}
+		});
+	});
+
 	$('#editBeacForObjModal').on('shown.bs.modal', function () {
 		var beacons = JSON.parse(sessionStorage.beaconsArray);
 	    var map = new google.maps.Map(document.getElementById('googleMapsEditBeacForObj'), {

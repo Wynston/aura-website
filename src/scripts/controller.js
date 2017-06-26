@@ -549,7 +549,6 @@ app.controller('mainController', function($scope, $http) {
 	//display a single object to the live display
 	$scope.displayBeacon = function(beacon){
 		$scope.curBeacon = beacon;
-		sessionStorage.curBeacon = beacon;
 		sessionStorage.curBeacon = JSON.stringify($scope.curBeacon);
 		$scope.changeLiveTitle("Beacon: " + $scope.curBeacon.beacon_name, false);
 		$scope.curView = "beacon";
@@ -564,10 +563,10 @@ app.controller('mainController', function($scope, $http) {
 		$scope.changeBeaconFilter($scope.curBeacon.beacon_name);
 	}
 
+
 	//displays a single object to the live display
 	$scope.displayObject = function(obj){
 		$scope.curObj = obj;
-		sessionStorage.curObj = obj;
 		sessionStorage.curObj = JSON.stringify($scope.curObj);
 		$scope.changeLiveTitle("Object: " + $scope.curObj.name, true);
 		$scope.curView = "object";
@@ -592,6 +591,19 @@ app.controller('mainController', function($scope, $http) {
 		$("#addObjectModal").modal();
 	}
 
+	//displays the modal to edit objects 
+	$scope.displayEditObjectModal = function(obj){
+		$scope.curObj = obj;
+		sessionStorage.curObj = JSON.stringify(obj);
+		loadGoogleScript();
+		$("#editObjectModal").modal();
+	}
+
+	$scope.displayEditBeaconTypeModal = function(){
+		$scope.newBeaconType = $scope.curBeacon.beacon_type;
+		$('#beaconTypeEditModal').modal();
+	}
+
 	//initializes or resets the form for object creation
 	$scope.resetAddObjectForm = function(){
 		$scope.addObjectName = "";
@@ -604,6 +616,16 @@ app.controller('mainController', function($scope, $http) {
 		loadGoogleScript();
 		$scope.resetAddBeaconForm();
 		$("#addBeaconModal").modal();
+	}
+
+	//displays the modal to edit beacons
+	$scope.displayEditBeaconModal = function(beacon){
+		$scope.curBeacon = beacon;
+		sessionStorage.curBeacon = JSON.stringify(beacon);
+		$scope.editBeacName = $scope.curBeacon.beacon_name;
+		$scope.editBeacType = $scope.curBeacon.beacon_type;
+		loadGoogleScript();
+		$("#editBeaconModal").modal();
 	}
 
 	//initializes or reserts the form for adding beacons
@@ -622,10 +644,10 @@ app.controller('mainController', function($scope, $http) {
 	}
 
 	//activates the add assets modal
-	$scope.displayNewAssetsModal = function(obj){
+	$scope.displayAddAssetsModal = function(obj){
 		$scope.curObj = obj;
 		$scope.resetAssetsForm();
-		$("#newAssetsModal").modal();
+		$("#addAssetsModal").modal();
 	}
 
 	//display an objects assets in a modal
@@ -1006,6 +1028,33 @@ app.controller('mainController', function($scope, $http) {
 
 //-------------------------------------- Update functions begin-----------------------------------------
 	
+	//updates multiple fields of the beacon at once
+	$scope.updateBeacon = function(updatedName, updatedType){
+		var updatedBeacon = {
+			name: updatedName,
+			beacon_type: updatedType.toLowerCase(),
+        	beacon_id: $scope.curBeacon.beacon_id, 
+        	altitude: $scope.newAlt, 
+        	latitude: $scope.newLat, 
+        	longitude: $scope.newLng,
+        	organization_id: $scope.curBeacon.organization_id,
+        	associated: $scope.curBeacon.associated_id
+        }
+		$http({
+        method: 'PUT',
+        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
+        data: updatedBeacon,
+        headers: {
+        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		}
+		}).then(function mySuccess(response) {
+			alertSuccess("SUCCESS: " + $scope.curBeacon.beacon_name + " has been successfully updated!");
+			$scope.loadBeacons();
+		}, function myError(response) {
+		    alertFailure("ERROR: failed to update " + $scope.curBeacon.beacon_name + "!");
+		});
+	}
+
 	//updates a beacons location on the server side
 	$scope.updateBeaconLocation = function(){
 		var updatedBeacon = {

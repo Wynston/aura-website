@@ -51,6 +51,56 @@ function initMap(){
 			}
 		});
 	});
+	$('#editBeaconModal').on('shown.bs.modal', function (){
+		var beacons = JSON.parse(sessionStorage.beaconsArray);
+		var curBeacon = JSON.parse(sessionStorage.curBeacon);
+		var curBeaconLoc = new google.maps.LatLng(curBeacon.latitude, curBeacon.longitude);
+	    var map = new google.maps.Map(document.getElementById('googleMapsEditBeacon'), {
+	      zoom: 11,
+	      center: findDPCenter(beacons)
+	    });
+	    var marker = new google.maps.Marker({
+	      position: curBeaconLoc,
+	      map: map,
+	      draggable:false,
+    	  animation: google.maps.Animation.DROP
+	    });
+	    for (var i = 0; i < beacons.length; i++ ) {
+	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
+          // Adds a 100m radius circle around each beacon
+          var cityCircle = new google.maps.Circle({
+            strokeColor: '#00FFE4',
+            strokeOpacity: 0.8,
+            strokeWeight: 4,
+            fillColor: '#00FFE4',
+            fillOpacity: 0.35,
+            map: map,
+            center: beaconCenter,
+            radius: 100,
+            clickable: false
+          });
+        }
+	    google.maps.event.addListener(map, 'click', function(event) {
+		   placeMarker(event.latLng);
+		   //places a marker at a given location, used for onclick triggers
+			//places a marker at a given location, used for onclick triggers
+			function placeMarker(location) {
+				if ( marker ) {
+			    	marker.setPosition(location);
+			  	} 
+			  	else{
+			    	marker = new google.maps.Marker({
+				    	position: location,
+				    	map: map
+			    	});
+			  	}
+			  	var pos = (JSON.parse(JSON.stringify(location)));
+			  	getElevation(location);
+			  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
+            	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
+			}
+		});
+	});
 	$('#addObjectModal').on('shown.bs.modal', function () {
 		var beacons = JSON.parse(sessionStorage.beaconsArray);
 	    var map = new google.maps.Map(document.getElementById('googleMapsAddObject'), {
@@ -248,8 +298,7 @@ function initMap(){
 			      map: map,
 			      draggable: false,
 		    	  animation: google.maps.Animation.DROP,
-		    	  beacon: beacons[i],
-		    	  icon: 'images/auro_logo.png'
+		    	  beacon: beacons[i]
 			  });
 	    	  google.maps.event.addListener(marker, 'click', function(){
 	    	  	if(document.getElementById('googleMapsBeacons')){
@@ -290,32 +339,17 @@ function initMap(){
   //       });
 		// heatmap.setMap(map);
 	}
-	else if(sessionStorage.curView == "stats" && document.getElementById('googleMapsStats')){
-		var beacons = JSON.parse(sessionStorage.beaconsArray);
+	else if(sessionStorage.curView == "stats"  && document.getElementById('googleMapsStats')){
 		var stats = JSON.parse(sessionStorage.statsArray);
 		var map = new google.maps.Map(document.getElementById('googleMapsStats'), {
           zoom: 11,
           center: findDPCenter(stats),
         });
-        for (var i = 0; i < beacons.length; i++ ) {
-	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-          // Adds a 100m radius circle around each beacon
-          var cityCircle = new google.maps.Circle({
-            strokeColor: '#00FFE4',
-            strokeOpacity: 0.8,
-            strokeWeight: 4,
-            fillColor: '#00FFE4',
-            fillOpacity: 0.35,
-            map: map,
-            center: beaconCenter,
-            radius: 100,
-            clickable: false
-          });
-        }
         heatmap = new google.maps.visualization.HeatmapLayer({
           data: getDataPoints(stats),
-          map: map,
-          radius: 30
+          maxIntensity: 4,
+          opacity: 0.75,
+          radius: 10,
         });
 		heatmap.setMap(map);
 	}

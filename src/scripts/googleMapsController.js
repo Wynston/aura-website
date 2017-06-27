@@ -17,7 +17,7 @@ function initMap(){
 	    });
 	    for (var i = 0; i < beacons.length; i++ ) {
 	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-          // Adds a 100m radius circle around each beacon
+          // Adds a 50m radius circle around each beacon
           var cityCircle = new google.maps.Circle({
             strokeColor: '#00FFE4',
             strokeOpacity: 0.8,
@@ -26,7 +26,7 @@ function initMap(){
             fillOpacity: 0.35,
             map: map,
             center: beaconCenter,
-            radius: 100,
+            radius: 50,
             clickable: false
           });
         }
@@ -41,8 +41,12 @@ function initMap(){
 			  	else{
 			    	marker = new google.maps.Marker({
 				    	position: location,
-				    	map: map
+				    	map: map,
+				    	draggable: true
 			    	});
+			    	google.maps.event.addListener(marker, 'dragend', function(event){
+						moveMarker(event.latLng);
+					});
 			  	}
 			  	var pos = (JSON.parse(JSON.stringify(location)));
 			  	getElevation(location);
@@ -56,18 +60,18 @@ function initMap(){
 		var curBeacon = JSON.parse(sessionStorage.curBeacon);
 		var curBeaconLoc = new google.maps.LatLng(curBeacon.latitude, curBeacon.longitude);
 	    var map = new google.maps.Map(document.getElementById('googleMapsEditBeacon'), {
-	      zoom: 11,
-	      center: findDPCenter(beacons)
+	      zoom: 14,
+	      center: curBeaconLoc
 	    });
 	    var marker = new google.maps.Marker({
 	      position: curBeaconLoc,
 	      map: map,
-	      draggable:false,
+	      draggable:true,
     	  animation: google.maps.Animation.DROP
 	    });
 	    for (var i = 0; i < beacons.length; i++ ) {
 	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-          // Adds a 100m radius circle around each beacon
+          // Adds a 50m radius circle around each beacon
           var cityCircle = new google.maps.Circle({
             strokeColor: '#00FFE4',
             strokeOpacity: 0.8,
@@ -76,7 +80,7 @@ function initMap(){
             fillOpacity: 0.35,
             map: map,
             center: beaconCenter,
-            radius: 100,
+            radius: 50,
             clickable: false
           });
         }
@@ -100,6 +104,10 @@ function initMap(){
             	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
 			}
 		});
+	    //moves the marker and updates the lat lng coordinates
+		google.maps.event.addListener(marker, 'dragend', function(event){
+			moveMarker(event.latLng);
+		});
 	});
 	$('#addObjectModal').on('shown.bs.modal', function () {
 		var beacons = JSON.parse(sessionStorage.beaconsArray);
@@ -109,7 +117,7 @@ function initMap(){
 	    });
 	    for (var i = 0; i < beacons.length; i++ ) {
 	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-          // Adds a 100m radius circle around each beacon
+          // Adds a 50m radius circle around each beacon
           var beaconCircle = new google.maps.Circle({
             strokeColor: '#00FFE4',
             strokeOpacity: 0.8,
@@ -118,7 +126,7 @@ function initMap(){
             fillOpacity: 0.35,
             map: map,
             center: beaconCenter,
-            radius: 100,
+            radius: 50,
             clickable: false
           });
         }
@@ -127,13 +135,18 @@ function initMap(){
 		   //places a marker at a given location, used for onclick triggers
 			function placeMarker(location) {
 				if ( marker ) {
-			    	marker.setPosition(location);;
+			    	marker.setPosition(location);
 			  	} 
 			  	else{
 			    	marker = new google.maps.Marker({
-			    	position: location,
-			    	map: map
+				    	position: location,
+				    	map: map,
+				    	draggable: true
 			    	});
+			    	//moves the marker and updates the lat lng coordinates
+					google.maps.event.addListener(marker, 'dragend', function(event){
+						placeMarker(event.latLng);
+					});
 			  	}
 			  	var pos = (JSON.parse(JSON.stringify(location)));
 			  	getElevation(location);
@@ -150,7 +163,7 @@ function initMap(){
 	      zoom: 14,
 	      center: beaconCenter
 	    });
-      // Adds a 100m radius circle around each beacon
+      // Adds a 50m radius circle around each beacon
       var beaconCircle = new google.maps.Circle({
         strokeColor: '#00FFE4',
         strokeOpacity: 0.8,
@@ -159,7 +172,7 @@ function initMap(){
         fillOpacity: 0.35,
         map: map,
         center: beaconCenter,
-        radius: 100,
+        radius: 50,
         clickable: false
       });
 	    google.maps.event.addListener(map, 'click', function(event) {
@@ -172,11 +185,77 @@ function initMap(){
 			  	else{
 			    	marker = new google.maps.Marker({
 			    	position: location,
-			    	map: map
+			    	map: map,
+			    	draggable: true
+			    	});
+			    	 //moves the marker and updates the lat lng coordinates
+					google.maps.event.addListener(marker, 'dragend', function(event){
+						moveMarker(event.latLng);
+					});
+			  	}
+			  	var pos = (JSON.parse(JSON.stringify(location)));
+			  	getElevation(location);
+			  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
+            	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
+			}
+		});
+	});
+
+	$('#editObjectModal').on('shown.bs.modal', function (){
+		var beacons = JSON.parse(sessionStorage.beaconsArray);
+		var curObj = JSON.parse(sessionStorage.curObj);
+		var curObjLoc = new google.maps.LatLng(curObj.latitude, curObj.longitude);
+	    var map = new google.maps.Map(document.getElementById('googleMapsEditObject'), {
+	      zoom: 14,
+	      center: curObjLoc
+	    });
+	    var marker = new google.maps.Marker({
+	      position: curObjLoc,
+	      map: map,
+	      draggable:true,
+    	  animation: google.maps.Animation.DROP
+	    });
+	    for (var i = 0; i < beacons.length; i++ ) {
+	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
+          // Adds a 50m radius circle around each beacon
+          var cityCircle = new google.maps.Circle({
+            strokeColor: '#00FFE4',
+            strokeOpacity: 0.8,
+            strokeWeight: 4,
+            fillColor: '#00FFE4',
+            fillOpacity: 0.35,
+            map: map,
+            center: beaconCenter,
+            radius: 50,
+            clickable: false
+          });
+        }
+	    google.maps.event.addListener(map, 'click', function(event) {
+		   placeMarker(event.latLng);
+		   //places a marker at a given location, used for onclick triggers
+			//places a marker at a given location, used for onclick triggers
+			function placeMarker(location) {
+				if ( marker ) {
+			    	marker.setPosition(location);
+			  	} 
+			  	else{
+			    	marker = new google.maps.Marker({
+				    	position: location,
+				    	map: map
 			    	});
 			  	}
 			  	var pos = (JSON.parse(JSON.stringify(location)));
 			  	getElevation(location);
+			  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
+            	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
+			}
+		});
+	    //moves the marker and updates the lat lng coordinates
+		google.maps.event.addListener(marker, 'dragend', function(event){
+			moveMarker(event.latLng);
+			function moveMarker(location){
+				var pos = (JSON.parse(JSON.stringify(location)));
+				getElevation(location);
 			  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
             	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
 			}
@@ -191,7 +270,7 @@ function initMap(){
 	    });
 	    for (var i = 0; i < beacons.length; i++ ) {
 		      var beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-	          // Adds a 100m radius circle around each beacon
+	          // Adds a 50m radius circle around each beacon
 	          var beaconCircle = new google.maps.Circle({
 	            strokeColor: '#00FFE4',
 	            strokeOpacity: 0.8,
@@ -200,7 +279,7 @@ function initMap(){
 	            fillOpacity: 0.35,
 	            map: map,
 	            center: beaconCenter,
-	            radius: 100,
+	            radius: 50,
 	            clickable: false
 	          });
 	          var marker = new google.maps.Marker({
@@ -281,7 +360,7 @@ function initMap(){
         });
         for (var i = 0; i < beacons.length; i++ ) {
 		      var beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
-	          // Adds a 100m radius circle around each beacon
+	          // Adds a 50m radius circle around each beacon
 	          var beaconCircle = new google.maps.Circle({
 	            strokeColor: '#00FFE4',
 	            strokeOpacity: 0.8,
@@ -290,7 +369,7 @@ function initMap(){
 	            fillOpacity: 0.35,
 	            map: map,
 	            center: beaconCenter,
-	            radius: 100,
+	            radius: 50,
 	            clickable: false
 	          });
 	          var marker = new google.maps.Marker({
@@ -306,12 +385,6 @@ function initMap(){
 	    	  	}
 	    	  });
         }
-  //       heatmap = new google.maps.visualization.HeatmapLayer({
-  //         data: getDataPoints(JSON.parse(sessionStorage.beaconsArray)),
-  //         map: map,
-  //         radius: 30
-  //       });
-		// heatmap.setMap(map);
 	}
 	else if(sessionStorage.curView == "objectsList" && document.getElementById('googleMapsObjects')){
 		var objects = JSON.parse(sessionStorage.objectsArray);
@@ -332,12 +405,6 @@ function initMap(){
 	    	  	angular.element(document.getElementById('MAIN')).scope().displayObject(this.object);
 	    	  });
         }
-  //       heatmap = new google.maps.visualization.HeatmapLayer({
-  //         data: getDataPoints(JSON.parse(sessionStorage.objectsArray)),
-  //         map: map,
-  //         radius: 30
-  //       });
-		// heatmap.setMap(map);
 	}
 	else if(sessionStorage.curView == "stats"  && document.getElementById('googleMapsStats')){
 		var stats = JSON.parse(sessionStorage.statsArray);
@@ -437,6 +504,15 @@ function getElevation(latLng)
 	  		angular.element(document.getElementById('MAIN')).scope().alertFailure("Elevation service failed due to: " + status);
 		}
 	});
+}
+
+
+//updates the new marker location in the scope
+function moveMarker(location){
+	var pos = (JSON.parse(JSON.stringify(location)));
+	getElevation(location);
+  	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
+	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
 }
 
 //-------------------------------------end of google maps handling-------------------------------

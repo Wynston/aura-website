@@ -637,10 +637,10 @@
 				            	<h4><label>Location:</label></h4>
 				            	<div id="googleMapsEditBeacon" class="panel-body">
 				            	</div>
-				            	<h5 class="panel-body zeroPadding">Click a position on the map to the determine the beacon's location.</h5>
-				            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circles indicates a beacon's maximum service range.</h6>
+				            	<h5 class="panel-body zeroPadding">Place the marker on the map to determine {{curBeacon.beacon_name}}'s updated location.</h5>
+				            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circle indicates a beacon's maximum service range.</h6>
 				            </div>
-				            <button type="submit" class="btn btn-success btn-block" ng-click="updateBeacon(editBeacName, editBeacType)" data-dismiss="modal">Create</button>
+				            <button type="submit" class="btn btn-success btn-block" ng-click="updateBeacon(editBeacName, editBeacType)" data-dismiss="modal">Update</button>
 				          </form>
 				        </div>
 				        <div class="modal-footer">
@@ -712,32 +712,20 @@
 				          <form role="form">
 				            <div class="form-group">
 				              <label>Name:</label>
-				              <input type="text" class="form-control" placeholder="Enter object's name" ng-model="curObj.name" required>
+				              <input type="text" class="form-control" placeholder="Enter object's name" ng-model="editObjName" required>
 				            </div>
 				            <div class="form-group">
 				              <label>Description:</label>
-				              <textarea type="text" class="form-control" placeholder="Enter object's description" ng-model="curObj.description" rows=3 required style="resize: none;"></textarea>
-				            </div>
-				            <div class="form-group">
-				            	<label>Thumbnail:</label><br>
-				            	<div class="panel panel-default">
-				            		<label class="panel-body">
-					            		<label class="btn btn-info" for="thumbnailSelect">
-										    <input id="thumbnailSelect" type="file" style="display:none;" custom-on-change="updateThumbnailLabel" accept="image/*" required>
-										    Browse
-										</label>
-										<span class='label label-warning'>{{curThumbnail}}</span>
-									</label>
-				            	</div>
+				              <textarea type="text" class="form-control" placeholder="Enter object's description" ng-model="editObjDesc" rows=3 required style="resize: none;"></textarea>
 				            </div>
 				            <div class="form-group panel panel-default text-center">
 				            	<h4><label>Location:</label></h4>
-				            	<div id="googleMapsAddObject" class="panel-body">
+				            	<div id="googleMapsEditObject" class="panel-body">
 				            	</div>
-				            	<h5 class="panel-body zeroPadding">Click a position on the map to the determine the object's location.</h5>
+				            	<h5 class="panel-body zeroPadding">Place the marker on the map to determine the object's updated location.</h5>
 				            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circles indicates a beacon's maximum service range.</h6>
 				            </div>
-				            <button type="submit" class="btn btn-success btn-block" ng-click="thumbnailResize(addObjectName, addObjectDesc)" data-dismiss="modal">Create</button>
+				            <button type="submit" class="btn btn-success btn-block" ng-click="updateObject(editObjName, editObjDesc)" data-dismiss="modal">Update</button>
 				          </form>
 				        </div>
 				        <div class="modal-footer">

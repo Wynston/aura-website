@@ -245,7 +245,7 @@ app.controller('mainController', function($scope, $http) {
 		        var ctx = canvas.getContext("2d");
 		        ctx.drawImage(img, 0, 0, width, height);
 
-		        var dataurl = canvas.toDataURL("image/jpeg");  
+		        var dataurl = canvas.toDataURL("image/jpg");  
 		        $scope.uploadThumbnail(name, desc, dataurl); 
 	        }
 	    }
@@ -256,7 +256,24 @@ app.controller('mainController', function($scope, $http) {
 	//helper function to loop through input files 
 	$scope.multiFileUpload = function(){
 		for (var i = 0; i < $scope.files.length; i++) {
-		    $scope.resizeAsset($scope.files[i], $scope.fileNames[i]);
+			//file extension of the input files
+			var type = ($scope.files[i].split('.').pop()).toLowerCase();
+			switch(type){
+				//resize if its an image file then upload
+				case ("jpg" || "png" || "gif" || "webp" || "tif" || "bmp" || " jxr" || "psd"):
+					$scope.resizeAsset($scope.files[i], $scope.fileNames[i]);
+					break;
+				//audio upload
+				case ("mp3" || "wav"):
+					$scope.uploadFBAsset();
+					break;
+				//video upload
+				case 'm4v' || 'avi' || 'mpg' || 'mp4':
+					break;
+				//if no cases are present then the file type is invalid
+				default:
+					$scope.alertFailure("ERROR: " + type + " is not supported.")
+			}
 		}
 	}
 
@@ -313,8 +330,8 @@ app.controller('mainController', function($scope, $http) {
 			        ctx2.drawImage(assetThumbnail, 0, 0, width2, height2);
 
 			        //taking the base64 url for the asset and its thumbnail
-			        var assetURL = canvas1.toDataURL("image/jpeg"); 
-			        var thumbnailURL = canvas2.toDataURL("image/jpeg");
+			        var assetURL = canvas1.toDataURL("image/jpg"); 
+			        var thumbnailURL = canvas2.toDataURL("image/jpg");
 
 			        $scope.uploadFBAsset(fileName, assetURL, thumbnailURL);
 	        	}
@@ -596,6 +613,12 @@ app.controller('mainController', function($scope, $http) {
 		$scope.curObj = obj;
 		sessionStorage.curObj = JSON.stringify(obj);
 		loadGoogleScript();
+		$scope.resetThumbnailForm();
+		$scope.editObjName = $scope.curObj.name;
+		$scope.editObjDesc = $scope.curObj.description
+		$scope.newAlt = $scope.curObj.altitude;
+		$scope.newLat = $scope.curObj.latitude;
+		$scope.newLng = $scope.curObj.longitude;
 		$("#editObjectModal").modal();
 	}
 
@@ -727,13 +750,11 @@ app.controller('mainController', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			alertSuccess(name + " has been successfully added!");
+			alertSuccess("SUCCESS: the organization " + name + " has been successfully created!");
+			$scope.loadOrganizations();
 		}, function myError(response) {
-		    
+		    alertFailure("ERROR: failed to create the organization " + name + ".");
 		});
-		$scope.loadOrganizations();
-		$scope.safeApply();
-		$scope.destroy();
 	}
 
 	//adds a beacon to an organization onto the database
@@ -757,12 +778,11 @@ app.controller('mainController', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			alertSuccess(name + " has been successfully added!");
+			alertSuccess("SUCCESS: the beacon " + name + " has been successfully created!");
+			$scope.loadBeacons();
 		}, function myError(response) {
-		    
+		    alertFailure("ERROR: failed to create the beacon " + name + ".");
 		});
-		$scope.loadBeacons();
-		$scope.safeApply();
 	}
 
 	//adds a object for an organization onto the database
@@ -787,11 +807,11 @@ app.controller('mainController', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			alertSuccess(name + " has been successfully added!");
+			alertSuccess("SUCCESS: the object" + name + " has been successfully created!");
+			$scope.loadObjects();
 		}, function myError(response) {
+			alertFailure("ERROR: failed to create the object " + name + ".");
 		});
-		$scope.loadObjects();
-		$scope.safeApply();
 	}
 
 	//adding a beacon at an objects location 
@@ -816,11 +836,11 @@ app.controller('mainController', function($scope, $http) {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
 		}).then(function mySuccess(response) {
-			alertSuccess(name + " has been successfully added!");
+			alertSuccess("SUCCESS: the beacon " + name + " has been successfully created!");
+			$scope.loadBeacons();
 		}, function myError(response) {
+		    alertFailure("ERROR: failed to create the beacon " + name + ".");
 		});
-		$scope.loadBeacons();
-		$scope.safeApply();
 	}
 
 
@@ -844,12 +864,12 @@ app.controller('mainController', function($scope, $http) {
         headers: {
         	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 		}
-		}).then(function mySuccess(response) {
-			alertSuccess($scope.uploadCount +  " assets have been successfully added to " + $scope.curObj.name + "!");
+		}).then(function mySuccess(response){
+			alertSuccess("SUCCESS: " + $scope.uploadCount +  " assets have been successfully added to " + $scope.curObj.name + "!");
+			$scope.displayObject($scope.curObj);
 		}, function myError(response) {
+			alertFailure("ERROR: failed to create the asset/s for " + $scope.curObj.name + ".");
 		});
-		$scope.displayObject($scope.curObj);
-		$scope.safeApply();
 	}
 //---------------------------------------end of upload functions----------------------------------------
 
@@ -1110,6 +1130,35 @@ app.controller('mainController', function($scope, $http) {
 		});
 	}
 
+	//updates multiple fields of the object
+	$scope.updateObject = function(name, desc){
+		$http({
+        method: 'PUT',
+        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
+        data: {
+        	name: name, 
+        	desc: desc,
+        	beacon_id: $scope.curObj.beacon_id, 
+        	arobj_id: $scope.curObj.arobj_id, 
+        	organization_id: $scope.curObj.organization_id,
+        	altitude: $scope.newAlt, 
+        	latitude: $scope.newLat, 
+        	longitude: $scope.newLng,
+        	thumbnail: $scope.curObj.thumbnail,
+        	contents: $scope.curObj.assets
+        },
+        headers: {
+        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
+		}
+		}).then(function mySuccess(response) {
+			alertSuccess("SUCCESS: " + $scope.curObj.name + " has been successfully updated!");
+			//reload the object change
+			$scope.loadObjects();
+		}, function myError(response) {
+			alertFailure("ERROR: failed to update " + $scope.curObj.name + "!");
+		});
+	}
+
 	//updates the location of an object on the server side
 	$scope.updateObjectLocation = function(){
 		$http({
@@ -1225,7 +1274,7 @@ app.controller('mainController', function($scope, $http) {
 		        	//Delete the organization and any beacon, object, and media associated
 					$http({
 				        method: 'Delete',
-				        url: 'https://website-155919.appspot.com/api/v1.0/orgnization/' + organization_id.organization_id,
+				        url: 'https://website-155919.appspot.com/api/v1.0/orgnization/' + organization.organization_id,
 				        headers: {
 				        	"X-Aura-API-Key": "dGhpc2lzYWRldmVsb3BlcmFwcA=="
 						}
@@ -1385,7 +1434,8 @@ app.controller('mainController', function($scope, $http) {
 	  			}
 	  		}
 	  	}
-	  	if(closest > 100){
+	  	//no beacons within 50m of the objects location
+	  	if(closest > 50){
 	  		$('#addObjectModal').modal('hide');
 	  		//prompt user to make a new beacon within range
 	  		bootbox.confirm({

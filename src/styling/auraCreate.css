@@ -276,7 +276,8 @@ h6{
 		margin-top: 1em;
 	}
 
-	#googleMapsAddBeacon, #googleMapsAddObject, #googleMapsEditBeacForObj, #googleMapsAddObjectAtBeacon, #googleMapsEditBeacon{
+	#googleMapsAddBeacon, #googleMapsAddObject, #googleMapsEditBeacForObj, 
+	#googleMapsAddObjectAtBeacon, #googleMapsEditBeacon, #googleMapsEditObject{
 		height: 35vh;
 		width: 100%	;
 	}

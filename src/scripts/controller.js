@@ -324,7 +324,6 @@ app.controller('mainController', function($scope, $http) {
 	    reader.readAsDataURL(file);
 	}
 
-
 	//uploads the main asset and calls the uploading of the thumbnail asset
 	$scope.uploadFBAsset = function(assetName, assetURL, thumbnailURL){
 		//remove unecessary base64 string data

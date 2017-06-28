@@ -1,7 +1,7 @@
 //-------------------------------------custom filters begins-------------------------------------
 
 //filters an object list by beacon
-app.filter('filterByBeacon', function() {
+auraCreate.filter('filterByBeacon', function() {
 
 	return function(objectsArray, beaconsFilter) {
 	    var filteredObjects = [];
@@ -23,7 +23,7 @@ app.filter('filterByBeacon', function() {
 });
 
 //remove duplicate items from a dropdown menu
-app.filter('removeDuplicates', function() {
+auraCreate.filter('removeDuplicates', function() {
 	return function(objectsArray) {
 	    var filteredItems = [];
 	    angular.forEach(objectsArray, function(obj) {

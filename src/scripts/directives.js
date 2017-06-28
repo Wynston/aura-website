@@ -1,6 +1,5 @@
 //-------------------------------------Custom Directives begins----------------------------------
-
-app.directive('customOnChange', function() {
+auraCreate.directive('customOnChange', function() {
   return {
     restrict: 'A',
     link: function (scope, element, attrs) {

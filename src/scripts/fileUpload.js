@@ -15,7 +15,6 @@ auraCreate.fileUpload = function($scope){
         	for(var i = 0; i < files.length; i++){
         		temp1[$scope.files.length + i] = files[i];
         	}
-
         	//remove duplicates
         	var temp2 = [];
 			for(var i = 0; i < temp1.length; i++){
@@ -72,66 +71,12 @@ auraCreate.fileUpload = function($scope){
 
     //changes the thumbnail label to the selected file name
     $scope.updateThumbnailLabel = function(event){
+    	//slice the C:fakepath from the src and display it to the user
     	var thumb = document.getElementById("thumbnailSelect");
-    	$scope.curThumbnail = thumb.value;
+  		var thumbURL = (thumb.value).slice(12);
+    	$scope.curThumbnail = thumbURL;
     	$scope.$apply();
     }
-
-	//uploads a thumbnail to the firebase and retrieves a url of it to be stored in the AR object
-	$scope.uploadThumbnail = function(name, desc, thumbnailURL){
-		//remove unecessary base64 string data
-		thumbnailURL = thumbnailURL.split(',')[1];
-
-		//new AR object ID, will be used to generate thumbnail firebase name
-		var objID = $scope.randID();
-
-		// thumbnail metadata
-		var metadata = {
-			customMetadata: {
-				'AuraAPIKey': 'dGhpc2lzYWRldmVsb3BlcmFwcA=='
-			}
-		};
-
-		var thumnailRef = $scope.storageRef.child(objID + "_thumb.jpg");
-
-		// Upload file and metadata to the object 
-		var uploadTask = thumnailRef.putString(thumbnailURL, 'base64', metadata);
-
-		// Listen for state changes, errors, and completion of the upload.
-		uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
-		  function(snapshot){
-		    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-		    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-		    console.log('Upload is ' + progress + '% done');
-		    switch (snapshot.state) {
-		      case firebase.storage.TaskState.PAUSED:
-		        console.log('Upload is paused');
-		        break;
-		      case firebase.storage.TaskState.RUNNING:
-		        console.log('Upload is running');
-		        break;
-		    }
-		  }, function(error) {
-
-		  switch (error.code) {
-		    case 'storage/unauthorized':
-		      // User doesn't have permission to access the object
-		      break;
-
-		    case 'storage/canceled':
-		      // User canceled the upload
-		      break;
-
-		    case 'storage/unknown':
-		      // Unknown error occurred, inspect error.serverResponse
-		      break;
-		  }
-		}, function() {
-		 // Upload completed successfully, now we can get the download URL
-		  $scope.thumbnailURL = uploadTask.snapshot.downloadURL;
-		  $scope.addObject(name, desc, objID);
-		});
-	}
 
 	//scales a thumbnail to about 150px by 150px to be easily stored in firebase
 	$scope.thumbnailResize = function(name, desc){
@@ -178,11 +123,11 @@ auraCreate.fileUpload = function($scope){
 			switch(type){
 				//resize if its an image file then upload
 				case ("jpg" || "png" || "gif" || "webp" || "tif" || "bmp" || " jxr" || "psd"):
-					$scope.resizeAsset($scope.files[i], $scope.fileNames[i]);
+					$scope.resizeAsset($scope.files[i], $scope.fileNames[i], "image");
 					break;
 				//audio upload
 				case ("mp3" || "wav"):
-					$scope.uploadFBAsset();
+					$scope.uploadFBAsset( $scope.fileNames[i], $scope.files[i], "", "audio");
 					break;
 				//video upload
 				case 'm4v' || 'avi' || 'mpg' || 'mp4':
@@ -195,7 +140,7 @@ auraCreate.fileUpload = function($scope){
 	}
 
 	//resize an asset to be 750px and creates a 150px thumbnail version of itself
-	$scope.resizeAsset = function(file, fileName){
+	$scope.resizeAsset = function(file, fileName, type){
 		// Create an image and a thumbnail copy
 	    var imgAsset = document.createElement("img");
 	    var assetThumbnail = document.createElement("img");
@@ -250,7 +195,7 @@ auraCreate.fileUpload = function($scope){
 			        var assetURL = canvas1.toDataURL("image/jpg"); 
 			        var thumbnailURL = canvas2.toDataURL("image/jpg");
 
-			        $scope.uploadFBAsset(fileName, assetURL, thumbnailURL);
+			        $scope.uploadFBAsset(fileName, assetURL, thumbnailURL, type);
 	        	}
 	        }
 	    }

@@ -67,11 +67,23 @@ auraCreate.assetManagement = function($scope, $http){
 	}
 
 	//adds the asset to the scope in preparation to be added to the server
-	$scope.updateAssets = function(assetName, assetID, assetURL, thumbnailURL){
+	$scope.updateAssets = function(assetName, assetID, assetURL, thumbnailURL, type){
+		switch(type){
+			case "image":
+				break;
+			case "audio":
+				//replace url
+				thumbnailURL = $scope.genericAudioThumbnail;
+				break;
+			case "video":
+				break;
+			case "3d":
+				break;
+		}
 		var newAsset = {
 			name: assetName,
 			value: assetURL,
-			content_type: "image",
+			content_type: type,
 			arobj_id: $scope.curObj.arobj_id,
 			content_id: assetID,
 			thumbnail: thumbnailURL

@@ -18,7 +18,7 @@ auraCreate.beaconManagement = function($scope, $http){
         url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
         data: $scope.newBeacon,
         headers: {
-        	"X-Aura-API-Key": $scope.AuraAPIKEY
+        	"X-Aura-API-Key": $scope.auraAPIKey
 		}
 		}).then(function mySuccess(response) {
 			alertSuccess("SUCCESS: the beacon " + name + " has been successfully created!");
@@ -81,7 +81,7 @@ auraCreate.beaconManagement = function($scope, $http){
 		  			altitude:  jsonArray[i].attributes.altitude, 
 		  			latitude: jsonArray[i].attributes.latitude, 
 		  			longitude: jsonArray[i].attributes.longitude, 
-		  			associated: getAssociatedType(jsonArray[i].attributes.associated),
+		  			associated: $scope.getAssociatedType(jsonArray[i].attributes.associated),
 		  			associated_id: jsonArray[i].attributes.associated
 		  		};
 		  		$scope.beaconsArray[i] = $scope.beacon;
@@ -228,7 +228,7 @@ auraCreate.beaconManagement = function($scope, $http){
 	}
 
 	//helper function to determine the associated field when pulling from the database
-	function getAssociatedType(assoc){
+	$scope.getAssociatedType = function(assoc){
 		if(assoc == null){
 			return "Software";
 		}

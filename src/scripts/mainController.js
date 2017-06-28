@@ -23,4 +23,34 @@ auraCreate.controller('mainController', function($scope, $http){
 		$scope.loadOrganizations();
 		$scope.changeView("dashboard");
 	}
+
+// -------------------------------------------------Global functions--------------------------------------------------------
+	//creates a random id for a new beacon/object/organization/etc
+    $scope.randID = function(){
+	    var d = new Date().getTime();
+	    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+	        var r = (d + Math.random()*16)%16 | 0;
+	        d = Math.floor(d/16);
+	        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+	    });
+	    return uuid;
+	}
+
+	//replacement of the $apply to safely reload DOM
+	$scope.safeApply = function(fn){
+		var phase = this.$root.$$phase;
+		if(phase == '$apply' || phase == '$digest') {
+			if(fn && (typeof(fn) === 'function')) {
+			  fn();
+			}
+		} 
+		else{
+			if(fn){
+		    	$scope.$apply(fn);
+			} 
+			else{
+		    	$scope.$apply();
+			}
+		}
+	}
 });

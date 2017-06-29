@@ -363,6 +363,11 @@ h6{
 		font-size: 1em;
 	}
 
+	#webcamScreen{
+		height: 480px;
+		width: 640px;
+	}
+
 /* ------------------------Landscape tablets and medium desktops--------------------------------- */
 @media (min-width: 992px) and (max-width: 1199px) {
 	body{

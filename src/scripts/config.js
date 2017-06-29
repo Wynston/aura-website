@@ -17,7 +17,7 @@ auraCreate.config = function($scope){
 		}
 	};
 
-	$scope.genericAudioThumbnail = "http://findicons.com/files/icons/770/token_dark/128/headphones.png";
+	$scope.genericAudioThumbnail = "../images/auraheadphone150.jpg";
 
 	//initates scope variables
 	$scope.curOrg;

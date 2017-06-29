@@ -314,13 +314,14 @@ h6{
 	}
 
 	#liveDisplay{
-		height: 60vh;
-		overflow: auto;
+		height: 65vh;
+		overflow-y: auto;
 		width: 100%;
 		padding:0;
 	}
 
 	#liveTitle{
+		height: 10vh;
 		margin: 0.5em 0 0.5em 0;
 		position: relative;
 	}
@@ -343,9 +344,10 @@ h6{
 	}
 
 	#orgMenu{
-		max-height: 75vh;
+		margin: 0.5em 0 0 0;
+		height: 75.75vh;
 		overflow: auto;
-		padding: 0;
+		padding: 0 0 0 1em;
 	}
 
 	#pageTitle{
@@ -412,16 +414,21 @@ h6{
 		margin-top: 0;
 	}
 
-	#liveDisplay{
+	#liveDisplay, #liveTitle{
 		height: auto;
 		max-height: inherit;
-		overflow: hidden;
+		overflow-y: visible;
 	}
 
     #liveDisplay, #MAIN, #mainContentContainer, #mobileOrgMenu, #orgMenu{
 		padding-left: 0;
 		padding-right: 0;
 	}
+
+	#orgMenu{
+		height: auto;
+	}
+
 
 	.thumbnailGalleryItem, .thumbnailGallerySrc{
 		width: 8em;
@@ -454,10 +461,10 @@ h6{
 		margin-top: 0;
 	}
 
-	#liveDisplay{
+	#liveDisplay, #liveTitle{
 		height: auto;
 		max-height: inherit;
-		overflow: hidden;
+		overflow-y: visible;
 	}
 
     #liveDisplay, #MAIN, #mainContentContainer, #mobileOrgMenu, #orgMenu{
@@ -467,6 +474,10 @@ h6{
 
 	#objectsViewFilterTitle{
 		max-width: 10em;
+	}
+
+	#orgMenu{
+		height: auto;
 	}
 
 	.thumbnailGalleryItem, .thumbnailGallerySrc{

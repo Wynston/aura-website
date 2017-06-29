@@ -158,7 +158,7 @@ auraCreate.beaconManagement = function($scope, $http){
 		}
 		}).then(function mySuccess(response) {
 			alertSuccess("SUCCESS: " + $scope.curBeacon.beacon_name + " has been successfully updated!");
-			$scope.displayBeacon(updatedBeacon); 	
+			$scope.displayBeacon($scope.curBeacon); 	
 		}, function myError(response) {
 		    alertFailure("ERROR: failed to update " + $scope.curBeacon.beacon_name + "!");
 		});

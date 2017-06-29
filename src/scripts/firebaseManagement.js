@@ -8,19 +8,22 @@ auraCreate.firebaseManagement = function($scope, $http){
 
 	//uploads the main asset and calls the uploading of the thumbnail asset
 	$scope.uploadFBAsset = function(assetName, assetURL, thumbnailURL, type){
-		//remove unecessary base64 string data
-		assetURL = assetURL.split(',')[1];
-
 		//new asset ID, will be used to generate thumbnail firebase name
 		var assetID = $scope.randID();
 
 		var assetRef;
+		var uploadTask;
 		switch(type){
 			case "image":
+				//remove unecessary base64 string data
+				assetURL = assetURL.split(',')[1];
 				assetRef = $scope.storageRef.child(assetID + "_img.jpg");
+				// Upload file and metadata to the object 
+				uploadTask = assetRef.putString(assetURL, 'base64', $scope.FBMetaData);
 				break;
 			case "audio":
 				assetRef = $scope.storageRef.child(assetID + "_audio.mp3");
+				uploadTask = assetRef.put(assetURL, $scope.FBMetaData);
 				break;
 			case "video":
 				assetRef = $scope.storageRef.child(assetID + "_audio.mp4");
@@ -28,9 +31,6 @@ auraCreate.firebaseManagement = function($scope, $http){
 			case "3d":
 				break;
 		}
-
-		// Upload file and metadata to the object 
-		var uploadTask = assetRef.putString(assetURL, 'base64', $scope.FBMetaData);
 
 		// Listen for state changes, errors, and completion of the upload.
 		uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
@@ -69,7 +69,7 @@ auraCreate.firebaseManagement = function($scope, $http){
 					$scope.uploadFBAssetThumbnail(assetName, assetID, newAssetURL, thumbnailURL, type);
 					break;
 				case "audio":
-					$scope.updateAssets(assetName, assetID, assetURL, thumbnailURL, type);
+					$scope.updateAssets(assetName, assetID, newAssetURL, thumbnailURL, type);
 					break;
 				case "video":
 					$scope.uploadFBAssetThumbnail(assetName, assetID, newAssetURL, thumbnailURL, type);

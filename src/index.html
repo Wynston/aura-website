@@ -225,8 +225,8 @@
 							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 							          <h2><b>Will's Webcam</b></h2>
 							        </div>
-							        <div class="modal-body embed-responsive embed-responsive-16by9 modalPadding-1-2" style="background-color: black;">
-							        	<iframe class="embed-responsive-item" src="http://10.0.1.1:8009?action=stream">
+							        <div class="modal-body embed-responsive embed-responsive-16by9 modalPadding-1-2 text-center center-block" style="height: 480px; width:640px">
+							        	<iframe class="embed-responsive-item" src="http://10.0.1.1:8080?action=stream">
 			 							</iframe>
 							        </div>
 							        <div class="modal-footer">
@@ -935,10 +935,21 @@
 										</img>
 
 										<!-- Audio -->
-										<audio ng-if="asset.content_type == 'audio'" ng-src="" autobuffer autoloop loop controls></audio>
+										<div ng-if="asset.content_type == 'audio'" class="bg-danger">
+											<audio controls>
+												<source src="{{asset.value}}" type="audio/mpeg" />
+												<source src="{{asset.value}}" type="audio/ogg" />
+												<source src="{{asset.value}}" type="audio/wav" />
+												<a href="{{asset.value}}">{{asset.name}}</a>
+											</audio>
+										</div>
 
 										<!-- Video -->
-										<video ng-if="asset.content_type == 'video'" ng-src="" autobuffer autoloop loop controls poster=""></video>
+										<div ng-if="asset.content_type == 'video'" align="center" class="embed-responsive embed-responsive-16by9">
+										    <video autoplay loop class="embed-responsive-item">
+										        <source src="{{asset.value}}" type="video/mp4">
+										    </video>
+										</div>
 
 										<!-- 3D -->
 										<!-- 3D Placeholder -->
@@ -946,7 +957,7 @@
 										<!-- Caption for asset -->
 										<div class="carousel-caption">
 											<h3>
-												<b style="padding-left: 1em;">{{asset.name}}</b>
+												<b style="padding-left: 0.5em;">{{asset.name}}</b>
 												<span class="glyphicon glyphicon-remove deleteIcon float-right" ng-click="removeAsset(asset)"></span>
 											</h3>
 											<h4>

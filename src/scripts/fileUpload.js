@@ -126,7 +126,7 @@ auraCreate.fileUpload = function($scope){
 					$scope.resizeAsset($scope.files[i], $scope.fileNames[i], "image");
 					break;
 				//audio upload
-				case ("mp3" || "wav"):
+				case ("mp3" || "wav" || "ogg"):
 					$scope.uploadFBAsset( $scope.fileNames[i], $scope.files[i], "", "audio");
 					break;
 				//video upload

@@ -164,6 +164,10 @@ h6{
 		margin: 0 auto;
 	}
 
+	.media-wrap{
+		width: 70%;
+	}
+
 	.menuItem:hover{
 		background-color: #FDFEEC;
 		cursor: pointer;
@@ -359,7 +363,10 @@ h6{
 		font-size: 1em;
 	}
 
-
+	#webcamScreen{
+		height: 768px; 
+		width:1024px;
+	}
 
 /* ------------------------Landscape tablets and medium desktops--------------------------------- */
 @media (min-width: 992px) and (max-width: 1199px) {

@@ -16,7 +16,7 @@
 			<div id="alert"></div>
 			<div class="row page-header" id="banner">
 				<div class="col-xs-9 col-sm-6 col-md-6 col-lg-6 zeroPadding">
-					<img ng-src="images/aura_logo.png" alt="Aura Logo" class="img-responsive pull-left logo" ng-click="changeView('dashboard', '')"/>
+					<img ng-src="images/aura_Logo.jpg" alt="Aura Logo" class="img-responsive pull-left logo" ng-click="changeView('dashboard', '')"/>
 					<h1 id="pageTitle"><b ng-click="changeView('dashboard', '')">Create</b></h1>
 				</div>
 				<div class="col-xs-3 col-sm-6 col-md-6 col-lg-6 zeroPadding">
@@ -225,7 +225,7 @@
 							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 							          <h2><b>Will's Webcam</b></h2>
 							        </div>
-							        <div class="modal-body embed-responsive embed-responsive-16by9 modalPadding-1-2 text-center center-block" style="height: 480px; width:640px">
+							        <div class="modal-body embed-responsive embed-responsive-16by9 modalPadding-1-2 text-center center-block" id="webcamScreen">
 							        	<iframe class="embed-responsive-item" src="http://10.0.1.1:8080?action=stream">
 			 							</iframe>
 							        </div>
@@ -929,17 +929,17 @@
 								<!-- Wrapper for slides -->
 								<div class="carousel-inner">
 									<!-- Assets  -->
-									<div class="item media-wrap" ng-repeat="asset in assets track by asset.content_id" ng-class="{'active': $index == assetIndex}">
+									<div class="item media-wrap text-center center-block" ng-repeat="asset in assets track by asset.content_id" ng-class="{'active': $index == assetIndex}">
 										<!-- Image -->
 										<img ng-if="asset.content_type == 'image'" ng-src={{asset.value}} alt={{asset.name}} class="img-responsive">
 										</img>
 
 										<!-- Audio -->
-										<div ng-if="asset.content_type == 'audio'" class="bg-danger">
-											<audio controls>
-												<source src="{{asset.value}}" type="audio/mpeg" />
-												<source src="{{asset.value}}" type="audio/ogg" />
-												<source src="{{asset.value}}" type="audio/wav" />
+										<div ng-if="asset.content_type == 'audio'" class="center-block">
+											<audio controls style="width: 100%;">
+												<source ng-src="{{asset.value}}" type="audio/mpeg" />
+												<source ng-src="{{asset.value}}" type="audio/ogg" />
+												<source ng-src="{{asset.value}}" type="audio/wav" />
 												<a href="{{asset.value}}">{{asset.name}}</a>
 											</audio>
 										</div>
@@ -947,7 +947,7 @@
 										<!-- Video -->
 										<div ng-if="asset.content_type == 'video'" align="center" class="embed-responsive embed-responsive-16by9">
 										    <video autoplay loop class="embed-responsive-item">
-										        <source src="{{asset.value}}" type="video/mp4">
+										        <source ng-src="{{asset.value}}" type="video/mp4">
 										    </video>
 										</div>
 

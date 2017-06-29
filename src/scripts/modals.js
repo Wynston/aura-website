@@ -25,6 +25,11 @@ auraCreate.modals = function($scope){
 		$scope.curAssetSlide = $scope.assetIndex + 1;
 		$("#galleryCarousel").carousel($scope.assetIndex);
 		$("#assetCarouselModal").modal();
+		$('#assetCarouselModal').on('hidden.bs.modal', function (e) {
+			$.each($('audio'), function () {
+			    this.pause();
+			});
+		})
 	}
 
 	//display an objects assets in a modal

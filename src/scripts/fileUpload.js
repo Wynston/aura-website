@@ -122,7 +122,7 @@ auraCreate.fileUpload = function($scope){
 			type = type.slice(0, type.length - 1);
 			switch(type){
 				//resize if its an image file then upload
-				case ("jpg" || "png" || "gif" || "webp" || "tif" || "bmp" || " jxr" || "psd"):
+				case ("jpg" || "png"):
 					$scope.resizeAsset($scope.files[i], $scope.fileNames[i], "image");
 					break;
 				//audio upload
@@ -130,32 +130,39 @@ auraCreate.fileUpload = function($scope){
 					$scope.uploadFBAsset( $scope.fileNames[i], $scope.files[i], "", "audio");
 					break;
 				//video upload
-				case 'm4v' || 'avi' || 'mpg' || 'mp4':
+				case ("mp4" || "avi" || "mpg" || "mv4"):
+					$scope.captureVideoThumbnail($scope.files[i], $scope.fileNames[i], "video");
 					break;
 				//if no cases are present then the file type is invalid
 				default:
 					alertFailure("ERROR: " + type + " is not supported.");
+					break;
 			}
 		}
 	}
 
-	//resize an asset to be 750px and creates a 150px thumbnail version of itself
+	//resize an asset to be 750px and creates a 150px by 150px thumbnail version of itself
 	$scope.resizeAsset = function(file, fileName, type){
-		// Create an image and a thumbnail copy
-	    var imgAsset = document.createElement("img");
+		// Create an image/video and a thumbnail copy
+		var asset;
+		switch(type){
+			case "image":
+				asset = document.createElement("img");
+				break;
+		}
 	    var assetThumbnail = document.createElement("img");
 	    // Create a file reader
 	    var reader = new FileReader();
 	    // Set the image once loaded into file reader
 	    reader.onload = function(e){
-	        imgAsset.src = e.target.result;
+	        asset.src = e.target.result;
 	        assetThumbnail.src = e.target.result;
-	        imgAsset.onload = function(){
+	        asset.onload = function(){
 	        	assetThumbnail.onload = function(){
 	        		//canvas for the main asset
 	        		var canvas1 = document.createElement("canvas");
 			        var ctx1 = canvas1.getContext("2d");
-			        ctx1.drawImage(imgAsset, 0, 0);
+			        ctx1.drawImage(asset, 0, 0);
 
 			        //canvas for the asset thumbnail
 			        var canvas2 = document.createElement("canvas");
@@ -164,8 +171,8 @@ auraCreate.fileUpload = function($scope){
 
 			        //width and height for the main asset
 			        //  Note: Scale height proportional to width of 750px
-			        var oldHeight = imgAsset.height;
-			        var oldWidth = imgAsset.width;
+			        var oldHeight = asset.height;
+			        var oldWidth = asset.width;
 			        var width1;
 			        var height1;
 
@@ -183,7 +190,7 @@ auraCreate.fileUpload = function($scope){
 			        canvas1.width = width1;
 			        canvas1.height = height1;
 			        var ctx1 = canvas1.getContext("2d");
-			        ctx1.drawImage(imgAsset, 0, 0, width1, height1);
+			        ctx1.drawImage(asset, 0, 0, width1, height1);
 
 			        //draws the scaled asset on the canvas
 			        canvas2.width = width2;
@@ -192,14 +199,73 @@ auraCreate.fileUpload = function($scope){
 			        ctx2.drawImage(assetThumbnail, 0, 0, width2, height2);
 
 			        //taking the base64 url for the asset and its thumbnail
-			        var assetURL = canvas1.toDataURL("image/jpg"); 
+			        var assetURL
+			       	switch(type){
+			       		case "image":
+			       			assetURL = canvas1.toDataURL("image/jpg"); 
+			       			break;
+			       	}
 			        var thumbnailURL = canvas2.toDataURL("image/jpg");
 
 			        $scope.uploadFBAsset(fileName, assetURL, thumbnailURL, type);
+
+			        // clean up
+			        asset.remove();
+			        assetThumbnail.remove();
+			        canvas1.remove();
+			        canvas2.remove();
 	        	}
 	        }
 	    }
 	    //Load files into file reader
 	    reader.readAsDataURL(file);
+	}
+
+	//creates a thumbnail from a video file and requests them to be uploaded to firebase (Thumbnail size of 150px by 150px)
+	$scope.captureVideoThumbnail = function(file, fileName, type){
+		// Create a file reader
+	    var reader = new FileReader();
+	    // Set the image once loaded into file reader
+		reader.onload = function(e){
+			//create video element and set it to 1 second for image capture
+			var video = document.createElement('video');
+			video.preload = 'auto';
+			video.src = e.target.result;
+			video.onloadeddata = function() {
+				var canvas = document.createElement("canvas");
+				//determine aspect ratio and scales the image accordingly
+				var ratio = (video.videoWidth / video.videoHeight);
+				switch(ratio){
+					//4:3 aspect ratio
+					case (4/3):
+						canvas.getContext('2d').drawImage(video, 0, 0, 200, 150);
+						break;
+					//16:9 aspect ratio
+					case (16/9):
+						canvas.getContext('2d').drawImage(video, 0, 0, 300, 150);
+						break;
+					//3:2 aspect ratio
+					case (3:2):
+						canvas.getContext('2d').drawImage(video, 0, 0, 225, 150);
+						break;
+					//21:9 aspect ratio
+					case (21/9):
+						canvas.getContext('2d').drawImage(video, 0, 0, 350, 150);
+						break;
+					default:
+						canvas.getContext('2d').drawImage(video, 0, 0);
+						break;
+				}
+
+				//place the video in the canvas and capture the instance
+		    	var thumbnailURL = canvas.toDataURL("image/jpg");
+		    	$scope.uploadFBAsset(fileName, file, thumbnailURL, type);
+
+		    	// //clean up
+		    	// video.remove();
+		    	// canvas.remove();
+			}
+		}
+		reader.readAsDataURL(file);
 	}
 }

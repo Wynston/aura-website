@@ -17,7 +17,7 @@ auraCreate.config = function($scope){
 		}
 	};
 
-	$scope.genericAudioThumbnail = "../images/auraheadphone150.jpg";
+	$scope.genericAudioThumbnail= "images/auraheadphone150.jpg";
 
 	//initates scope variables
 	$scope.curOrg;

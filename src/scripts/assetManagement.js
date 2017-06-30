@@ -72,8 +72,8 @@ auraCreate.assetManagement = function($scope, $http){
 			case "image":
 				break;
 			case "audio":
-				//replace url
-				thumbnailURL = $scope.genericAudioThumbnail;
+				//no thumbnail for audio, use default Aura Headphone image in view
+				thumbnailURL = "";
 				break;
 			case "video":
 				break;

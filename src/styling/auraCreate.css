@@ -431,8 +431,8 @@ h6{
 
 
 	.thumbnailGalleryItem, .thumbnailGallerySrc{
-		width: 8em;
-		height: 8em;
+		width: 6em;
+		height: 6em;
 	}
 
 	#primTitle{
@@ -481,8 +481,8 @@ h6{
 	}
 
 	.thumbnailGalleryItem, .thumbnailGallerySrc{
-		width: 5em;
-		height: 5em;
+		width: 4em;
+		height: 4em;
 	}
 
 	#primTitle{

@@ -878,7 +878,8 @@
 										<div class="thumbnail thumbnailGalleryContainer">
 											<span class="glyphicon glyphicon-remove deleteIcon pull-right" ng-click="removeAsset(asset)" style="margin-bottom: 0.5em;"></span>
 											<div class="thumbnailGalleryItem center-block" ng-click="displayAssetCarouselModal(asset)">
-												<img class="img-circle thumbnailGallerySrc center-block text-center" ng-src={{asset.thumbnail}} alt="{{asset.name}}">
+												<img ng-if="asset.thumbnail == '' && asset.content_type == 'audio'" class="img-circle thumbnailGallerySrc center-block text-center" ng-src={{genericAudioThumbnail}} alt="{{asset.name}}">
+												<img ng-if="!(asset.thumbnail == '' && asset.content_type == 'audio')" class="img-circle thumbnailGallerySrc center-block text-center" ng-src={{asset.thumbnail}} alt="{{asset.name}}">
 												<div class="thumbnailGalleryOverlay">
 									            	<span ng-if="asset.content_type == 'image'" class="glyphicon glyphicon-picture"></span>
 									            	<span ng-if="asset.content_type == 'audio'" class="glyphicon glyphicon-music"></span>
@@ -945,8 +946,9 @@
 
 										<!-- Video -->
 										<div ng-if="asset.content_type == 'video'" align="center" class="embed-responsive embed-responsive-16by9">
-										    <video autoplay loop class="embed-responsive-item">
-										        <source ng-src="{{asset.value}}" type="video/mp4">
+										    <video controls class="embed-responsive-item">
+										    	<source src="{{asset.value}}" type="video/mp4">
+  												<source src="{{asset.value}}" type="video/ogg">
 										    </video>
 										</div>
 

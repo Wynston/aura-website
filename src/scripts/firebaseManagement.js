@@ -26,7 +26,8 @@ auraCreate.firebaseManagement = function($scope, $http){
 				uploadTask = assetRef.put(assetURL, $scope.FBMetaData);
 				break;
 			case "video":
-				assetRef = $scope.storageRef.child(assetID + "_audio.mp4");
+				assetRef = $scope.storageRef.child(assetID + "_video.mp4");
+				uploadTask = assetRef.put(assetURL, $scope.FBMetaData);
 				break;
 			case "3d":
 				break;

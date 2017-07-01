@@ -112,23 +112,17 @@ h6{
 		text-align: center;
 		font-size: 1em;
 		padding: 0;
-		overflow: auto;
+		overflow-y: auto;
 		max-height: 25em;
-		height: auto;
 	}
 
 	.dropdown-menu > li{
-		height: auto;
-		position: relative;
 		cursor: pointer;
-		overflow: auto;
 	}
 
 	.dropdown-menu li a {
-	    white-space: normal;
-	    display: block;
-	    overflow: auto;
 	    width: 100%;
+	    text-overflow: hidden;
 	}
 
 	.editIcon{
@@ -180,6 +174,7 @@ h6{
 	.modal-dialog{
 	    overflow-y: initial !important;
 	}
+
 	.modal-body{
 		height: auto;
 		max-height: inherit;
@@ -187,11 +182,16 @@ h6{
 	}
 
 	.panel-default > .panel-heading, .panel-footer{
-	  background-color: white !important;
-	 }
+	 	background-color: white !important;
+	}
 
 	 .pointer{
 	 	cursor: pointer;
+	 }
+
+	 .tableDiv{
+	 	height: 58vh; 
+	 	overflow-y: auto;
 	 }
 
 	 .thumbnail150x150{
@@ -287,12 +287,12 @@ h6{
 	}
 
 	#googleMapsBeacon, #googleMapsObject{
-		height: 44vh;
+		height: 37vh;
 		width: 100%;
 	}
 
 	#googleMapsObjects, #googleMapsBeacons, #googleMapsStats{
-		height: 57vh;
+		height: 58vh;
 		width: 100%;
 		margin: 0;
 	}
@@ -314,8 +314,7 @@ h6{
 	}
 
 	#liveDisplay{
-		height: 65vh;
-		overflow-y: auto;
+		height: 59vh;
 		width: 100%;
 		padding:0;
 	}
@@ -323,12 +322,12 @@ h6{
 	#liveTitle{
 		height: 10vh;
 		margin: 0.5em 0 0.5em 0;
-		position: relative;
 	}
 
-	#objectsViewFilter{
-		text-overflow: none;
-		white-space: normal;
+	#objectsViewFilterTitle{
+		max-width: 15vw;
+		overflow: none;
+		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
 
@@ -344,8 +343,8 @@ h6{
 	}
 
 	#orgMenu{
-		margin: 0.5em 0 0 0;
-		height: 75.75vh;
+		margin: 0.5em 0 1em 0;
+		max-height: 70.0vh;
 		overflow: auto;
 		padding: 0 0 0 1em;
 	}
@@ -412,9 +411,10 @@ h6{
 
 	#filterTitle{
 		margin-top: 0;
+		text-align: center;
 	}
 
-	#liveDisplay, #liveTitle{
+	#liveDisplay, #liveTitle, .tableDiv{
 		height: auto;
 		max-height: inherit;
 		overflow-y: visible;
@@ -459,9 +459,10 @@ h6{
 
 	#filterTitle{
 		margin-top: 0;
+		text-align: center;
 	}
 
-	#liveDisplay, #liveTitle{
+	#liveDisplay, #liveTitle, .tableDiv{
 		height: auto;
 		max-height: inherit;
 		overflow-y: visible;
@@ -470,10 +471,6 @@ h6{
     #liveDisplay, #MAIN, #mainContentContainer, #mobileOrgMenu, #orgMenu{
 		padding-left: 0;
 		padding-right: 0;
-	}
-
-	#objectsViewFilterTitle{
-		max-width: 10em;
 	}
 
 	#orgMenu{

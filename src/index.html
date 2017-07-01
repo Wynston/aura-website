@@ -112,7 +112,7 @@
 			 			<div id="orgTitle" class="hidden-xs">
 			 				<h4 class="text-muted">{{curOrg.name}}</h4>
 			 			</div>
-					    <div ng-switch="filterTitle" id="filterTitle" class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-center zeroPadding">
+					    <div ng-switch="filterTitle" id="filterTitle" class="col-xs-12 col-sm-8 col-md-8 col-lg-8 text-left zeroPadding">
 					    	<!-- Objects View Filter -->
 						    <div ng-switch-when="objectsView" id="objectsViewFilter" class="btn-group">
 						    	<div class="btn-group">
@@ -134,8 +134,8 @@
 								    	</li>
 								    </ul>
 							    </div>
-					    		<div class="btn-group" id="objectsViewFilterTitle">
-							    	<button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu">
+					    		<div class="btn-group">
+							    	<button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" id="objectsViewFilterTitle">
 								    	Filter by Beacon: {{beaconsFilter}}
 								    	<span class="caret"></span>
 								    </button>
@@ -306,7 +306,7 @@
 			 			<!-- Beacons List -->
 			 			<div ng-switch-when="beaconsList">
 			 				<div ng-switch="viewType">
-			 					<div ng-switch-when="List" class="panel-body">
+			 					<div ng-switch-when="List" class="panel-body tableDiv">
 					 				<table class="table table-striped table-hover table-condensed table-responsive">
 						 				<thead>
 						 					<tr class="row">
@@ -339,14 +339,14 @@
 						 			</table>
 						 		</div>
 						 		<!-- Google Maps API -->
-					 			<div ng-switch-when="Map" id="googleMapsBeacons" class=""></div>
+					 			<div ng-switch-when="Map" id="googleMapsBeacons"></div>
 					 		</div>
 			 			</div>
 
 			 			<!-- Beacon (Singular) -->
 		 				<!-- Google Maps API -->
-		 				<div ng-switch-when="beacon">
-		 					<div class="text-center center-block panel-body">
+		 				<div ng-switch-when="beacon" style="height: inherit;">
+		 					<div class="text-center center-block panel-body" style="height: inherit; padding-bottom: 0;">
 			 					<div class="panel-heading">
 			 						<div class="row">
 			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary zeroPadding"> 
@@ -366,7 +366,7 @@
 				 					</div>
 			 					</div>
 			 					<div class="panel-body" id="googleMapsBeacon"></div>
-			 					<div class="panel-footer">
+			 					<div class="panel-footer" style="padding-bottom: 0;">
 			 						<div class="row">
 			 							<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curBeacon.altitude | number: 3}}</h4>
 					 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curBeacon.latitude | number: 3}}</h4>
@@ -407,7 +407,7 @@
 			 			<!-- Objects List -->
 			 			<div ng-switch-when="objectsList">
 			 				<div ng-switch="viewType">
-				 				<div ng-switch-when="List" class="panel-body">
+				 				<div ng-switch-when="List" class="panel-body tableDiv">
 					 				<table class="table table-striped table-hover table-condensed table-responsive">
 						 				<thead>
 						 					<tr>
@@ -442,71 +442,48 @@
 						 					</tr>
 						 				</tbody>
 						 			</table>
-								 	<!-- Thumbnail Modal -->
-						 			<div class="modal fade" id="thumbnailModal" role="dialog" data-backdrop="true">
-									    <div class="modal-dialog">
-									      <!-- Thumbnail Modal content-->
-									      <div class="modal-content">
-									        <div class="modal-header text-primary text-center">
-									          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
-									          <h2 class="modal-title"><b>{{modalHeader}}</b></h2>
-									        </div>
-									        <div class="modal-body text-center">
-									        	<img class="img-rounded thumbnail150x150" ng-src={{modalImgSrc}}>
-									        </div>
-									        <div class="modal-footer">
-									        	<ul class="list-inline pull-left text-muted d-inline">
-									        		<li class="pointer">#Images <span class="badge">{{curObj.numImage}}</span></li>
-									        		<li class="pointer">#Audio <span class="badge">{{curObj.numAudio}}</span></li>
-									        		<li class="pointer">#Video <span class="badge">{{curObj.numVideo}}</span></li>
-									        		<li class="pointer">#3D <span class="badge">{{curObj.num3D}}</span></li>				
-									        	</ul>
-									          <button type="button" class="btn btn-info pull-right d-inline" data-dismiss="modal">Close</button>
-									        </div>
-									      </div>  
-									    </div>
-									</div>
 								</div>
 								<!-- Google Maps API -->
-				 				<div ng-switch-when="Map" class="center-block panel text-center">
-				 					<div id="googleMapsObjects"></div>
+				 				<div ng-switch-when="Map" id="googleMapsObjects">
 				 				</div>
 							</div>
 			 			</div>
 
 			 			<!-- Object (Singular) -->
-			 			<!-- Google Maps API -->
-		 				<div ng-switch-when="object" class="panel-body">
-		 					<div class="panel-heading">
-		 						<div class="row">
-		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left zeroPadding">
-		 								<div class="btn-group">
-			 								<button class="btn btn-sm btn-info" type="button" ng-click="loadBeacon(curObj.beacon_name)">Beacon: {{curObj.beacon_name}}</button>
-			 								<button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editBeacForObjModal">
-			 									<span class="glyphicon glyphicon-edit"></span>
-			 								</label>
-		 								</div>
-		 							</div>
-		 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center zeroPadding">
-		 								<div class="btn-group">
-		 									<button class="btn btn-sm btn-success" type="button" data-toggle="modal" ng-click="displayAddAssetsModal(curObj)">
-									          <span class="glyphicon glyphicon-plus"></span> 
-									        </button>
-		 									<button class="btn btn-sm btn-info" type="button" ng-click="displayAssetsModal()">Media</button>
-									    </div>
-		 							</div>
-			 						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right zeroPadding">
-			 							<button class="btn btn-sm btn-info" type="button" ng-click="displayDescriptionModal()">Description</button>
-			 						</div>
+		 				<div ng-switch-when="object" style="height: inherit;">
+		 					<div class="panel-body" style="height: inherit; padding-bottom: 0;">
+		 						<div class="panel-heading">
+		 							<div class="row">
+			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left zeroPadding">
+			 								<div class="btn-group">
+				 								<button class="btn btn-sm btn-info" type="button" ng-click="loadBeacon(curObj.beacon_name)">Beacon: {{curObj.beacon_name}}</button>
+				 								<button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editBeacForObjModal">
+				 									<span class="glyphicon glyphicon-edit"></span>
+				 								</label>
+			 								</div>
+			 							</div>
+			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center zeroPadding">
+			 								<div class="btn-group">
+			 									<button class="btn btn-sm btn-success" type="button" data-toggle="modal" ng-click="displayAddAssetsModal(curObj)">
+										          <span class="glyphicon glyphicon-plus"></span> 
+										        </button>
+			 									<button class="btn btn-sm btn-info" type="button" ng-click="displayAssetsModal()">Media</button>
+										    </div>
+			 							</div>
+				 						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right zeroPadding">
+				 							<button class="btn btn-sm btn-info" type="button" ng-click="displayDescriptionModal()">Description</button>
+				 						</div>
+				 					</div>
+		 						</div>
+		 						<!-- Google Maps API -->
+			 					<div class="panel-body" id="googleMapsObject"></div>
+			 					<div class="panel-footer" style="padding-bottom: 0;">
+			 						<div class="row">
+					 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curObj.altitude | number: 3}}</h4>
+					 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curObj.latitude | number: 3}}</h4>
+					 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right text-primary">Longitude: {{curObj.longitude | number: 3}}</h4>
+					 				</div>
 			 					</div>
-		 					</div>
-		 					<div class="panel-body" id="googleMapsObject"></div>
-		 					<div class="panel-footer">
-		 						<div class="row">
-				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curObj.altitude | number: 3}}</h4>
-				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curObj.latitude | number: 3}}</h4>
-				 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right text-primary">Longitude: {{curObj.longitude | number: 3}}</h4>
-				 				</div>
 		 					</div>
 
 		 					<!-- Edit Beacon for Object Modal -->
@@ -985,14 +962,38 @@
 				      </div>
 				    </div>
 				</div>
- 			</div>
 
-			</div>
+				<!-- Thumbnail Modal -->
+	 			<div class="modal fade" id="thumbnailModal" role="dialog" data-backdrop="true">
+				    <div class="modal-dialog">
+				      <!-- Thumbnail Modal content-->
+				      <div class="modal-content">
+				        <div class="modal-header text-primary text-center">
+				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				          <h2 class="modal-title"><b>{{modalHeader}}</b></h2>
+				        </div>
+				        <div class="modal-body text-center">
+				        	<img class="img-rounded thumbnail150x150" ng-src={{modalImgSrc}}>
+				        </div>
+				        <div class="modal-footer">
+				        	<ul class="list-inline pull-left text-muted d-inline">
+				        		<li class="pointer">#Images <span class="badge">{{curObj.numImage}}</span></li>
+				        		<li class="pointer">#Audio <span class="badge">{{curObj.numAudio}}</span></li>
+				        		<li class="pointer">#Video <span class="badge">{{curObj.numVideo}}</span></li>
+				        		<li class="pointer">#3D <span class="badge">{{curObj.num3D}}</span></li>				
+				        	</ul>
+				          <button type="button" class="btn btn-info pull-right d-inline" data-dismiss="modal">Close</button>
+				        </div>
+				      </div>  
+				    </div>
+				</div>
+
+ 			</div>
+			<footer class="text-center footer text-muted margin0 zeroPadding">
+				<h6 class="margin0">© 2017 Aura Technologies Inc.</h6>
+				<h6><a href="http://www.auracr.io/" class="text-info" target="_blank" style="text-decoration: none;">auracr.io</a></h6>
+			</footer>
 		</div>
-		<footer class="text-center footer text-muted margin0">
-			<h4 class="margin0">© 2017 Aura Technologies Inc.</h4>
-			<h4><a href="http://www.auracr.io/" class="text-info" target="_blank" style="text-decoration: none;">auracr.io</a></h4>
-		</footer>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type='text/javascript'></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous" type='text/javascript'></script>

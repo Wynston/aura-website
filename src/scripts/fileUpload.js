@@ -245,7 +245,7 @@ auraCreate.fileUpload = function($scope){
 						canvas.getContext('2d').drawImage(video, 0, 0, 300, 150);
 						break;
 					//3:2 aspect ratio
-					case (3:2):
+					case (3/2):
 						canvas.getContext('2d').drawImage(video, 0, 0, 225, 150);
 						break;
 					//21:9 aspect ratio

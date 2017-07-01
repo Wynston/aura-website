@@ -29,6 +29,9 @@ auraCreate.modals = function($scope){
 			$.each($('audio'), function () {
 			    this.pause();
 			});
+			$.each($('video'), function () {
+			    this.pause();
+			});
 		})
 	}
 

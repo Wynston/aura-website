@@ -12,36 +12,44 @@
 		<script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 	</head>
 	<body>
-		<div class="container-fluid" ng-app="auraCreate" ng-controller="mainController" ng-init="init()" ng-cloak id="MAIN">
+		<div class="container-fluid zeroPadding" ng-app="auraCreate" ng-controller="mainController" ng-init="init()" ng-cloak id="MAIN">
 			<div id="alert"></div>
-			<div class="row page-header" id="banner">
-				<div class="col-xs-9 col-sm-6 col-md-6 col-lg-6 zeroPadding">
-					<img ng-src="images/aura_Logo.jpg" alt="Aura Logo" class="img-responsive pull-left logo" ng-click="changeView('dashboard', '')"/>
-					<h1 id="pageTitle"><b ng-click="changeView('dashboard', '')">Create</b></h1>
+			<nav class="navbar navbar-inverse" id="header">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a id="pageTitle" class="navbar-left pointer" ng-click="changeView('dashboard', '')">
+							<img ng-src="images/aura_Logo.jpg" alt="Aura Logo" ng-click="changeView('dashboard', '')" style="height: 1em;"/>
+							Aura Create
+						</a>
+					</div>
+					<ul class="nav navbar-nav">
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<a class="pointer" ng-click="changeView('profileSettings', '' )">
+								<span>{{userName}}</span>
+				          		<span class="glyphicon glyphicon-user"></span>
+				        	</a>	
+						</li>
+					</ul>
 				</div>
-				<div class="col-xs-3 col-sm-6 col-md-6 col-lg-6 zeroPadding">
-					<a ng-click="changeView('profileSettings', '' )" class="btn btn-info btn-sm pull-right" id="profileButton">
-						<span class="hidden-xs">{{userName}}</span>
-		          		<span class="glyphicon glyphicon-user"></span>
-		        	</a>	
-				</div>
-			</div> 
+			</nav>
 		
 			<!-- Main Content -->
-			<div class="row well well-lg" id="mainContentContainer">
+			<div class="row well well-lg" id="mainContentContainer" style="border: 0">
 				<!-- User Organizations Menu -->
 			 	<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" id="orgMenu">
 			 		<div class="hidden-xs" id="accordion">
 				 		<!-- Creates a navigation list for each organization the user is in control of -->
-				 		<div ng-repeat="organization in organizationsArray| orderBy: name" class="panel panel-success" style="margin: 0 0 0 0; border-radius: 0;">
-						    <div class="panel-heading">
+				 		<div ng-repeat="organization in organizationsArray| orderBy: name" class="panel panel-success borderRadius0" style="margin: 0 0 0 0;">
+						    <div class="panel-heading borderRadius0">
 						      <h4 class="panel-title">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#{{$index}}">
 						        	<h2><strong>{{organization.name}}</strong></h2>
 						        </a>
 						      </h4>
 						    </div>
-						    <div id="{{$index}}" class="panel-collapse collapse container-fluid zeroPadding">
+						    <div id="{{$index}}" class="panel-collapse collapse container-fluid zeroPadding borderRadius0">
 						      <div class="panel-body list-group zeroPadding">
 						      		<li ng-click="changeView('beaconsList', organization)" class="menuItem list-group-item list-group-item-info">
 					 					<h2 class="menuName"><small>Beacons</small></h2>
@@ -62,7 +70,7 @@
 						 	</div>
 				 		</div>
 				 	</div>
-			 		<div class="container-fluid visible-xs text-center">
+			 		<div class="container-fluid visible-xs text-center zeroPadding">
 			 			<div class="container-fluid" id="mobileOrgMenu">
 			 				<h3><b>Organizations</b></h3>
 			 			</div>
@@ -101,18 +109,18 @@
 			 	</div>
 
 			 	<!-- Dynamic Section -->
-			 	<div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 container-fluid">
+			 	<div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 container-fluid zeroPadding" id=dynamicSection>
 			 		<!-- Dynamic Title -->
 			 		<div class="row text-center panel panel-heading" id="liveTitle">
 			 			<!-- Primary title -->
-			 			<div id="primTitle" class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-left text-primary zeroPadding">
+			 			<div id="primTitle" class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-left zeroPadding">
 			 				<h2><b>{{primTitle}}</b></h2>
 			 			</div>
 			 			<!-- Secondary Title -->
 			 			<div id="orgTitle" class="hidden-xs">
 			 				<h4 class="text-muted">{{curOrg.name}}</h4>
 			 			</div>
-					    <div ng-switch="filterTitle" id="filterTitle" class="col-xs-12 col-sm-8 col-md-8 col-lg-8 text-left zeroPadding">
+					    <div ng-switch="filterTitle" id="filterTitle" class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-center zeroPadding">
 					    	<!-- Objects View Filter -->
 						    <div ng-switch-when="objectsView" id="objectsViewFilter" class="btn-group">
 						    	<div class="btn-group">
@@ -135,8 +143,8 @@
 								    </ul>
 							    </div>
 					    		<div class="btn-group">
-							    	<button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu" id="objectsViewFilterTitle">
-								    	Filter by Beacon: {{beaconsFilter}}
+							    	<button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu">
+								    	Filter by Beacon
 								    	<span class="caret"></span>
 								    </button>
 								    <ul class="dropdown-menu">
@@ -152,7 +160,7 @@
 						    </div>
 
 						    <!-- Object View Filter -->
-						    <div ng-switch-when="objectPrivacy" class="text-center">
+						    <div ng-switch-when="objectPrivacy">
 						    	<label class="switch">
 									<input type="checkbox">
 									<div class="slider round"></div>
@@ -306,8 +314,8 @@
 			 			<!-- Beacons List -->
 			 			<div ng-switch-when="beaconsList">
 			 				<div ng-switch="viewType">
-			 					<div ng-switch-when="List" class="panel-body tableDiv">
-					 				<table class="table table-striped table-hover table-condensed table-responsive">
+			 					<div ng-switch-when="List" class="panel-body">
+					 				<table class="table table-hover table-striped table-condensed table-responsive">
 						 				<thead>
 						 					<tr class="row">
 						 						<th>Name</th>
@@ -321,12 +329,12 @@
 						 				</thead>
 						 				<tbody>
 						 					<tr class="row" ng-repeat="beacon in beaconsArray | orderBy:'beacon_name'">
-						 						<td ng-click="displayBeacon(beacon)" class="menuItem">{{beacon.beacon_name}}</td>
-						 						<td class="menuItem">{{beacon.associated}}</td>
-						 						<td class="menuItem">{{beacon.beacon_type}}</td>
-						 						<td class="menuItem hidden-sm hidden-xs">{{beacon.altitude | number: 3}}</td>
-						 						<td class="menuItem hidden-sm hidden-xs">{{beacon.latitude | number: 3}}</td>
-						 						<td class="menuItem hidden-sm hidden-xs">{{beacon.longitude | number: 3}}</td>
+						 						<td ng-click="displayBeacon(beacon)">{{beacon.beacon_name}}</td>
+						 						<td>{{beacon.associated}}</td>
+						 						<td>{{beacon.beacon_type}}</td>
+						 						<td class="hidden-sm hidden-xs">{{beacon.altitude | number: 3}}</td>
+						 						<td class="hidden-sm hidden-xs">{{beacon.latitude | number: 3}}</td>
+						 						<td class="hidden-sm hidden-xs">{{beacon.longitude | number: 3}}</td>
 						 						<td>
 						 							<h4>
 							 							<span class="glyphicon glyphicon-plus addIcon" ng-click="displayAddObjectAtBeaconModal(beacon)"></span>
@@ -407,8 +415,8 @@
 			 			<!-- Objects List -->
 			 			<div ng-switch-when="objectsList">
 			 				<div ng-switch="viewType">
-				 				<div ng-switch-when="List" class="panel-body tableDiv">
-					 				<table class="table table-striped table-hover table-condensed table-responsive">
+				 				<div ng-switch-when="List" class="panel-body">
+					 				<table class="table table-hover table-striped table-condensed table-responsive">
 						 				<thead>
 						 					<tr>
 						 						<th></th>
@@ -423,15 +431,15 @@
 						 				</thead>
 						 				<tbody>
 						 					<tr ng-repeat="obj in objectsArray | filterByBeacon: beaconsFilter | orderBy: 'beacon_name'">
-						 						<td class="menuItem" ng-click="displaythumbNailModal(obj)" style="height:3em; width: 3em;">
+						 						<td ng-click="displaythumbNailModal(obj)" style="height:3em; width: 3em;">
 						 							<img ng-src="{{obj.thumbnail}}" class="img-rounded pull-left" alt="{{obj.name}}" style="height:3em; width: 3em; margin: 0 auto;">
 						 						</td>
-						 						<td ng-click="displayObject(obj)" class="menuItem">{{obj.name}}</td>
-						 						<td ng-click="loadBeacon(obj.beacon_name)" class="menuItem">{{obj.beacon_name}}</td>
-						 						<td class="menuItem hidden-xs hidden-sm columnSm"><span class="badge">{{obj.numImage}}</span></td>
-						 						<td class="menuItem hidden-xs hidden-sm columnSm"><span class="badge">{{obj.numAudio}}</span></td>
-						 						<td class="menuItem hidden-xs hidden-sm columnSm"><span class="badge">{{obj.numVideo}}</span></td>
-						 						<td class="menuItem hidden-xs hidden-sm columnSm"><span class="badge">{{obj.num3D}}</span></td>
+						 						<td ng-click="displayObject(obj)">{{obj.name}}</td>
+						 						<td ng-click="loadBeacon(obj.beacon_name)">{{obj.beacon_name}}</td>
+						 						<td class="hidden-xs hidden-sm columnSm"><span class="badge">{{obj.numImage}}</span></td>
+						 						<td class="hidden-xs hidden-sm columnSm"><span class="badge">{{obj.numAudio}}</span></td>
+						 						<td class="hidden-xs hidden-sm columnSm"><span class="badge">{{obj.numVideo}}</span></td>
+						 						<td class="hidden-xs hidden-sm columnSm"><span class="badge">{{obj.num3D}}</span></td>
 						 						<td>
 						 							<h4>
 							 							<span class="glyphicon glyphicon-plus addIcon" ng-click="displayAddAssetsModal(obj)"></span>
@@ -987,11 +995,10 @@
 				      </div>  
 				    </div>
 				</div>
-
  			</div>
-			<footer class="text-center footer text-muted margin0 zeroPadding">
-				<h6 class="margin0">© 2017 Aura Technologies Inc.</h6>
-				<h6><a href="http://www.auracr.io/" class="text-info" target="_blank" style="text-decoration: none;">auracr.io</a></h6>
+ 			<footer class="text-center footer text-muted" id="footer">
+				<h5 class="margin0">© 2017 Aura Technologies Inc.</h5>
+				<h5 class="margin0"><a href="http://www.auracr.io/" class="text-info" target="_blank" style="text-decoration: none;">auracr.io</a></h5>
 			</footer>
 		</div>
 

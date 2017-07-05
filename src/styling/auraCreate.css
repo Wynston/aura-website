@@ -10,7 +10,8 @@ html, body{
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-size: 16px;
     line-height: 1.2;
-    background-color: #222;
+    background-color: #191818;
+    color: #F4EBEB;
 }
 
 h1{
@@ -144,6 +145,20 @@ h6{
 		line-height: 0.5em;
 	} 
 
+	.fontDark{	
+		color: #4B4747;
+	}
+
+	.fontLight{
+		color: #F4EBEB;
+	}
+
+	.list-group-itemDark{
+		background-color: #222;
+		color: #E1DDDD;
+		border: black solid 1px;
+	}
+
 	.margin0{
 		margin: 0 auto;
 	}
@@ -179,8 +194,23 @@ h6{
 		border-color: black;
 	}
 
+	.navbar-inverse{
+		background-color: #191818;
+	}
+
 	.panel-default > .panel-heading, .panel-footer{
 	 	background-color: white !important;
+	}
+
+	.panelDark{
+		background-color: #1A1A1A;
+		color: #337ab7;
+		border: black solid 1px;
+	}
+
+	.panelDark:hover{
+		cursor: pointer;
+		background-color: #000919;
 	}
 
 	 .pointer{
@@ -197,14 +227,14 @@ h6{
 
 	.table-striped{
 	 	background-color: #333;
-	 	border-color: black;
-	 	color: white;
+	 	border: 0;
+	 	color: #F4EBEB
 	}
 
 	.table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
 	   background-color: #444;
 	   border-color: black;
-	   color: white;
+	   color: #F4EBEB
 	}
 
 	.table-striped>tbody>tr:nth-of-type(odd){
@@ -227,7 +257,7 @@ h6{
 	 }
 
 	 .thumbnailGalleryContainer{
-	 	background-color: #E6E6E6;
+	 	background-color: #212121;
 	 }
 
 	.thumbnailGalleryItem{
@@ -249,6 +279,8 @@ h6{
 	    left: 0;
 	    right: 0;
 	    bottom: 0;
+	    background-color: white;
+	    border: white solid 1px;
 	}
 
 	 .thumbnailGalleryOverlay{
@@ -328,9 +360,8 @@ h6{
 	}
 
 	#googleMapsObjects, #googleMapsBeacons, #googleMapsStats{
-		height: 77.4vh;
+		height: 74vh;
 		width: 100%;
-		margin: 0;
 	}
 
 	#header{
@@ -372,6 +403,7 @@ h6{
 		height: 10vh;
 		margin: 0 0 0 0;
 		border-radius: 0;
+		border: black solid 1px;
 		background-color: #292929;
 	}
 
@@ -404,7 +436,7 @@ h6{
 	}
 
 	#primTitle{
-		color: white;
+		color: #337ab7;
 	}
 
 	#webcamScreen{

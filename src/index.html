@@ -41,30 +41,26 @@
 			 	<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" id="orgMenu">
 			 		<div class="hidden-xs" id="accordion">
 				 		<!-- Creates a navigation list for each organization the user is in control of -->
-				 		<div ng-repeat="organization in organizationsArray| orderBy: name" class="panel panel-success borderRadius0" style="margin: 0 0 0 0;">
-						    <div class="panel-heading borderRadius0">
-						      <h4 class="panel-title">
-						        <a data-toggle="collapse" data-parent="#accordion" href="#{{$index}}">
-						        	<h2><strong>{{organization.name}}</strong></h2>
-						        </a>
-						      </h4>
+				 		<div ng-repeat="organization in organizationsArray| orderBy: name" class="panel panelDark borderRadius0 margin0">
+						    <div class="panel-heading borderRadius0" data-toggle="collapse" data-parent="#accordion" href="#{{$index}}">
+						        <h2><strong>{{organization.name}}</strong></h2>
 						    </div>
 						    <div id="{{$index}}" class="panel-collapse collapse container-fluid zeroPadding borderRadius0">
 						      <div class="panel-body list-group zeroPadding">
-						      		<li ng-click="changeView('beaconsList', organization)" class="menuItem list-group-item list-group-item-info">
-					 					<h2 class="menuName"><small>Beacons</small></h2>
+						      		<li ng-click="changeView('beaconsList', organization)" class="menuItem list-group-item list-group-itemDark">
+					 					<h4 class="menuName">Beacons</h4>
 						 			</li>
 
-						 			<li ng-click="changeView('objectsList', organization)" class="menuItem list-group-item list-group-item-info" >
-						 				<h2 class="menuName"><small>Objects</small></h2>
+						 			<li ng-click="changeView('objectsList', organization)" class="menuItem list-group-item list-group-itemDark" >
+						 				<h4 class="menuName">Objects</h4>
 						 			</li>
 
-						 			<li ng-click="changeView('settings', organization)" class="menuItem list-group-item list-group-item-info">
-						 				<h2 class="menuName"><small>Settings</small></h2>
+						 			<li ng-click="changeView('settings', organization)" class="menuItem list-group-item list-group-itemDark">
+						 				<h4 class="menuName">Settings</h4>
 						 			</li>
 
-						 			<li ng-click="changeView('stats', organization)" class="menuItem list-group-item list-group-item-info">
-						 				<h2 class="menuName"><small>Stats</small></h2>
+						 			<li ng-click="changeView('stats', organization)" class="menuItem list-group-item list-group-itemDark">
+						 				<h4 class="menuName">Stats</h4>
 						 			</li>
 						 		</div>
 						 	</div>
@@ -242,73 +238,7 @@
 							        </div>
 							      </div>
 							    </div>
-							  </div>
-			 				
-			 				<!-- Modal for creating an organization-->
-							  <div class="modal fade" id="addOrgModal" role="dialog">
-							    <div class="modal-dialog">
-							    
-							      <!-- Modal content-->
-							      <div class="modal-content">
-							        <div class="modal-header text-primary text-center modalPadding-2-3">
-							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
-							          <h2><b>Organization creation</b></h2>
-							        </div>
-							        <div class="modal-body modalPadding-2-4">
-							          <form role="form">
-							            <div class="form-group">
-							              <label>Name</label>
-							              <input type="text" class="form-control" placeholder="Enter organization's name" ng-model="addOrgName" required>
-							            </div>
-							            <div class="form-group">
-							              <label>Description</label>
-							              <input type="text" class="form-control" placeholder="Enter organization's description" ng-model="addOrgDesc" required>
-							            </div>
-							            <button type="submit" class="btn btn-success btn-block" ng-click="addOrganization(addOrgName, addOrgDesc)" data-dismiss="modal">Create</button>
-							          </form>
-							        </div>
-							        <div class="modal-footer">
-							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
-							        </div>
-							      </div>
-							    </div>
-							  </div>
-
-							  <!-- Modal for deleting an organization-->
-							  <div class="modal fade" id="removeOrgModal" role="dialog">
-							    <div class="modal-dialog">
-							    
-							      <!-- Modal content-->
-							      <div class="modal-content">
-							        <div class="modal-header text-primary text-center modalPadding-2-3">
-							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
-							          <h2><b>Organization deletion</b></h2>
-							        </div>
-							        <div class="modal-body modalPadding-2-7">
-							          <form role="form">
-							            <div class="form-group">
-							            	<ul class="list list-unstyled">
-								        		<li ng-repeat="organization in organizationsArray" class="panel panel-primary">
-							        				<h4 class="panel-heading" style="margin-top: 0;" data-dismiss="modal">{{organization.name}}</h4>
-							        				<div class="panel-body text-left">
-							        					<label class="label label-info">Description:</label>
-							        					<h5 style="display:inline;">{{organization.description}}</h5>
-							        				</div>
-							        				<div class="panel-footer text-center">
-							        					<label class="btn btn-danger text-center" ng-click="removeOrganization(organization)">Delete <span class="glyphicon glyphicon-remove"></span></label>
-							        				</div>
-								        		</li>
-								        	</ul>
-							            </div>
-							          </form>
-							        </div>
-							        <div class="modal-footer">
-							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
-							        </div>
-							      </div>
-							      
-							    </div>
-							  </div>  
+							  </div> 
 			 			</div>
 
 			 			<!-- Beacons List -->
@@ -317,7 +247,7 @@
 			 					<div ng-switch-when="List" class="panel-body">
 					 				<table class="table table-hover table-striped table-condensed table-responsive">
 						 				<thead>
-						 					<tr class="row">
+						 					<tr>
 						 						<th>Name</th>
 						 						<th>Associated</th>
 						 						<th>Type</th>
@@ -328,7 +258,7 @@
 						 					</tr>
 						 				</thead>
 						 				<tbody>
-						 					<tr class="row" ng-repeat="beacon in beaconsArray | orderBy:'beacon_name'">
+						 					<tr ng-repeat="beacon in beaconsArray | orderBy:'beacon_name'">
 						 						<td ng-click="displayBeacon(beacon)">{{beacon.beacon_name}}</td>
 						 						<td>{{beacon.associated}}</td>
 						 						<td>{{beacon.beacon_type}}</td>
@@ -347,7 +277,9 @@
 						 			</table>
 						 		</div>
 						 		<!-- Google Maps API -->
-					 			<div ng-switch-when="Map" id="googleMapsBeacons"></div>
+						 		<div ng-switch-when="Map" class="panel-body" style="padding-top: 0; padding-bottom: 0;">
+					 				<div id="googleMapsBeacons" class="panel"></div>
+					 			</div>
 					 		</div>
 			 			</div>
 
@@ -452,8 +384,9 @@
 						 			</table>
 								</div>
 								<!-- Google Maps API -->
-				 				<div ng-switch-when="Map" id="googleMapsObjects">
-				 				</div>
+								<div ng-switch-when="Map" class="panel-body" style="padding-top: 0; padding-bottom: 0;">
+					 				<div id="googleMapsObjects" class="panel"></div>
+					 			</div>
 							</div>
 			 			</div>
 
@@ -547,13 +480,78 @@
 			 			</div>
 
 			 			<!-- Stats -->
-			 			<div ng-switch-when="stats">
-			 				<div id="googleMapsStats" class="panel text-center"></div>
+			 			<div ng-switch-when="stats" class="panel-body" style="padding-top: 0; padding-bottom: 0;">
+			 				<div id="googleMapsStats" class="panel"></div>
 			 			</div>
 			 		</div>
 			 	</div>
 
 			 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Global Modals~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			 	<!-- Modal for creating an organization-->
+				  <div class="modal fade" id="addOrgModal" role="dialog">
+				    <div class="modal-dialog">
+				    
+				      <!-- Modal content-->
+				      <div class="modal-content">
+				        <div class="modal-header text-primary text-center modalPadding-2-3">
+				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				          <h2><b>Organization creation</b></h2>
+				        </div>
+				        <div class="modal-body modalPadding-2-4">
+				          <form role="form">
+				            <div class="form-group">
+				              <label>Name</label>
+				              <input type="text" class="form-control" placeholder="Enter organization's name" ng-model="addOrgName" required>
+				            </div>
+				            <div class="form-group">
+				              <label>Description</label>
+				              <input type="text" class="form-control" placeholder="Enter organization's description" ng-model="addOrgDesc" required>
+				            </div>
+				            <button type="submit" class="btn btn-success btn-block" ng-click="addOrganization(addOrgName, addOrgDesc)" data-dismiss="modal">Create</button>
+				          </form>
+				        </div>
+				        <div class="modal-footer">
+				          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+				        </div>
+				      </div>
+				    </div>
+				  </div>
+
+				  <!-- Modal for deleting an organization-->
+				  <div class="modal fade" id="removeOrgModal" role="dialog">
+				    <div class="modal-dialog">
+				    
+				      <!-- Modal content-->
+				      <div class="modal-content">
+				        <div class="modal-header text-primary text-center modalPadding-2-3">
+				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				          <h2><b>Organization deletion</b></h2>
+				        </div>
+				        <div class="modal-body modalPadding-2-7">
+				          <form role="form">
+				            <div class="form-group">
+				            	<ul class="list list-unstyled fontDark">
+					        		<li ng-repeat="organization in organizationsArray" class="panel panel-primary">
+				        				<h4 class="panel-heading" style="margin-top: 0;" data-dismiss="modal">{{organization.name}}</h4>
+				        				<div class="panel-body text-left">
+				        					<label class="label label-info">Description:</label>
+				        					<h5 style="display:inline;">{{organization.description}}</h5>
+				        				</div>
+				        				<div class="panel-footer text-center">
+				        					<label class="btn btn-danger text-center" ng-click="removeOrganization(organization)">Delete <span class="glyphicon glyphicon-remove"></span></label>
+				        				</div>
+					        		</li>
+					        	</ul>
+				            </div>
+				          </form>
+				        </div>
+				        <div class="modal-footer">
+				          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+				        </div>
+				      </div>
+				      
+				    </div>
+				  </div> 
 
 			 	<!-- Modal for creating an beacon-->
 				<div class="modal fade" id="addBeaconModal" role="dialog">
@@ -578,7 +576,7 @@
 							    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
 							    </select>
 				            </div> 
-				            <div class="form-group panel panel-default text-center">
+				            <div class="form-group panel panel-default text-center fontDark">
 				            	<h4><label>Location:</label></h4>
 				            	<div id="googleMapsAddBeacon" class="panel-body">
 				            	</div>
@@ -618,7 +616,7 @@
 							    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
 							    </select>
 				            </div> 
-				            <div class="form-group panel panel-default text-center">
+				            <div class="form-group panel panel-default text-center fontDark">
 				            	<h4><label>Location:</label></h4>
 				            	<div id="googleMapsEditBeacon" class="panel-body">
 				            	</div>
@@ -666,7 +664,7 @@
 									</label>
 				            	</div>
 				            </div>
-				            <div class="form-group panel panel-default text-center">
+				            <div class="form-group panel panel-default text-center fontDark">
 				            	<h4><label>Location:</label></h4>
 				            	<div id="googleMapsAddObject" class="panel-body">
 				            	</div>
@@ -703,7 +701,7 @@
 				              <label>Description:</label>
 				              <textarea type="text" class="form-control" placeholder="Enter object's description" ng-model="editObjDesc" rows=3 required style="resize: none;"></textarea>
 				            </div>
-				            <div class="form-group panel panel-default text-center">
+				            <div class="form-group panel panel-default text-center fontDark">
 				            	<h4><label>Location:</label></h4>
 				            	<div id="googleMapsEditObject" class="panel-body">
 				            	</div>
@@ -788,7 +786,7 @@
 									</label>
 				            	</div>
 				            </div>
-				            <div class="form-group panel panel-default text-center">
+				            <div class="form-group panel panel-default text-center fontDark">
 				            	<h4><label>Location:</label></h4>
 				            	<div id="googleMapsAddObjectAtBeacon" class="panel-body">
 				            	</div>
@@ -872,7 +870,7 @@
 									            	<span ng-if="asset.content_type == 'threeD'" class="glyphicon glyphicon-picture">3D</span>
 										    	</div>
 										    </div>
-									    	<h4 class="text-center text-info ellipsisWrap">
+									    	<h4 class="text-center text-primary ellipsisWrap">
 									    		{{asset.name}}
 									    	</h4>
 										</div>
@@ -984,7 +982,7 @@
 				        	<img class="img-rounded thumbnail150x150" ng-src={{modalImgSrc}}>
 				        </div>
 				        <div class="modal-footer">
-				        	<ul class="list-inline pull-left text-muted d-inline">
+				        	<ul class="list-inline pull-left d-inline">
 				        		<li class="pointer">#Images <span class="badge">{{curObj.numImage}}</span></li>
 				        		<li class="pointer">#Audio <span class="badge">{{curObj.numAudio}}</span></li>
 				        		<li class="pointer">#Video <span class="badge">{{curObj.numVideo}}</span></li>

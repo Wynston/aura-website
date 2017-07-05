@@ -32,12 +32,6 @@ auraCreate.viewController = function($scope){
 				sessionStorage.curView = view;
 				$scope.curView = view;
 				break;
-			case "settings":
-				$scope.curOrg = org;
-				$scope.changeLiveTitle("Settings", false);
-				sessionStorage.curView = view;
-				$scope.curView = view;
-				break;
 			case "stats":
 				$scope.curOrg = org;
 				$scope.changeLiveTitle("Stats", false);
@@ -143,4 +137,15 @@ auraCreate.viewController = function($scope){
 	    }
 	    sessionStorage.objectsArray = JSON.stringify(tempArray);
     }
+
+    $('.nav.navbar-nav > li').on('click', function(e) {
+	    $('.nav.navbar-nav > li').removeClass('active');
+	    $(this).addClass('active');
+	});  
+
+	$('.list-group-itemDark').on('click', function(e) {
+		alert("hi");
+	    $('.list-group-itemDark').removeClass('active');
+	    $(this).addClass('active');
+	});  
 }

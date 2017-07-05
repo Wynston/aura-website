@@ -16,19 +16,31 @@
 			<div id="alert"></div>
 			<nav class="navbar navbar-inverse" id="header">
 				<div class="container-fluid">
-					<div class="navbar-header">
+					<div class="navbar-header" style="padding-right: 1em;">
 						<a id="pageTitle" class="navbar-left pointer" ng-click="changeView('dashboard', '')">
 							<img ng-src="images/aura_Logo.jpg" alt="Aura Logo" ng-click="changeView('dashboard', '')" style="height: 1em;"/>
 							Aura Create
 						</a>
 					</div>
 					<ul class="nav navbar-nav">
+						<li class="active pointer" ng-click="changeView('dashboard', '')">
+							<a><span class="glyphicon glyphicon-dashboard"> Dashboard</span></a>
+						</li>
+						<li class="pointer" ng-click="changeView('beaconsList', curOrg)">
+							<a><span class="glyphicon glyphicon-list-alt"> Beacons</a>
+						</li>
+						<li class="pointer" ng-click="changeView('objectsList', curOrg)">
+							<a><span class="glyphicon glyphicon-list-alt"> Objects</a>
+						</li>
+						<li class="pointer" ng-click="changeView('stats', curOrg)">
+							<a><span class="glyphicon glyphicon-stats"> Stats</a>
+						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li>
 							<a class="pointer" ng-click="changeView('profileSettings', '' )">
-								<span>{{userName}}</span>
 				          		<span class="glyphicon glyphicon-user"></span>
+				          		<span>{{userName}}</span>
 				        	</a>	
 						</li>
 					</ul>
@@ -39,32 +51,18 @@
 			<div class="row well well-lg" id="mainContentContainer" style="border: 0">
 				<!-- User Organizations Menu -->
 			 	<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" id="orgMenu">
-			 		<div class="hidden-xs" id="accordion">
-				 		<!-- Creates a navigation list for each organization the user is in control of -->
-				 		<div ng-repeat="organization in organizationsArray| orderBy: name" class="panel panelDark borderRadius0 margin0">
-						    <div class="panel-heading borderRadius0" data-toggle="collapse" data-parent="#accordion" href="#{{$index}}">
-						        <h2><strong>{{organization.name}}</strong></h2>
-						    </div>
-						    <div id="{{$index}}" class="panel-collapse collapse container-fluid zeroPadding borderRadius0">
-						      <div class="panel-body list-group zeroPadding">
-						      		<li ng-click="changeView('beaconsList', organization)" class="menuItem list-group-item list-group-itemDark">
-					 					<h4 class="menuName">Beacons</h4>
-						 			</li>
-
-						 			<li ng-click="changeView('objectsList', organization)" class="menuItem list-group-item list-group-itemDark" >
-						 				<h4 class="menuName">Objects</h4>
-						 			</li>
-
-						 			<li ng-click="changeView('settings', organization)" class="menuItem list-group-item list-group-itemDark">
-						 				<h4 class="menuName">Settings</h4>
-						 			</li>
-
-						 			<li ng-click="changeView('stats', organization)" class="menuItem list-group-item list-group-itemDark">
-						 				<h4 class="menuName">Stats</h4>
-						 			</li>
-						 		</div>
-						 	</div>
-				 		</div>
+			 		<div class="hidden-xs">
+			 			<div class="text-center borderDark"><h4>Organizations</h4></div>
+				 		<div ng-repeat="organization in organizationsArray| orderBy: name" class="list-group margin0">
+				 			<!-- First organization (Base case) -->
+						    <li ng-if="$index == 0" class="active pointer list-group-item list-group-itemDark" ng-click="changeCurOrg(organization)">
+						    	<a>{{organization.name}}</a>
+						    </li>
+						    <!-- Rest of the organizations -->
+						    <li ng-if="$index != 0" class="pointer list-group-item list-group-itemDark" ng-click="changeCurOrg(organization)">
+						    	<a>{{organization.name}}</a>
+						    </li>
+						</div>
 				 	</div>
 			 		<div class="container-fluid visible-xs text-center zeroPadding">
 			 			<div class="container-fluid" id="mobileOrgMenu">
@@ -94,12 +92,6 @@
 							    <span class="glyphicon glyphicon-chevron-right"></span>
 							    <span class="sr-only">Next</span>
 							  </a>
-						</div>
-						<div class="btn-group-justified">
-							<a type="button" class="btn btn-lightGreen borderRadius0" ng-click="carouselViewController('beaconsList')"><b>Beacons</b></a>
-							<a type="button" class="btn btn-lightGreen borderRadius0" ng-click="carouselViewController('objectsList')"><b>Objects</b></a>
-							<a type="button" class="btn btn-lightGreen borderRadius0" ng-click="carouselViewController('settings')"><b>Settings</b></a>
-							<a type="button" class="btn btn-lightGreen borderRadius0" ng-click="carouselViewController('stats')"><b>Stats</b></a>
 						</div>
 					</div>
 			 	</div>
@@ -314,34 +306,6 @@
 			 						</div>
 			 					</div>
 			 				</div>
-
-			 				<!-- Modal for editing a beacon's type-->
-							<div class="modal fade" id="beaconTypeEditModal" role="dialog">
-							    <div class="modal-dialog">
-							      <!-- Modal content-->
-							      <div class="modal-content">
-							        <div class="modal-header text-primary text-center modalPadding-1-2">
-							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
-							          <h2><b>Type Editing for {{curBeacon.beacon_name}}</b></h2>
-							        </div>
-							        <div class="modal-body modalPadding-1-2">
-							          <form role="form">
-							          	<div class="form-group form-group">
-							            	<label>Type:</label>
-										    <select ng-model="newBeaconType" class="form-control" required>
-										    	<option value="" disabled selected hidden>{{curBeacon.beacon_type}}</option>
-										    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
-										    </select>
-							            </div> 
-							            <button type="submit" class="btn btn-success btn-block" ng-click="updateBeaconType(newBeaconType)" data-dismiss="modal">Confirm</button>
-							          </form>
-							        </div>
-							        <div class="modal-footer">
-							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
-							        </div>
-							      </div>
-							    </div>
-							</div>
 		 				</div>
 
 			 			<!-- Objects List -->
@@ -474,10 +438,6 @@
 							    </div>
 							</div>
 						</div>
-
-			 			<!-- Settings -->
-			 			<div ng-switch-when="settings" class="panel-body">
-			 			</div>
 
 			 			<!-- Stats -->
 			 			<div ng-switch-when="stats" class="panel-body" style="padding-top: 0; padding-bottom: 0;">
@@ -624,6 +584,34 @@
 				            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circle indicates a beacon's maximum service range.</h6>
 				            </div>
 				            <button type="submit" class="btn btn-success btn-block" ng-click="updateBeacon(editBeacName, editBeacType)" data-dismiss="modal">Update</button>
+				          </form>
+				        </div>
+				        <div class="modal-footer">
+				          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+				        </div>
+				      </div>
+				    </div>
+				</div>
+
+				<!-- Modal for editing a beacon's type-->
+				<div class="modal fade" id="beaconTypeEditModal" role="dialog">
+				    <div class="modal-dialog">
+				      <!-- Modal content-->
+				      <div class="modal-content">
+				        <div class="modal-header text-primary text-center modalPadding-1-2">
+				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				          <h2><b>Type Editing for {{curBeacon.beacon_name}}</b></h2>
+				        </div>
+				        <div class="modal-body modalPadding-1-2">
+				          <form role="form">
+				          	<div class="form-group form-group">
+				            	<label>Type:</label>
+							    <select ng-model="newBeaconType" class="form-control" required>
+							    	<option value="" disabled selected hidden>{{curBeacon.beacon_type}}</option>
+							    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
+							    </select>
+				            </div> 
+				            <button type="submit" class="btn btn-success btn-block" ng-click="updateBeaconType(newBeaconType)" data-dismiss="modal">Confirm</button>
 				          </form>
 				        </div>
 				        <div class="modal-footer">

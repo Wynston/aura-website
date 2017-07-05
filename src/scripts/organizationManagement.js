@@ -23,6 +23,7 @@ auraCreate.organizationManagement = function($scope, $http){
 			  		};
 			  		$scope.organizationsArray[i] = $scope.organization;
 			  	}
+			  	$scope.curOrg = $scope.organizationsArray[0];
 			  	sessionStorage.organizationsArray = JSON.stringify($scope.organizationsArray);
 		    }, function myError(response) {
 		    	alertFailure("ERROR: failed to load organizations for " + $scope.userName);
@@ -79,5 +80,37 @@ auraCreate.organizationManagement = function($scope, $http){
 		        }
 		    }
 		});
+	}
+
+	//changes the current organization to the given organization and reloads depending on the current view
+	$scope.changeCurOrg = function(org){
+		$scope.curOrg = org;
+		//reload depending on the user's current view with the new organization
+		switch($scope.curView){
+			case "beacon":
+				$scope.loadBeacons();
+				$scope.changeView('beaconsList', org);
+				break;
+			case "object":
+				$scope.loadObjects();
+				$scope.changeView('objectsList', org);
+				break;
+			case "beaconsList":
+				$scope.loadBeacons();
+				$scope.changeView('beaconsList', org);
+				break;
+			case "objectList":
+				$scope.loadObjects();
+				$scope.changeView('objectssList', org);
+				break;
+			case "stats":
+				$scope.loadStats();
+				$scope.changeView('stats', org);
+				break;
+			case ("profileSettings" || "dashboard"):
+				break;
+			default: 
+				break;
+		}
 	}
 }

@@ -21,8 +21,8 @@ auraCreate.objectManagement = function($scope, $http){
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey
 		}
-		}).then(function mySuccess(response) {
-			alertSuccess("SUCCESS: the object" + name + " has been successfully created!");
+		}).then(function mySuccess(response){
+			alertSuccess("SUCCESS: the object " + name + " has been successfully created!");
 			$scope.loadObjects();
 		}, function myError(response) {
 			alertFailure("ERROR: failed to create the object " + name + ".");

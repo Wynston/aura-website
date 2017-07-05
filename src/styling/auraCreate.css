@@ -73,6 +73,10 @@ h6{
 		border-radius: 0;
 	}
 
+	.borderDark{
+		border: black solid 1px;
+	}
+
 	.cancelFile{
 		color: white;
 	}
@@ -112,8 +116,9 @@ h6{
 		min-width: 0 !important;
 		width: 100%;
 		white-space: normal;
+		overflow: auto;
 		text-align: center;
-		max-height: 25em;
+		max-height: 50vh;
 	}
 
 	.dropdown-menu li a {
@@ -155,7 +160,23 @@ h6{
 
 	.list-group-itemDark{
 		background-color: #222;
-		color: #E1DDDD;
+		border: black solid 1px;
+		border-radius: 0 !important;
+	}
+
+	.list-group-itemDark:hover{
+		color: white;
+		background-color: #222;
+	}
+
+	.list-group-itemDark.active{
+		background-color: #111;
+		border: black solid 1px;
+		border-radius: 0 !important;
+	}
+
+	.list-group-itemDark.active:hover{
+		background-color: #111;
 		border: black solid 1px;
 	}
 
@@ -186,12 +207,26 @@ h6{
 	    overflow-y: auto;
 	    background-color: #444;
 	    color: white;
-	    border-color: black;
+	    border-top: #111 solid 1px;
+		border-right: #111 solid 1px;
+		border-left: #111 solid 1px;
+		border-bottom: #111 solid 1px;
 	}
 
-	.modal-header, .modal-footer{
+	.modal-header{
 		background-color: #333;
-		border-color: black;
+		border-top: #111 solid 1px;
+		border-right: #111 solid 1px;
+		border-left: #111 solid 1px;
+		border-bottom: 0;
+	}
+
+	.modal-footer{
+		background-color: #333;
+		border-top: 0;
+		border-right: #111 solid 1px;
+		border-left: #111 solid 1px;
+		border-bottom: #111 solid 1px;
 	}
 
 	.navbar-inverse{
@@ -360,7 +395,8 @@ h6{
 	}
 
 	#googleMapsObjects, #googleMapsBeacons, #googleMapsStats{
-		height: 74vh;
+		margin-top: 1em;
+		height: 72vh;
 		width: 100%;
 	}
 
@@ -396,6 +432,7 @@ h6{
 		margin: 0;
 		padding:0;
 		border-radius: 0;
+		border: black solid 1px;
 		background-color: #292929;
 	}
 

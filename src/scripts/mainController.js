@@ -21,7 +21,7 @@ auraCreate.controller('mainController', function($scope, $http){
 		//Initialize User and their organizations and displays the dashboard
 		$scope.userName = "Wynston Ramsay";
 		$scope.loadOrganizations();
-		$scope.changeView("dashboard");
+		$scope.changeView("dashboard", false);
 	}
 
 // -------------------------------------------------Global functions--------------------------------------------------------

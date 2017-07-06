@@ -84,6 +84,8 @@ auraCreate.organizationManagement = function($scope, $http){
 
 	//changes the current organization to the given organization and reloads depending on the current view
 	$scope.changeCurOrg = function(org){
+		$('#orgList > li.active').removeClass('active');
+		$('#orgList > #' + org.name).addClass('active');
 		$scope.curOrg = org;
 		//reload depending on the user's current view with the new organization
 		switch($scope.curView){

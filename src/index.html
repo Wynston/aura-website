@@ -18,7 +18,7 @@
 				<div class="container-fluid">
 					<div class="navbar-header" style="padding-right: 1em;">
 						<a id="pageTitle" class="navbar-left pointer" ng-click="changeView('dashboard', '')">
-							<img ng-src="images/aura_Logo.jpg" alt="Aura Logo" ng-click="changeView('dashboard', '')" style="height: 1em;"/>
+							<img class="img" ng-src="images/aura_Logo.jpg" alt="Aura Logo" ng-click="changeView('dashboard', '')" style="height: 40px"/>
 							Aura Create
 						</a>
 					</div>
@@ -40,7 +40,7 @@
 						<li>
 							<a class="pointer" ng-click="changeView('profileSettings', '' )">
 				          		<span class="glyphicon glyphicon-user"></span>
-				          		<span>{{userName}}</span>
+				          		<span class="hidden-sm">{{userName}}</span>
 				        	</a>	
 						</li>
 					</ul>
@@ -48,19 +48,19 @@
 			</nav>
 		
 			<!-- Main Content -->
-			<div class="row well well-lg" id="mainContentContainer" style="border: 0">
+			<div class="row borderRadius0 borderDark" id="mainContentContainer">
 				<!-- User Organizations Menu -->
 			 	<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" id="orgMenu">
 			 		<div class="hidden-xs">
-			 			<div class="text-center borderDark"><h4>Organizations</h4></div>
-				 		<div ng-repeat="organization in organizationsArray| orderBy: name" class="list-group margin0">
+			 			<div id="orgMenuTitle" class="text-center borderDark"><h3>Organizations</h3></div>
+				 		<div id="orgList" ng-repeat="organization in organizationsArray| orderBy: name" class="list-group margin0">
 				 			<!-- First organization (Base case) -->
-						    <li ng-if="$index == 0" class="active pointer list-group-item list-group-itemDark" ng-click="changeCurOrg(organization)">
-						    	<a>{{organization.name}}</a>
+						    <li id={{organization.name}} ng-if="$index == 0" class="active pointer list-group-item list-group-itemDark" ng-click="changeCurOrg(organization)">
+						    	<h4>{{organization.name}}</h4>
 						    </li>
 						    <!-- Rest of the organizations -->
-						    <li ng-if="$index != 0" class="pointer list-group-item list-group-itemDark" ng-click="changeCurOrg(organization)">
-						    	<a>{{organization.name}}</a>
+						    <li id={{organization.name}} ng-if="$index != 0" class="pointer list-group-item list-group-itemDark" ng-click="changeCurOrg(organization)">
+						    	<h4>{{organization.name}}</h4>
 						    </li>
 						</div>
 				 	</div>
@@ -101,8 +101,8 @@
 			 		<!-- Dynamic Title -->
 			 		<div class="row text-center panel panel-heading" id="liveTitle">
 			 			<!-- Primary title -->
-			 			<div id="primTitle" class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-left zeroPadding">
-			 				<h2><b>{{primTitle}}</b></h2>
+			 			<div id="primTitle" class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-left fontLight zeroPadding">
+			 				<h3>{{primTitle}}</h3>
 			 			</div>
 			 			<!-- Secondary Title -->
 			 			<div id="orgTitle" class="hidden-xs">
@@ -270,7 +270,7 @@
 						 		</div>
 						 		<!-- Google Maps API -->
 						 		<div ng-switch-when="Map" class="panel-body" style="padding-top: 0; padding-bottom: 0;">
-					 				<div id="googleMapsBeacons" class="panel"></div>
+					 				<div id="googleMapsBeacons" class="panel borderDark"></div>
 					 			</div>
 					 		</div>
 			 			</div>
@@ -297,8 +297,8 @@
 				 						</div>
 				 					</div>
 			 					</div>
-			 					<div class="panel-body" id="googleMapsBeacon"></div>
-			 					<div class="panel-footer" style="padding-bottom: 0;">
+			 					<div class="panel-body borderDark" id="googleMapsBeacon"></div>
+			 					<div class="panel-footer bgDark222 border0">
 			 						<div class="row">
 			 							<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curBeacon.altitude | number: 3}}</h4>
 					 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curBeacon.latitude | number: 3}}</h4>
@@ -349,7 +349,7 @@
 								</div>
 								<!-- Google Maps API -->
 								<div ng-switch-when="Map" class="panel-body" style="padding-top: 0; padding-bottom: 0;">
-					 				<div id="googleMapsObjects" class="panel"></div>
+					 				<div id="googleMapsObjects" class="panel borderDark"></div>
 					 			</div>
 							</div>
 			 			</div>
@@ -381,8 +381,8 @@
 				 					</div>
 		 						</div>
 		 						<!-- Google Maps API -->
-			 					<div class="panel-body" id="googleMapsObject"></div>
-			 					<div class="panel-footer" style="padding-bottom: 0;">
+			 					<div class="panel-body borderDark" id="googleMapsObject"></div>
+			 					<div class="panel-footer bgDark222 border0">
 			 						<div class="row">
 					 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curObj.altitude | number: 3}}</h4>
 					 					<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curObj.latitude | number: 3}}</h4>
@@ -400,10 +400,12 @@
 							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 							          <h2 class="modal-title"><b>Change {{curObj.name}}'s service beacon</b></h2>
 							        </div>
-							        <div class="modal-body text-center modalPadding-1-2">
-							        	<div class="panel-default panel-body" id="googleMapsEditBeacForObj"></div>
-						        		<h5 class="panel-body zeroPadding">Click a marker to determine the object's new service beacon.</h5>
-			            				<h6 class="panel-body text-muted zeroPadding">Note: circles indicates a beacon's maximum service range.</h6>
+							        <div class="modal-body modalPadding-1-2">
+							        	<div class="panel panel-default text-center bgDark333 borderDark">
+							        		<div class="panel-body" id="googleMapsEditBeacForObj"></div>
+						        			<h5 class="panel-body zeroPadding">Click a marker to determine the object's new service beacon.</h5>
+			            					<h6 class="panel-body text-muted zeroPadding">Note: circles indicates a beacon's maximum service range.</h6>
+							        	</div>
 							        </div>
 							        <div class="modal-footer">
 							          <button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
@@ -441,7 +443,7 @@
 
 			 			<!-- Stats -->
 			 			<div ng-switch-when="stats" class="panel-body" style="padding-top: 0; padding-bottom: 0;">
-			 				<div id="googleMapsStats" class="panel"></div>
+			 				<div id="googleMapsStats" class="panel borderDark"></div>
 			 			</div>
 			 		</div>
 			 	</div>
@@ -523,7 +525,7 @@
 				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 				          <h2><b>Beacon creation for {{curOrg.name}}</b></h2>
 				        </div>
-				        <div class="modal-body modalPadding-1-2">
+				        <div class="modal-body text-center modalPadding-1-2">
 				          <form role="form">
 				            <div class="form-group">
 				              <label>Name:</label>
@@ -535,10 +537,10 @@
 							    	<option value="" disabled selected hidden>Select beacon type</option>
 							    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
 							    </select>
-				            </div> 
-				            <div class="form-group panel panel-default text-center fontDark">
-				            	<h4><label>Location:</label></h4>
-				            	<div id="googleMapsAddBeacon" class="panel-body">
+				            </div>
+				            <h4><label>Location:</label></h4> 
+				            <div class="form-group panel panel-default text-center bgDark333 borderDark">
+				            	<div id="googleMapsAddBeacon" class="panel-body borderDark">
 				            	</div>
 				            	<h5 class="panel-body zeroPadding">Click a position on the map to the determine the beacon's location.</h5>
 				            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circles indicates a beacon's maximum service range.</h6>
@@ -563,7 +565,7 @@
 				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 				          <h2><b>Beacon editing for {{curBeacon.beacon_name}}</b></h2>
 				        </div>
-				        <div class="modal-body modalPadding-1-2">
+				        <div class="modal-body text-center modalPadding-1-2">
 				          <form role="form">
 				            <div class="form-group">
 				              <label>Name:</label>
@@ -575,10 +577,10 @@
 							    	<option value="" disabled selected hidden>Select beacon type</option>
 							    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
 							    </select>
-				            </div> 
-				            <div class="form-group panel panel-default text-center fontDark">
-				            	<h4><label>Location:</label></h4>
-				            	<div id="googleMapsEditBeacon" class="panel-body">
+				            </div>
+				            <h4><label>Location:</label></h4> 
+				            <div class="form-group panel panel-default text-center bgDark333 borderDark">
+				            	<div id="googleMapsEditBeacon" class="panel-body borderDark">
 				            	</div>
 				            	<h5 class="panel-body zeroPadding">Place the marker on the map to determine {{curBeacon.beacon_name}}'s updated location.</h5>
 				            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circle indicates a beacon's maximum service range.</h6>
@@ -642,7 +644,7 @@
 				            </div>
 				            <div class="form-group">
 				            	<label>Thumbnail:</label><br>
-				            	<div class="panel panel-default">
+				            	<div class="panel panel-default bgDark333 borderDark">
 				            		<label class="panel-body">
 					            		<label class="btn btn-info" for="thumbnailSelect">
 										    <input id="thumbnailSelect" type="file" style="display:none;" custom-on-change="updateThumbnailLabel" accept="image/*" required>
@@ -652,9 +654,9 @@
 									</label>
 				            	</div>
 				            </div>
-				            <div class="form-group panel panel-default text-center fontDark">
-				            	<h4><label>Location:</label></h4>
-				            	<div id="googleMapsAddObject" class="panel-body">
+				            <h4><label>Location:</label></h4>
+				            <div class="form-group panel panel-default text-center bgDark333 borderDark">
+				            	<div id="googleMapsAddObject" class="panel-body borderDark">
 				            	</div>
 				            	<h5 class="panel-body zeroPadding">Click a position on the map to the determine the object's location.</h5>
 				            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circles indicates a beacon's maximum service range.</h6>
@@ -689,9 +691,9 @@
 				              <label>Description:</label>
 				              <textarea type="text" class="form-control" placeholder="Enter object's description" ng-model="editObjDesc" rows=3 required style="resize: none;"></textarea>
 				            </div>
-				            <div class="form-group panel panel-default text-center fontDark">
-				            	<h4><label>Location:</label></h4>
-				            	<div id="googleMapsEditObject" class="panel-body">
+				            <h4><label>Location:</label></h4>
+				            <div class="form-group panel panel-default text-center bgDark333 borderDark">
+				            	<div id="googleMapsEditObject" class="panel-body borderDark">
 				            	</div>
 				            	<h5 class="panel-body zeroPadding">Place the marker on the map to determine the object's updated location.</h5>
 				            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circles indicates a beacon's maximum service range.</h6>
@@ -764,7 +766,7 @@
 				            </div>
 				            <div class="form-group">
 				            	<label>Thumbnail:</label><br>
-				            	<div class="panel panel-default">
+				            	<div class="panel panel-default bgDark333 borderDark">
 				            		<label class="panel-body">
 					            		<label class="btn btn-info" for="thumbnailSelect">
 										    <input id="thumbnailSelect" type="file" style="display:none;" custom-on-change="updateThumbnailLabel" accept="image/*" required>
@@ -774,9 +776,10 @@
 									</label>
 				            	</div>
 				            </div>
-				            <div class="form-group panel panel-default text-center fontDark">
-				            	<h4><label>Location:</label></h4>
-				            	<div id="googleMapsAddObjectAtBeacon" class="panel-body">
+				            <h4><label>Location:</label></h4>
+				            <div class="form-group panel panel-default text-center bgDark333 borderDark">
+				            	
+				            	<div id="googleMapsAddObjectAtBeacon" class="panel-body borderDark">
 				            	</div>
 				            	<h5 class="panel-body zeroPadding">Click a position on the map to the determine the object's location.</h5>
 				            	<h6 class="panel-body text-muted zeroPadding">Note: Blue circle indicates a beacon's maximum service range.</h6>
@@ -803,14 +806,14 @@
 				        </div>
 				        <div class="modal-body text-center modalPadding-2-3">
 				          <form role="form" class="form">
-				            <div class="form-group well well-sm">
+				            <div class="form-group well well-sm bgDark333 borderDark">
 			            		<h4 class="text-primary">Import image, audio, video, or 3D files:</h4>
 			            		<label class="btn btn-info" for="assetFiles">
 								    <input id="assetFiles" type="file" style="display:none;" accept="image/*|audio/*|video*" custom-on-change="uploadFile" required multiple="true"></input>
 								    Browse
 								</label>
 				            </div>
-				            <div class="form-group well well-sm form-horizontal">
+				            <div class="form-group well well-sm form-horizontal bgDark333 borderDark">
 				              <h4 class="text-primary">Enter a title for each file:</h4>
 				            	<ul class="list list-unstyled">
 				            		<li ng-if="files.length < 1" class='label label-warning float-left'>No files chosen.</li>
@@ -907,7 +910,7 @@
 
 										<!-- Audio -->
 										<div ng-if="asset.content_type == 'audio'" class="center-block">
-											<audio controls style="width: 100%;">
+											<audio controls id="audioAsset">
 												<source ng-src="{{asset.value}}" type="audio/mpeg" />
 												<source ng-src="{{asset.value}}" type="audio/ogg" />
 												<source ng-src="{{asset.value}}" type="audio/wav" />

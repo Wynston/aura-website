@@ -141,11 +141,5 @@ auraCreate.viewController = function($scope){
     $('.nav.navbar-nav > li').on('click', function(e) {
 	    $('.nav.navbar-nav > li').removeClass('active');
 	    $(this).addClass('active');
-	});  
-
-	$('.list-group-itemDark').on('click', function(e) {
-		alert("hi");
-	    $('.list-group-itemDark').removeClass('active');
-	    $(this).addClass('active');
-	});  
+	});
 }

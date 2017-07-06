@@ -13,7 +13,8 @@ function initMap(){
 		var beacons = JSON.parse(sessionStorage.beaconsArray);
 	    var map = new google.maps.Map(document.getElementById('googleMapsAddBeacon'), {
 	      zoom: 11,
-	      center: findDPCenter(beacons)
+	      center: findDPCenter(beacons),
+	      styles: darkThemedMap()
 	    });
 	    for (var i = 0; i < beacons.length; i++ ) {
 	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
@@ -61,7 +62,8 @@ function initMap(){
 		var curBeaconLoc = new google.maps.LatLng(curBeacon.latitude, curBeacon.longitude);
 	    var map = new google.maps.Map(document.getElementById('googleMapsEditBeacon'), {
 	      zoom: 14,
-	      center: curBeaconLoc
+	      center: curBeaconLoc,
+	      styles: darkThemedMap()
 	    });
 	    var marker = new google.maps.Marker({
 	      position: curBeaconLoc,
@@ -113,7 +115,8 @@ function initMap(){
 		var beacons = JSON.parse(sessionStorage.beaconsArray);
 	    var map = new google.maps.Map(document.getElementById('googleMapsAddObject'), {
 	      zoom: 11,
-	      center: findDPCenter(beacons)
+	      center: findDPCenter(beacons),
+	      styles: darkThemedMap()
 	    });
 	    for (var i = 0; i < beacons.length; i++ ) {
 	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
@@ -161,7 +164,8 @@ function initMap(){
 		var beaconCenter = new google.maps.LatLng(beacon.latitude, beacon.longitude);
 	    var map = new google.maps.Map(document.getElementById('googleMapsAddObjectAtBeacon'), {
 	      zoom: 14,
-	      center: beaconCenter
+	      center: beaconCenter,
+	      styles: darkThemedMap()
 	    });
       // Adds a 50m radius circle around each beacon
       var beaconCircle = new google.maps.Circle({
@@ -207,7 +211,8 @@ function initMap(){
 		var curObjLoc = new google.maps.LatLng(curObj.latitude, curObj.longitude);
 	    var map = new google.maps.Map(document.getElementById('googleMapsEditObject'), {
 	      zoom: 14,
-	      center: curObjLoc
+	      center: curObjLoc,
+	      styles: darkThemedMap()
 	    });
 	    var marker = new google.maps.Marker({
 	      position: curObjLoc,
@@ -266,7 +271,8 @@ function initMap(){
 		var beacons = JSON.parse(sessionStorage.beaconsArray);
 	    var map = new google.maps.Map(document.getElementById('googleMapsEditBeacForObj'), {
 	      zoom: 11,
-	      center: findDPCenter(beacons)
+	      center: findDPCenter(beacons),
+	      styles: darkThemedMap()
 	    });
 	    for (var i = 0; i < beacons.length; i++ ) {
 		      var beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
@@ -321,7 +327,8 @@ function initMap(){
 	    var loc = {lat: curBeacon.latitude, lng: curBeacon.longitude };
 	    var map = new google.maps.Map(document.getElementById("googleMapsBeacon"), {
 	      zoom: 15,
-	      center: loc
+	      center: loc,
+	      styles: darkThemedMap()
 	    });
 	    var marker = new google.maps.Marker({
 	      position: loc,
@@ -339,7 +346,8 @@ function initMap(){
 	    var loc = {lat: curObj.latitude, lng: curObj.longitude };
 	    var map = new google.maps.Map(document.getElementById("googleMapsObject"), {
 	      zoom: 15,
-	      center: loc
+	      center: loc,
+	      styles: darkThemedMap()
 	    });
 	    var marker = new google.maps.Marker({
 	      position: loc,
@@ -356,7 +364,8 @@ function initMap(){
 		var beacons = JSON.parse(sessionStorage.beaconsArray);
 		var map = new google.maps.Map(document.getElementById('googleMapsBeacons'), {
           zoom: 11,
-          center: findDPCenter(JSON.parse(sessionStorage.beaconsArray))
+          center: findDPCenter(JSON.parse(sessionStorage.beaconsArray)),
+          styles: darkThemedMap()
         });
         for (var i = 0; i < beacons.length; i++ ) {
 		      var beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
@@ -390,7 +399,8 @@ function initMap(){
 		var objects = JSON.parse(sessionStorage.objectsArray);
 		var map = new google.maps.Map(document.getElementById('googleMapsObjects'),{
           zoom: 11,
-          center: findDPCenter(JSON.parse(sessionStorage.objectsArray))
+          center: findDPCenter(JSON.parse(sessionStorage.objectsArray)),
+          styles: darkThemedMap()
         });
         for (var i = 0; i < objects.length; i++ ) {
 		      var objectCenter = new google.maps.LatLng(objects[i].latitude, objects[i].longitude);
@@ -411,12 +421,13 @@ function initMap(){
 		var map = new google.maps.Map(document.getElementById('googleMapsStats'), {
           zoom: 11,
           center: findDPCenter(stats),
+          styles: darkThemedMap()
         });
         heatmap = new google.maps.visualization.HeatmapLayer({
           data: getDataPoints(stats),
           maxIntensity: 4,
           opacity: 0.75,
-          radius: 10,
+          radius: 10
         });
 		heatmap.setMap(map);
 	}
@@ -513,6 +524,90 @@ function moveMarker(location){
 	getElevation(location);
   	angular.element(document.getElementById('MAIN')).scope().newLat = pos.lat;
 	angular.element(document.getElementById('MAIN')).scope().newLng = pos.lng;
+}
+
+//returns a dark theme of google maps styling
+function darkThemedMap(){
+	return [
+            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+            {
+              featureType: 'administrative.locality',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'geometry',
+              stylers: [{color: '#263c3f'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#6b9a76'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry',
+              stylers: [{color: '#38414e'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#212a37'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#9ca5b3'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry',
+              stylers: [{color: '#746855'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#1f2835'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#f3d19c'}]
+            },
+            {
+              featureType: 'transit',
+              elementType: 'geometry',
+              stylers: [{color: '#2f3948'}]
+            },
+            {
+              featureType: 'transit.station',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'geometry',
+              stylers: [{color: '#17263c'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#515c6d'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.stroke',
+              stylers: [{color: '#17263c'}]
+            }
+          ];
 }
 
 //-------------------------------------end of google maps handling-------------------------------

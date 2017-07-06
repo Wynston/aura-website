@@ -49,6 +49,18 @@ h6{
 		color: #207020;
 	}
 
+	.bgDark111{
+		background-color: #111;
+	}
+
+	.bgDark222{
+		background-color: #222;
+	}
+
+	.bgDark333{
+		background-color: #333;
+	}
+
 	.btn{
 		font-size: 1em;
 	}
@@ -69,6 +81,10 @@ h6{
 		border-color: #92B673;
 	}
 
+	.border0{
+		border: 0;
+	}
+
 	.borderRadius0{
 		border-radius: 0;
 	}
@@ -79,6 +95,7 @@ h6{
 
 	.cancelFile{
 		color: white;
+
 	}
 
 	.cancelFile:hover{
@@ -159,17 +176,19 @@ h6{
 	}
 
 	.list-group-itemDark{
-		background-color: #222;
+		background-color: #252525;
+		color: #4D96E0;
 		border: black solid 1px;
 		border-radius: 0 !important;
 	}
 
 	.list-group-itemDark:hover{
 		color: white;
-		background-color: #222;
+		background-color: #4C5C6D;
 	}
 
 	.list-group-itemDark.active{
+		color: #4D96E0;
 		background-color: #111;
 		border: black solid 1px;
 		border-radius: 0 !important;
@@ -233,10 +252,6 @@ h6{
 		background-color: #191818;
 	}
 
-	.panel-default > .panel-heading, .panel-footer{
-	 	background-color: white !important;
-	}
-
 	.panelDark{
 		background-color: #1A1A1A;
 		color: #337ab7;
@@ -284,6 +299,10 @@ h6{
 	.table-striped.table-hover>tbody>tr:hover>th {
 		background-color: #415665;
 		cursor: pointer;
+	}
+
+	.text-primary{
+		color: #4D96E0;
 	}
 
 	 .thumbnail150x150{
@@ -352,6 +371,14 @@ h6{
 	    border-radius:0
 	}
 
+	#audioAsset{
+		width: 100%; 
+		background-image: url(../images/auraHeadphone150.jpg); 
+		background-repeat: no-repeat; 
+		background-position: center center;
+		background-color: #222;
+	}
+
 	#banner{
 		margin-top: 2em;
 		margin-left: 1em;
@@ -361,10 +388,13 @@ h6{
 	#dynamicSection{
 		height: 100%;
 		overflow: auto;
+		background-color: #292929;
 	}
 
 	#footer{
-		height: 4vh;
+		height: 5vh;
+		margin: 0;
+		padding-top: 1vh;
 	}
 
 	#fileLabel{
@@ -402,6 +432,7 @@ h6{
 
 	#header{
 		height: 6vh;
+		border: 0;
 		border-radius: 0; 
 		margin: 0;
 	}
@@ -412,10 +443,9 @@ h6{
 
 	#mainContentContainer{
 		height: 88vh;
-		padding: 0;
-		margin: 0 auto;
+		padding: 0 0 0 0;
+		margin: 0 0 0 0;
 		background-color: #333;
-		border-radius: 0;
 	}
 
 	#mobileOrgMenu{
@@ -428,25 +458,25 @@ h6{
 
 	#liveDisplay{
 		height: auto;
-		min-height: 78vh;
 		margin: 0;
 		padding:0;
 		border-radius: 0;
-		border: black solid 1px;
+		border: 0;
 		background-color: #292929;
 	}
 
 	#liveTitle{
-		height: 10vh;
+		height: auto;
 		margin: 0 0 0 0;
 		border-radius: 0;
-		border: black solid 1px;
+		border-bottom: black solid 1px;
 		background-color: #292929;
 	}
 
 	#orgsCarousel{
 		height: 80px;
 		background-color: #333;
+		border-bottom: black solid 1px;
 	}
 
 	#orgTitle{
@@ -460,20 +490,19 @@ h6{
 		max-height: 100%;
 		overflow: auto;
 		padding: 0 0 0 0;
+		background-color: #1E1E1E;
+	}
+
+	#orgMenuTitle{
+		min-height: 
+		background-color: #232323;
+		color: #E3D8D8;
 	}
 
 	#pageTitle{
 		color: #A8A8A8;
 		font-size: 40px;
 		text-shadow: 0 0 0.33em #1BC9F4;
-	}
-
-	#pageTitle > b{
-		cursor: pointer;
-	}
-
-	#primTitle{
-		color: #337ab7;
 	}
 
 	#webcamScreen{
@@ -487,10 +516,6 @@ h6{
 		font-size: 14px;
 	}
 
-	.btn, .btn-group-vertical{
-		max-width: 14em;
-	}
-
 	#fileLabel{
 		margin-top: 0.5em;
 	}
@@ -500,10 +525,6 @@ h6{
 @media (min-width: 768px) and (max-width: 991px) {
 	body{
 		font-size: 12px;
-	}
-
-	.btn, .btn-group-vertical{
-		max-width: 13em;
 	}
 
 	#fileLabel{
@@ -517,10 +538,6 @@ h6{
 		font-size: 10px;
 	}
 
-	#dyanmicSection{
-		height: auto;
-	}
-
 	#fileLabel{
 		margin-top: 0.75em;
 	}
@@ -530,11 +547,11 @@ h6{
 		text-align: center;
 	}
 
-	#header, #MAIN, #mainContentContainer{
+	#header, #MAIN{
 		height: auto;
 	}
 
-	#liveDisplay, #liveTitle, .tableDiv{
+	#liveDisplay, #liveTitle, #mainContentContainer, .tableDiv{
 		height: auto;
 		max-height: inherit;
 		overflow-y: visible;
@@ -582,11 +599,11 @@ h6{
 		text-align: center;
 	}
 
-	#header, #MAIN, #mainContentContainer{
+	#header, #MAIN{
 		height: auto;
 	}
 
-	#liveDisplay, #liveTitle, .tableDiv{
+	#liveDisplay, #liveTitle, #mainContentContainer, .tableDiv{
 		height: auto;
 		max-height: inherit;
 		overflow-y: visible;

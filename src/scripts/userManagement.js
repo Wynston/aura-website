@@ -4,7 +4,7 @@ auraCreate.userManagement = function($scope, $http){
 	// $scope.loadUser = function(){
 	// 	$http({
 	// 	    method : "GET",
-	// 	    url : "https://website-155919.appspot.com/api/v1.0/user",
+	// 	    url : $scope.userUrl,
 	// 	    headers: {
  //        		'Accept': 'application/json',
  //        		"X-Aura-API-Key": $scope.auraAPIKey

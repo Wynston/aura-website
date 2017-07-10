@@ -5,7 +5,7 @@ auraCreate.organizationManagement = function($scope, $http){
 	$scope.loadOrganizations = function(){
 		$http({
 		    method : "GET",
-		    url : "https://website-155919.appspot.com/api/v1.0/organization",
+		    url : $scope.organizationsUrl,
 		    headers: {
         		'Accept': 'application/json',
         		"X-Aura-API-Key": $scope.auraAPIKey
@@ -34,7 +34,7 @@ auraCreate.organizationManagement = function($scope, $http){
 	$scope.addOrganization = function(name, desc){
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/organization',
+        url: $scope.organizationsUrl,
         data: {name: name, desc: desc},
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey

@@ -138,8 +138,18 @@ auraCreate.viewController = function($scope){
 	    sessionStorage.objectsArray = JSON.stringify(tempArray);
     }
 
+    //determines the active class of the navbar
     $('.nav.navbar-nav > li').on('click', function(e) {
 	    $('.nav.navbar-nav > li').removeClass('active');
 	    $(this).addClass('active');
-	});
+	}); 
+
+	//toggles the popover on certain events
+	$scope.showBeaconsFilterTooltip = function(){
+		$("#beaconsFilterDiv").tooltip({title: $scope.beaconsFilter, placement: "right"});
+	}
+
+	$scope.hideBeaconsFilterTooltip = function(){
+		$("#beaconsFilterDiv").tooltip("destroy");
+	}
 }

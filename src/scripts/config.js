@@ -4,6 +4,8 @@ auraCreate.config = function($scope){
 	//aura api key
 	$scope.auraAPIKey = "dGhpc2lzYWRldmVsb3BlcmFwcA==";
 
+	//google cloud storage urls
+
 	//firebase bucket and gs urls
 	$scope.storageBucket = {
 		storageBucket: "https://firebasestorage.googleapis.com/v0/b/auraalert-21339.appspot.com"

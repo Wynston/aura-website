@@ -14,7 +14,8 @@ function initMap(){
 	    var map = new google.maps.Map(document.getElementById('googleMapsAddBeacon'), {
 	      zoom: 11,
 	      center: findDPCenter(beacons),
-	      styles: darkThemedMap()
+	      styles: darkThemedMap(),
+          backgroundColor: '#333'
 	    });
 	    for (var i = 0; i < beacons.length; i++ ) {
 	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
@@ -63,7 +64,8 @@ function initMap(){
 	    var map = new google.maps.Map(document.getElementById('googleMapsEditBeacon'), {
 	      zoom: 14,
 	      center: curBeaconLoc,
-	      styles: darkThemedMap()
+	      styles: darkThemedMap(),
+          backgroundColor: '#333'
 	    });
 	    var marker = new google.maps.Marker({
 	      position: curBeaconLoc,
@@ -116,7 +118,8 @@ function initMap(){
 	    var map = new google.maps.Map(document.getElementById('googleMapsAddObject'), {
 	      zoom: 11,
 	      center: findDPCenter(beacons),
-	      styles: darkThemedMap()
+	      styles: darkThemedMap(),
+          backgroundColor: '#333'
 	    });
 	    for (var i = 0; i < beacons.length; i++ ) {
 	      beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
@@ -165,7 +168,8 @@ function initMap(){
 	    var map = new google.maps.Map(document.getElementById('googleMapsAddObjectAtBeacon'), {
 	      zoom: 14,
 	      center: beaconCenter,
-	      styles: darkThemedMap()
+	      styles: darkThemedMap(),
+          backgroundColor: '#333'
 	    });
       // Adds a 50m radius circle around each beacon
       var beaconCircle = new google.maps.Circle({
@@ -212,7 +216,8 @@ function initMap(){
 	    var map = new google.maps.Map(document.getElementById('googleMapsEditObject'), {
 	      zoom: 14,
 	      center: curObjLoc,
-	      styles: darkThemedMap()
+	      styles: darkThemedMap(),
+          backgroundColor: '#333'
 	    });
 	    var marker = new google.maps.Marker({
 	      position: curObjLoc,
@@ -272,7 +277,8 @@ function initMap(){
 	    var map = new google.maps.Map(document.getElementById('googleMapsEditBeacForObj'), {
 	      zoom: 11,
 	      center: findDPCenter(beacons),
-	      styles: darkThemedMap()
+	      styles: darkThemedMap(),
+          backgroundColor: '#333'
 	    });
 	    for (var i = 0; i < beacons.length; i++ ) {
 		      var beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
@@ -328,7 +334,8 @@ function initMap(){
 	    var map = new google.maps.Map(document.getElementById("googleMapsBeacon"), {
 	      zoom: 15,
 	      center: loc,
-	      styles: darkThemedMap()
+	      styles: darkThemedMap(),
+          backgroundColor: '#333'
 	    });
 	    var marker = new google.maps.Marker({
 	      position: loc,
@@ -347,7 +354,8 @@ function initMap(){
 	    var map = new google.maps.Map(document.getElementById("googleMapsObject"), {
 	      zoom: 15,
 	      center: loc,
-	      styles: darkThemedMap()
+	      styles: darkThemedMap(),
+          backgroundColor: '#333'
 	    });
 	    var marker = new google.maps.Marker({
 	      position: loc,
@@ -365,7 +373,8 @@ function initMap(){
 		var map = new google.maps.Map(document.getElementById('googleMapsBeacons'), {
           zoom: 11,
           center: findDPCenter(JSON.parse(sessionStorage.beaconsArray)),
-          styles: darkThemedMap()
+          styles: darkThemedMap(),
+          backgroundColor: '#333'
         });
         for (var i = 0; i < beacons.length; i++ ) {
 		      var beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
@@ -400,7 +409,8 @@ function initMap(){
 		var map = new google.maps.Map(document.getElementById('googleMapsObjects'),{
           zoom: 11,
           center: findDPCenter(JSON.parse(sessionStorage.objectsArray)),
-          styles: darkThemedMap()
+          styles: darkThemedMap(),
+          backgroundColor: '#333'
         });
         for (var i = 0; i < objects.length; i++ ) {
 		      var objectCenter = new google.maps.LatLng(objects[i].latitude, objects[i].longitude);
@@ -421,7 +431,8 @@ function initMap(){
 		var map = new google.maps.Map(document.getElementById('googleMapsStats'), {
           zoom: 11,
           center: findDPCenter(stats),
-          styles: darkThemedMap()
+          styles: darkThemedMap(),
+          backgroundColor: '#333'
         });
         heatmap = new google.maps.visualization.HeatmapLayer({
           data: getDataPoints(stats),

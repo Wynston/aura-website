@@ -102,13 +102,13 @@
 			 		<div class="row text-center panel panel-heading" id="liveTitle">
 			 			<!-- Primary title -->
 			 			<div id="primTitle" class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-left fontLight zeroPadding">
-			 				<h3>{{primTitle}}</h3>
+			 				{{primTitle}}
 			 			</div>
 			 			<!-- Secondary Title -->
 			 			<div id="orgTitle" class="hidden-xs">
 			 				<h4 class="text-muted">{{curOrg.name}}</h4>
 			 			</div>
-					    <div ng-switch="filterTitle" id="filterTitle" class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-center zeroPadding">
+					    <div ng-switch="filterTitle" id="filterTitle" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 text-center zeroPadding">
 					    	<!-- Objects View Filter -->
 						    <div ng-switch-when="objectsView" id="objectsViewFilter" class="btn-group">
 						    	<div class="btn-group">
@@ -130,8 +130,9 @@
 								    	</li>
 								    </ul>
 							    </div>
-					    		<div class="btn-group">
-							    	<button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu">
+
+					    		<div id="beaconsFilterDiv" class="btn-group" data-toggle="tooltip" data-placement="right" ng-mouseenter="showBeaconsFilterTooltip()" ng-mouseleave="hideBeaconsFilterTooltip()">
+							    	<button id="beaconFilterButton" class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" role="menu">
 								    	Filter by Beacon
 								    	<span class="caret"></span>
 								    </button>
@@ -213,7 +214,7 @@
 			 				</div>
 
 			 				<!-- Webcam Modal -->
-							  <div class="modal fade" id="webcamModal" role="dialog">
+							<div class="modal fade" id="webcamModal" role="dialog">
 							    <div class="modal-dialog modal-lg">
 							      <!-- Modal content-->
 							      <div class="modal-content">
@@ -221,16 +222,17 @@
 							          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 							          <h2><b>Will's Webcam</b></h2>
 							        </div>
-							        <div class="modal-body embed-responsive embed-responsive-16by9 modalPadding-1-2 text-center center-block" id="webcamScreen">
-							        	<!-- <iframe class="embed-responsive-item" src="http://10.0.1.1:8080?action=stream">
-			 							</iframe> -->
+							        <div class="modal-body zeroPadding">
+						       			<div class="embed-responsive embed-responsive-16by9 modalPadding-1-2 center-block" id="webcamScreen">
+						       				<!-- <iframe class="embed-responsive-item" src="http://10.0.1.1:8080?action=stream"></iframe> -->
+						       			</div>
 							        </div>
 							        <div class="modal-footer">
 							          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
 							        </div>
 							      </div>
 							    </div>
-							  </div> 
+							</div> 
 			 			</div>
 
 			 			<!-- Beacons List -->
@@ -257,12 +259,10 @@
 						 						<td class="hidden-sm hidden-xs">{{beacon.altitude | number: 3}}</td>
 						 						<td class="hidden-sm hidden-xs">{{beacon.latitude | number: 3}}</td>
 						 						<td class="hidden-sm hidden-xs">{{beacon.longitude | number: 3}}</td>
-						 						<td>
-						 							<h4>
-							 							<span class="glyphicon glyphicon-plus addIcon" ng-click="displayAddObjectAtBeaconModal(beacon)"></span>
-							 							<span class="glyphicon glyphicon-pencil editIcon" ng-click="displayEditBeaconModal(beacon)"></span>
-							 							<span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeBeacon(beacon)"></span>
-							 						</h4>
+						 						<td class="iconCell">
+						 							<span class="glyphicon glyphicon-plus addIcon" ng-click="displayAddObjectAtBeaconModal(beacon)"></span>
+						 							<span class="glyphicon glyphicon-pencil editIcon" ng-click="displayEditBeaconModal(beacon)"></span>
+						 							<span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeBeacon(beacon)"></span>
 						 						</td>
 						 					</tr>
 						 				</tbody>
@@ -336,12 +336,10 @@
 						 						<td class="hidden-xs hidden-sm columnSm"><span class="badge">{{obj.numAudio}}</span></td>
 						 						<td class="hidden-xs hidden-sm columnSm"><span class="badge">{{obj.numVideo}}</span></td>
 						 						<td class="hidden-xs hidden-sm columnSm"><span class="badge">{{obj.num3D}}</span></td>
-						 						<td>
-						 							<h4>
-							 							<span class="glyphicon glyphicon-plus addIcon" ng-click="displayAddAssetsModal(obj)"></span>
-							 							<span class="glyphicon glyphicon-pencil editIcon" ng-click="displayEditObjectModal(obj)"></span>
-							 							<span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeObject(arObject)"></span>
-							 						</h4>
+						 						<td class="iconCell">
+						 							<span class="glyphicon glyphicon-plus addIcon" ng-click="displayAddAssetsModal(obj)"></span>
+						 							<span class="glyphicon glyphicon-pencil editIcon" ng-click="displayEditObjectModal(obj)"></span>
+						 							<span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeObject(arObject)"></span>
 						 						</td>
 						 					</tr>
 						 				</tbody>
@@ -985,9 +983,10 @@
 				    </div>
 				</div>
  			</div>
- 			<footer class="text-center footer text-muted" id="footer">
-				<h5 class="margin0">© 2017 Aura Technologies Inc.</h5>
-				<h5 class="margin0"><a href="http://www.auracr.io/" class="text-info" target="_blank" style="text-decoration: none;">auracr.io</a></h5>
+ 			<footer class="footer text-muted">
+				© 2017 Aura Technologies Inc. 
+				<br>
+				<a class="text-info" href="http://www.auracr.io/" target="_blank" style="text-decoration: none;">auracr.io</a>
 			</footer>
 		</div>
 

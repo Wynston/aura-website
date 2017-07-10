@@ -15,7 +15,7 @@ auraCreate.beaconManagement = function($scope, $http){
 
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
+        url: $scope.beaconsUrl + $scope.curOrg.organization_id,
         data: $scope.newBeacon,
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey
@@ -44,7 +44,7 @@ auraCreate.beaconManagement = function($scope, $http){
 
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
+        url: $scope.beaconsUrl + $scope.curOrg.organization_id,
         data: $scope.newBeacon,
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey
@@ -61,7 +61,7 @@ auraCreate.beaconManagement = function($scope, $http){
     $scope.loadBeacons = function(){
 		$http({
 		    method : "GET",
-		    url : "https://website-155919.appspot.com/api/v1.0/newbeacon",
+		    url : $scope.beaconsUrl + $scope.curOrg.organization_id,
 		    headers: {
         		'Accept': 'application/json',
         		"X-Aura-API-Key": $scope.auraAPIKey
@@ -124,7 +124,7 @@ auraCreate.beaconManagement = function($scope, $http){
         }
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
+        url: $scope.beaconsUrl + $scope.curOrg.organization_id,
         data: updatedBeacon,
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey
@@ -151,7 +151,7 @@ auraCreate.beaconManagement = function($scope, $http){
         }
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
+        url: $scope.beaconsUrl + $scope.curOrg.organization_id,
         data: updatedBeacon,
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey
@@ -179,7 +179,7 @@ auraCreate.beaconManagement = function($scope, $http){
 
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon',
+        url: $scope.beaconsUrl + $scope.curOrg.organization_id,
         data: updatedBeacon,
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey
@@ -212,7 +212,7 @@ auraCreate.beaconManagement = function($scope, $http){
 		        	//Delete the beacon
 					$http({
 				        method: 'Delete',
-				        url: 'https://website-155919.appspot.com/api/v1.0/newbeacon/' + beacon.beacon_id,
+				        url: $scope.beaconsUrl + $scope.curOrg.organization_id + "/" + beacon.beacon_id,
 				        headers: {
 				        	"X-Aura-API-Key": $scope.auraAPIKey
 						}

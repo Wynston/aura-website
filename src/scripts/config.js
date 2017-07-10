@@ -5,6 +5,10 @@ auraCreate.config = function($scope){
 	$scope.auraAPIKey = "dGhpc2lzYWRldmVsb3BlcmFwcA==";
 
 	//google cloud storage urls
+	$scope.userUrl = "https://website-155919.appspot.com/api/v1.0/user";
+	$scope.organizationsUrl = "https://website-155919.appspot.com/api/v1.0/organization";
+	$scope.beaconsUrl = "https://website-155919.appspot.com/api/v1.0/newbeacon?filter[organization_id]=";
+	$scope.objectsUrl = "https://website-155919.appspot.com/api/v1.0/arobj?filter[organization_id]=";
 
 	//firebase bucket and gs urls
 	$scope.storageBucket = {

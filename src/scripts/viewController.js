@@ -138,18 +138,49 @@ auraCreate.viewController = function($scope){
 	    sessionStorage.objectsArray = JSON.stringify(tempArray);
     }
 
-    //determines the active class of the navbar
-    $('.nav.navbar-nav > li').on('click', function(e) {
-	    $('.nav.navbar-nav > li').removeClass('active');
-	    $(this).addClass('active');
-	}); 
-
-	//toggles the popover on certain events
+	//shows the tooltip on certain events
 	$scope.showBeaconsFilterTooltip = function(){
 		$("#beaconsFilterDiv").tooltip({title: $scope.beaconsFilter, placement: "right"});
 	}
 
+	//destroys the previous tooltip so that a new title can be assigned
 	$scope.hideBeaconsFilterTooltip = function(){
 		$("#beaconsFilterDiv").tooltip("destroy");
 	}
+
+	//displays the assets of an object with the specified filter
+	$scope.displayFilteredAssets = function(filter, obj){
+		$scope.curObj = obj;
+		$scope.displayAssetsModal();
+		$scope.galleryFilter.image = false;
+		$scope.galleryFilter.audio = false;
+		$scope.galleryFilter.video = false;
+		$scope.galleryFilter.threeD = false;
+		switch(filter){
+			case "image":
+				$scope.galleryFilter.image = true;
+				break;
+			case "audio":
+				$scope.galleryFilter.audio = true;
+				break;
+			case "video":
+				$scope.galleryFilter.video = true;
+				break;
+			case "3d":
+				$scope.galleryFilter.threeD = true;
+				break;
+			default:
+				$scope.galleryFilter.image = true;
+				$scope.galleryFilter.audio = true;
+				$scope.galleryFilter.video = true;
+				$scope.galleryFilter.threeD = true;
+				break;
+		}
+	}
+
+	//determines the active class of the navbar
+    $('.nav.navbar-nav > li').on('click', function(e) {
+	    $('.nav.navbar-nav > li').removeClass('active');
+	    $(this).addClass('active');
+	}); 
 }

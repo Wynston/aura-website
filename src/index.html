@@ -288,7 +288,7 @@
 			 							</div>
 				 						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right pull-right zeroPadding">
 				 							<div class="btn-group">
-					 							<button class="btn btn-sm btn-info disabled" style="cursor: default;">Type: {{curBeacon.beacon_type}}</button>
+					 							<button class="btn btn-sm fakeButton">Type: {{curBeacon.beacon_type}}</button>
 					 							<button class="btn btn-sm btn-warning" type="button" data-toggle="modal" data-target="#beaconTypeEditModal">
 					 								<span class="glyphicon glyphicon-edit"></span>
 					 							</button>
@@ -331,10 +331,18 @@
 						 						</td>
 						 						<td ng-click="displayObject(obj)">{{obj.name}}</td>
 						 						<td ng-click="loadBeacon(obj.beacon_name)">{{obj.beacon_name}}</td>
-						 						<td class="hidden-xs hidden-sm columnSm"><span class="badge">{{obj.numImage}}</span></td>
-						 						<td class="hidden-xs hidden-sm columnSm"><span class="badge">{{obj.numAudio}}</span></td>
-						 						<td class="hidden-xs hidden-sm columnSm"><span class="badge">{{obj.numVideo}}</span></td>
-						 						<td class="hidden-xs hidden-sm columnSm"><span class="badge">{{obj.num3D}}</span></td>
+						 						<td ng-click="displayFilteredAssets('image', obj)" class="hidden-xs hidden-sm columnSm text-center">
+						 							<span class="badge">{{obj.numImage}}</span>
+						 						</td>
+						 						<td ng-click="displayFilteredAssets('audio', obj)" class="hidden-xs hidden-sm columnSm text-center">
+						 							<span class="badge">{{obj.numAudio}}</span>
+						 						</td>
+						 						<td ng-click="displayFilteredAssets('video', obj)" class="hidden-xs hidden-sm columnSm text-center">
+						 							<span class="badge">{{obj.numVideo}}</span>
+						 						</td>
+						 						<td ng-click="displayFilteredAssets('3d', obj)" class="hidden-xs hidden-sm columnSm text-center">
+						 							<span class="badge">{{obj.num3D}}</span>
+						 						</td>
 						 						<td class="iconCell">
 						 							<span class="glyphicon glyphicon-plus addIcon" ng-click="displayAddAssetsModal(obj)"></span>
 						 							<span class="glyphicon glyphicon-pencil editIcon" ng-click="displayEditObjectModal(obj)"></span>
@@ -452,7 +460,7 @@
 				    
 				      <!-- Modal content-->
 				      <div class="modal-content">
-				        <div class="modal-header text-primary text-center modalPadding-2-3">
+				        <div class="modal-header text-primary text-center modalPadding-1-2">
 				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 				          <h2><b>Organization creation</b></h2>
 				        </div>
@@ -482,11 +490,11 @@
 				    
 				      <!-- Modal content-->
 				      <div class="modal-content">
-				        <div class="modal-header text-primary text-center modalPadding-2-3">
+				        <div class="modal-header text-primary text-center modalPadding-1-1">
 				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 				          <h2><b>Organization deletion</b></h2>
 				        </div>
-				        <div class="modal-body modalPadding-2-7">
+				        <div class="modal-body modalPadding-2-5">
 				          <form role="form">
 				            <div class="form-group">
 				            	<ul class="list list-unstyled fontDark">
@@ -971,10 +979,10 @@
 				        </div>
 				        <div class="modal-footer">
 				        	<ul class="list-inline pull-left d-inline">
-				        		<li class="pointer">#Images <span class="badge">{{curObj.numImage}}</span></li>
-				        		<li class="pointer">#Audio <span class="badge">{{curObj.numAudio}}</span></li>
-				        		<li class="pointer">#Video <span class="badge">{{curObj.numVideo}}</span></li>
-				        		<li class="pointer">#3D <span class="badge">{{curObj.num3D}}</span></li>				
+				        		<li>#Images <span ng-click="displayFilteredAssets('image', curObj)" class="badge pointer">{{curObj.numImage}}</span></li>
+				        		<li>#Audio <span ng-click="displayFilteredAssets('audio', curObj)" class="badge pointer">{{curObj.numAudio}}</span></li>
+				        		<li>#Video <span ng-click="displayFilteredAssets('video', curObj)" class="badge pointer">{{curObj.numVideo}}</span></li>
+				        		<li>#3D <span ng-click="displayFilteredAssets('3d', curObj)" class="badge pointer">{{curObj.num3D}}</span></li>				
 				        	</ul>
 				          <button type="button" class="btn btn-info pull-right d-inline" data-dismiss="modal">Close</button>
 				        </div>

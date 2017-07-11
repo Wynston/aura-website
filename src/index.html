@@ -18,8 +18,7 @@
 				<div class="container-fluid">
 					<div class="navbar-header" style="padding-right: 1em;">
 						<a id="pageTitle" class="navbar-left pointer" ng-click="changeView('dashboard', '')">
-							<img class="img" ng-src="images/aura_Logo.jpg" alt="Aura Logo" ng-click="changeView('dashboard', '')" style="height: 40px"/>
-							Aura Create
+							<img class="img" ng-src="images/Aura_Create_rev1.jpg" alt="Aura Logo" ng-click="changeView('dashboard', '')" style="height: 40px"/>
 						</a>
 					</div>
 					<ul class="nav navbar-nav">
@@ -66,17 +65,17 @@
 				 	</div>
 			 		<div class="container-fluid visible-xs text-center zeroPadding">
 			 			<div class="container-fluid" id="mobileOrgMenu">
-			 				<h3><b>Organizations</b></h3>
+			 				Organizations
 			 			</div>
  						<!-- Carousel of organizations -->
 		 				<div id="orgsCarousel" class="carousel" data-ride="carousel" data-interval="false">
 							  <!-- Organization -->
 							  <div class="carousel-inner">
-							  	<div class="item active text-center text-success">
+							  	<div class="item active text-center text-primary">
 									<h1><b>{{organizationsArray[0].name}}</b></h1>
 							    </div>
 
-							  	<div class="item text-center text-success" ng-repeat="organization in organizationsArray | orderBy: name" ng-if="$index > 0">
+							  	<div class="item text-center text-primary" ng-repeat="organization in organizationsArray | orderBy: name" ng-if="$index > 0">
 									<h1><b>{{organization.name}}</b></h1>
 							    </div>
 
@@ -285,7 +284,7 @@
 			 								<button class="btn btn-sm btn-info" type="button" ng-click="displayBeaconObjects()">Objects Served</button>					
 			 							</div>
 			 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary zeroPadding">
-			 								<h4 class="text-primary">Associated: {{curBeacon.associated}}</h4>
+			 								Associated: {{curBeacon.associated}}
 			 							</div>
 				 						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right pull-right zeroPadding">
 				 							<div class="btn-group">

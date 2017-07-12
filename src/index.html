@@ -9,11 +9,11 @@
 		<link rel="stylesheet" type="text/css" href="styling/auraCreate.css">
 		<link rel="stylesheet" type="text/css" href="styling/toggleSwitch.css">
 		<link rel="stylesheet" type="text/css" href="styling/modalPadding.css">
+		<link rel="stylesheet" type="text/css" href="styling/loading-bar.css">
 		<script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 	</head>
 	<body>
 		<div class="container-fluid zeroPadding" ng-app="auraCreate" ng-controller="mainController" ng-init="init()" ng-cloak id="MAIN">
-			<div id="alert"></div>
 			<nav class="navbar navbar-inverse" id="header">
 				<div class="container-fluid">
 					<div class="navbar-header" style="padding-right: 1em;">
@@ -805,7 +805,7 @@
 				    
 				      <!-- Modal content-->
 				      <div class="modal-content">
-				        <div class="modal-header text-center modalPadding-2-3">
+				        <div class="modal-header text-center modalPadding-1-2">
 				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
 				          <h2 class="text-primary"><b>New Media Content for {{curObj.name}}</b></h2>
 				        </div>
@@ -979,10 +979,10 @@
 				        </div>
 				        <div class="modal-footer">
 				        	<ul class="list-inline pull-left d-inline">
-				        		<li>#Images <span ng-click="displayFilteredAssets('image', curObj)" class="badge pointer">{{curObj.numImage}}</span></li>
-				        		<li>#Audio <span ng-click="displayFilteredAssets('audio', curObj)" class="badge pointer">{{curObj.numAudio}}</span></li>
-				        		<li>#Video <span ng-click="displayFilteredAssets('video', curObj)" class="badge pointer">{{curObj.numVideo}}</span></li>
-				        		<li>#3D <span ng-click="displayFilteredAssets('3d', curObj)" class="badge pointer">{{curObj.num3D}}</span></li>				
+				        		<li>#Images: <span ng-click="displayFilteredAssets('image', curObj)" class="badge pointer">{{curObj.numImage}}</span></li>
+				        		<li>#Audio: <span ng-click="displayFilteredAssets('audio', curObj)" class="badge pointer">{{curObj.numAudio}}</span></li>
+				        		<li>#Video: <span ng-click="displayFilteredAssets('video', curObj)" class="badge pointer">{{curObj.numVideo}}</span></li>
+				        		<li>#3D: <span ng-click="displayFilteredAssets('3d', curObj)" class="badge pointer">{{curObj.num3D}}</span></li>				
 				        	</ul>
 				          <button type="button" class="btn btn-info pull-right d-inline" data-dismiss="modal">Close</button>
 				        </div>
@@ -995,6 +995,12 @@
 				<br>
 				<a class="text-info" href="http://www.auracr.io/" target="_blank" style="text-decoration: none;">auracr.io</a>
 			</footer>
+			<div id="alert"></div>
+			<div class="progress" ng-show="fbLoading">
+				<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+					{{progressPercent | number:0}}% Complete
+				</div>
+			</div>
 		</div>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type='text/javascript'></script>
@@ -1023,6 +1029,7 @@
 		<script src="scripts/directives.js" type='text/javascript'></script>
 		<script src="scripts/filters.js" type='text/javascript'></script>
 		<script src="scripts/customAlerts.js" type='text/javascript'></script>
+		<script src="scripts/loading-bar.js" type='text/javascript'></script>
 		<script src="scripts/googleMapsController.js" type='text/javascript'></script>
 	</body>
 </html>

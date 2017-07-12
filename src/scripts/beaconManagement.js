@@ -212,7 +212,7 @@ auraCreate.beaconManagement = function($scope, $http){
 		        	//Delete the beacon
 					$http({
 				        method: 'Delete',
-				        url: $scope.beaconsUrl + $scope.curOrg.organization_id + "/" + beacon.beacon_id,
+				        url: $scope.beaconById + beacon.beacon_id,
 				        headers: {
 				        	"X-Aura-API-Key": $scope.auraAPIKey
 						}

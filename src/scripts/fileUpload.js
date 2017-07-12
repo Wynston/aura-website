@@ -120,23 +120,22 @@ auraCreate.fileUpload = function($scope){
 			var type = JSON.stringify($scope.files[i].name);
 			type = (type.split('.').pop()).toLowerCase();
 			type = type.slice(0, type.length - 1);
-			switch(type){
-				//resize if its an image file then upload
-				case ("jpg" || "png"):
-					$scope.resizeAsset($scope.files[i], $scope.fileNames[i], "image");
-					break;
-				//audio upload
-				case ("mp3" || "wav" || "ogg"):
-					$scope.uploadFBAsset( $scope.fileNames[i], $scope.files[i], "", "audio");
-					break;
-				//video upload
-				case ("mp4" || "avi" || "mpg" || "mv4"):
-					$scope.captureVideoThumbnail($scope.files[i], $scope.fileNames[i], "video");
-					break;
-				//if no cases are present then the file type is invalid
-				default:
-					alertFailure("ERROR: " + type + " is not supported.");
-					break;
+
+			//resize if its an image file then upload
+			if(type == "jpg" || type == "png"){
+				$scope.resizeAsset($scope.files[i], $scope.fileNames[i], "image");
+			}
+			//audio upload
+			else if(type == "mp3" || type == "wav" || type == "ogg"){
+				$scope.uploadFBAsset( $scope.fileNames[i], $scope.files[i], "", "audio");
+			}
+			//video upload
+			else if(type == "mp4" || type == "avi" || type == "mpg" || type == "mv4" || type == "webm"){
+				$scope.captureVideoThumbnail($scope.files[i], $scope.fileNames[i], "video");
+			}
+			//if no cases are present then the file type is invalid
+			else{
+				alertFailure("ERROR: " + type + " is not supported.");
 			}
 		}
 	}

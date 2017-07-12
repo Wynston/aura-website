@@ -101,9 +101,9 @@ auraCreate.organizationManagement = function($scope, $http){
 				$scope.loadBeacons();
 				$scope.changeView('beaconsList', org);
 				break;
-			case "objectList":
+			case "objectsList":
 				$scope.loadObjects();
-				$scope.changeView('objectssList', org);
+				$scope.changeView('objectsList', org);
 				break;
 			case "stats":
 				$scope.loadStats();

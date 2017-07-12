@@ -6,6 +6,10 @@ auraCreate.firebaseManagement = function($scope, $http){
 	$scope.storage = $scope.firebaseApp.storage($scope.fireBaseGS);
 	$scope.storageRef = $scope.storage.ref();
 
+	//firebase loading bar
+	$scope.fbLoading = false;
+	$scope.progressPercent = 0;
+
 	//uploads the main asset and calls the uploading of the thumbnail asset
 	$scope.uploadFBAsset = function(assetName, assetURL, thumbnailURL, type){
 		//new asset ID, will be used to generate thumbnail firebase name
@@ -33,11 +37,19 @@ auraCreate.firebaseManagement = function($scope, $http){
 				break;
 		}
 
+		//reset progress bar
+		$('.progress-bar').css('width', '0%').attr('aria-valuenow', 0);
+		$scope.fbLoading = true;
+		$scope.safeApply();
+
 		// Listen for state changes, errors, and completion of the upload.
 		uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
 		  function(snapshot){
 		    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
 		    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+		    $('.progress-bar').css('width', progress+'%').attr('aria-valuenow', progress);
+		    $scope.progressPercent = progress;
+		    $scope.safeApply();
 		    console.log('Upload is ' + progress + '% done');
 		    switch (snapshot.state) {
 		      case firebase.storage.TaskState.PAUSED:
@@ -52,18 +64,22 @@ auraCreate.firebaseManagement = function($scope, $http){
 		  switch (error.code) {
 		    case 'storage/unauthorized':
 		      // User doesn't have permission to access the object
+		      $scope.fbLoading = false;
 		      break;
 
 		    case 'storage/canceled':
 		      // User canceled the upload
+		      $scope.fbLoading = false;
 		      break;
 
 		    case 'storage/unknown':
 		      // Unknown error occurred, inspect error.serverResponse
+		      $scope.fbLoading = false;
 		      break;
 		  }
 		}, function(){
-		 // Upload completed successfully, now we can get the download URL
+			$scope.fbLoading = false;
+			// Upload completed successfully, now we can get the download URL
 		  var newAssetURL = uploadTask.snapshot.downloadURL;
 			switch(type){
 				case "image":
@@ -139,11 +155,18 @@ auraCreate.firebaseManagement = function($scope, $http){
 		// Upload file and metadata to the object 
 		var uploadTask = thumnailRef.putString(thumbnailURL, 'base64', $scope.FBMetaData);
 
+		//reset progress bar
+		$('.progress-bar').css('width', '0%').attr('aria-valuenow', 0);
+		$scope.fbLoading = true;
+		$scope.safeApply();
+
 		// Listen for state changes, errors, and completion of the upload.
 		uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
 		  function(snapshot){
 		    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
 		    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+		    $('.progress-bar').css('width', progress+'%').attr('aria-valuenow', progress);
+		    $scope.progressPercent = progress;
 		    console.log('Upload is ' + progress + '% done');
 		    switch (snapshot.state) {
 		      case firebase.storage.TaskState.PAUSED:
@@ -158,18 +181,22 @@ auraCreate.firebaseManagement = function($scope, $http){
 		  switch (error.code) {
 		    case 'storage/unauthorized':
 		      // User doesn't have permission to access the object
+		      $scope.fbLoading = false;
 		      break;
 
 		    case 'storage/canceled':
 		      // User canceled the upload
+		      $scope.fbLoading = false;
 		      break;
 
 		    case 'storage/unknown':
 		      // Unknown error occurred, inspect error.serverResponse
+		      $scope.fbLoading = false;
 		      break;
 		  }
 		}, function() {
 		 // Upload completed successfully, now we can get the download URL
+		  $scope.fbLoading = false;
 		  $scope.thumbnailURL = uploadTask.snapshot.downloadURL;
 		  $scope.addObject(name, desc, objID);
 		});

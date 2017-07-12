@@ -412,18 +412,35 @@ function initMap(){
           styles: darkThemedMap(),
           backgroundColor: '#333'
         });
+        var infoWindows = [];
+        var markers = [];
         for (var i = 0; i < objects.length; i++ ) {
-		      var objectCenter = new google.maps.LatLng(objects[i].latitude, objects[i].longitude);
-	          var marker = new google.maps.Marker({
-			      position: objectCenter,
-			      map: map,
-			      draggable: false,
-		    	  animation: google.maps.Animation.DROP,
-		    	  object: objects[i]
-			  });
-	    	  google.maps.event.addListener(marker, 'click', function(){
-	    	  	angular.element(document.getElementById('MAIN')).scope().displayObject(this.object);
-	    	  });
+        	//info window for object
+        	var contentString = "<button class='btn btn-sm btn-info infoWindowButton' onclick='objectDisplayHelp(objects[i])'>Object: " + objects[i].name 
+        	+ "</button><h6>Description: " + objects[i].description
+        	+ "</h6><h6>Altitude: " + objects[i].altitude +
+        		"</h6><h6>Latitude: " + objects[i].latitude + "</h6><h6>Longitude: " + objects[i].longitude + "</h6>";
+	        infoWindows[i] = new google.maps.InfoWindow({
+	          content: contentString,
+	          maxWidth: 300,
+	          object: objects[i]
+	        });
+
+	        //marker for object
+			var objectCenter = new google.maps.LatLng(objects[i].latitude, objects[i].longitude);
+			markers[i] = new google.maps.Marker({
+			  position: objectCenter,
+			  map: map,
+			  draggable: false,
+			  animation: google.maps.Animation.DROP,
+			  object: objects[i]
+			}); 
+
+			google.maps.event.addListener(markers[i], 'click', (function(marker, i) {
+			  return function() {
+			    infoWindows[i].open(map, markers[i]);
+			  }
+			})(markers[i], i));
         }
 	}
 	else if(sessionStorage.curView == "stats"  && document.getElementById('googleMapsStats')){
@@ -619,6 +636,16 @@ function darkThemedMap(){
               stylers: [{color: '#17263c'}]
             }
           ];
+}
+
+//helper function for the infowindow to display a specific beacon
+function beaconDisplayHelp(beacon){
+	angular.element(document.getElementById('MAIN')).scope().displayBeacon(beacon);
+}
+
+//helper function for the infowindow to display a specific beacon
+function objectDisplayHelp(obj){
+	angular.element(document.getElementById('MAIN')).scope().displayObject(obj);
 }
 
 //-------------------------------------end of google maps handling-------------------------------

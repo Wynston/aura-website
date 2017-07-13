@@ -13,7 +13,6 @@ auraCreate.organizationManagement = function($scope, $http){
 		  }).then(function mySuccess(response) {
 			  	//loops over every organization in the response and adds it to session storage and binding
 			  	var jsonArray = response.data.data;
-			  	$scope.numOrganizations = jsonArray.length;
 			  	$scope.organizationsArray = [];
 			  	for(var i = 0; i < jsonArray.length; i++){
 			  		$scope.organization = {
@@ -23,8 +22,8 @@ auraCreate.organizationManagement = function($scope, $http){
 			  		};
 			  		$scope.organizationsArray[i] = $scope.organization;
 			  	}
-			  	$scope.curOrg = $scope.organizationsArray[0];
 			  	sessionStorage.organizationsArray = JSON.stringify($scope.organizationsArray);
+			  	$scope.changeView("dashboard", $scope.organizationsArray[0]);
 		    }, function myError(response) {
 		    	alertFailure("ERROR: failed to load organizations for " + $scope.userName);
 		  });
@@ -86,30 +85,27 @@ auraCreate.organizationManagement = function($scope, $http){
 	$scope.changeCurOrg = function(org){
 		$('#orgList > li.active').removeClass('active');
 		$('#orgList > #' + org.name).addClass('active');
-		$scope.curOrg = org;
 		//reload depending on the user's current view with the new organization
 		switch($scope.curView){
 			case "beacon":
-				$scope.loadBeacons();
 				$scope.changeView('beaconsList', org);
 				break;
 			case "object":
-				$scope.loadObjects();
 				$scope.changeView('objectsList', org);
 				break;
 			case "beaconsList":
-				$scope.loadBeacons();
 				$scope.changeView('beaconsList', org);
 				break;
 			case "objectsList":
-				$scope.loadObjects();
 				$scope.changeView('objectsList', org);
 				break;
 			case "stats":
-				$scope.loadStats();
 				$scope.changeView('stats', org);
 				break;
-			case ("profileSettings" || "dashboard"):
+			case "dashboard":
+				$scope.changeView('dashboard', org);
+				break;
+			case ("profileSettings"):
 				break;
 			default: 
 				break;

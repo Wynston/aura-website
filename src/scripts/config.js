@@ -24,7 +24,9 @@ auraCreate.config = function($scope){
 		}
 	};
 
+	//images
 	$scope.genericAudioThumbnail= "images/auraheadphone150.jpg";
+	$scope.loaderGif = "images/load.gif";
 
 	//initates scope variables
 	$scope.curOrg;
@@ -34,25 +36,25 @@ auraCreate.config = function($scope){
 	$scope.curAssetIndex;
 	$scope.curGalleryIndex;
 
-	//valid beacon types
+	//valid beacon types and a tally object
 	$scope.beaconTypes = [
-			"Airport",
-			"Art",
-			"Coffee-shop",
-			"Gallery",
-			"Landmark",
-			"Manufacturing",
-			"Museum",
-			"Office",
-			"Other",
-			"Park",
-			"Parking",
-			"Retail",
-			"Restaurant",
-			"Security",
-			"Trail",
-			"Zoo"
-		];
+		{type: "Airport", tally: 0},
+		{type: "Art", tally: 0},
+		{type: "Coffee-shop", tally: 0},
+		{type: "Gallery", tally: 0},
+		{type: "Landmark", tally: 0},
+		{type: "Manufacturing", tally: 0},
+		{type: "Museum", tally: 0},
+		{type: "Office", tally: 0},
+		{type: "Other", tally: 0},
+		{type: "Park", tally: 0},
+		{type: "Parking", tally: 0},
+		{type: "Retail", tally: 0},
+		{type: "Restaurant", tally: 0},
+		{type: "Security", tally: 0},
+		{type: "Trail", tally: 0},
+		{type: "Zoo", tally: 0}
+	];
 
 	//media carousel filters, all preset to true
 	$scope.galleryFilter = {

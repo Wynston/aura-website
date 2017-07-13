@@ -11,7 +11,7 @@ auraCreate.userManagement = function($scope, $http){
 	// 	    }
 	// 	  }).then(function mySucces(response) {
 	// 	  	//stores the user in session storage and angular binding
-	// 	  	var jsonArray = response.data;
+	// 	  	var jsonArray = response.data.data;
 	//   		$scope.user = {
 	//   			name: jsonArray[0].name,
 	//   			email: jsonArray[0].email,

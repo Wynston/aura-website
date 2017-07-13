@@ -184,10 +184,22 @@
 			 		<div ng-switch="curView" id="liveDisplay" class="container-fluid panel">
 			 			<!-- Dashboard -->
 			 			<div ng-switch-when="dashboard" class="panel-body text-primary">
-			 				<h2># Organizations: {{numOrganizations}}</h2>
-			 				<h2># Beacons: {{numBeacons}}</h2>
-			 				<h2># Objects: {{numObjects}}</h2>
-			 				<h2>Average Throughput: {{avgThroughput}}</h2>
+			 				<div class="row">
+			 					<!-- Beacons by type -->
+				 				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				 					<div class="pieChart" id="beaconsByTypeChart"></div>
+				 				</div>
+				 				
+				 				<!-- Objects by beacon -->
+				 				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				 					<div class="pieChart" id="objectsByBeaconChart"></div>
+				 				</div>
+
+				 				<!-- Assets by file type -->
+				 				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				 					<div class="pieChart" id="assetsByTypeChart"></div>
+				 				</div>
+			 				</div>
 			 			</div>
 
 			 			<!-- Profile Settings -->
@@ -540,7 +552,7 @@
 				            	<label>Type:</label>
 							    <select ng-model="addBeaconType" class="form-control input-sm" required>
 							    	<option value="" disabled selected hidden>Select beacon type</option>
-							    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
+							    	<option ng-repeat="cur in beaconTypes" value={{cur.type}>{{cur.type}}</option>
 							    </select>
 				            </div>
 				            <h4><label>Location:</label></h4> 
@@ -580,7 +592,7 @@
 				            	<label>Type:</label>
 							    <select ng-model="editBeacType" class="form-control input-sm" required>
 							    	<option value="" disabled selected hidden>Select beacon type</option>
-							    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
+							    	<option ng-repeat="cur in beaconTypes" value={{cur.type}}>{{cur.type}}</option>
 							    </select>
 				            </div>
 				            <h4><label>Location:</label></h4> 
@@ -615,7 +627,7 @@
 				            	<label>Type:</label>
 							    <select ng-model="newBeaconType" class="form-control" required>
 							    	<option value="" disabled selected hidden>{{curBeacon.beacon_type}}</option>
-							    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
+							    	<option ng-repeat="cur in beaconTypes" value={{cur.type}}>{{cur.type}}</option>
 							    </select>
 				            </div> 
 				            <button type="submit" class="btn btn-success btn-block" ng-click="updateBeaconType(newBeaconType)" data-dismiss="modal">Confirm</button>
@@ -733,7 +745,7 @@
 				            	<label>Type:</label>
 							    <select ng-model="addBeaconForObjectType" class="form-control" required>
 							    	<option value="" disabled selected hidden>Select beacon type</option>
-							    	<option ng-repeat="type in beaconTypes" value={{type}}>{{type}}</option>
+							    	<option ng-repeat="cur in beaconTypes" value={{cur.type}}>{{cur.type}}</option>
 							    </select>
 				            </div>
 				            <div class="form-group">
@@ -1010,6 +1022,7 @@
 		<script src="scripts/bootbox.min.js" type='text/javascript'></script>
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCq80g8ye8MQaNGW3BOVaj0VY3m7jpomoY&libraries=visualization" type='text/javascript'></script>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script src="scripts/auraCreateAppModule.js" type='text/javascript'></script>
 		<script src="scripts/config.js" type='text/javascript'></script>
 		<script src="scripts/mainController.js" type='text/javascript'></script>
@@ -1021,6 +1034,7 @@
 		<script src="scripts/objectManagement.js" type='text/javascript'></script>
 		<script src="scripts/assetManagement.js" type='text/javascript'></script>
 		<script src="scripts/statManagement.js" type='text/javascript'></script>
+		<script src="scripts/dashboard.js" type='text/javascript'></script>
 		<script src="scripts/firebaseManagement.js" type='text/javascript'></script>
 		<script src="scripts/locationCalculations.js" type='text/javascript'></script>
 		<script src="scripts/resetControls.js" type='text/javascript'></script>

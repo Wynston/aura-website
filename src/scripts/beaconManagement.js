@@ -67,6 +67,7 @@ auraCreate.beaconManagement = function($scope, $http){
         		"X-Aura-API-Key": $scope.auraAPIKey
 		    }
 		  }).then(function mySuccess(response) {
+		  	$scope.resetBeaconTypeTally();
 		  	//loops over every beacon object in the response and adds it to session storage
 		  	//stores the objects as beacons objects in an array that is stored as JSON
 		  	var jsonArray = response.data.data;
@@ -85,10 +86,12 @@ auraCreate.beaconManagement = function($scope, $http){
 		  			associated_id: jsonArray[i].attributes.associated
 		  		};
 		  		$scope.beaconsArray[i] = $scope.beacon;
+		  		$scope.tallyBeaconTypes($scope.beacon.beacon_type);
 		  	}
 		  	sessionStorage.beaconsArray = JSON.stringify($scope.beaconsArray);
 
 		    }, function myError(response) {
+		    	alertFailure("ERROR: failed to load beacons.");
 		  });
     }
 
@@ -241,11 +244,27 @@ auraCreate.beaconManagement = function($scope, $http){
 	$scope.toUpperBeaconType = function(beaconType){
 		var type = "";
 		for(var i = 0; i < $scope.beaconTypes.length; i++){
-			if(beaconType == $scope.beaconTypes[i].toLowerCase()){
-				type = $scope.beaconTypes[i];
+			if(beaconType == $scope.beaconTypes[i].type.toLowerCase()){
+				type = $scope.beaconTypes[i].type;
 				break;
 			}
 		}
 		return type;
+	}
+
+	//increments the counter for given beacon type
+	$scope.tallyBeaconTypes = function(type){
+		for(var i = 0; i < $scope.beaconTypes.length; i++){
+			if(type == $scope.beaconTypes[i].type){
+				$scope.beaconTypes.tally ++;
+			}
+		}
+	}
+
+	//resets the counter for each type of beacon
+	$scope.resetBeaconTypeTally = function(){
+		for(var i = 0; i < $scope.beaconTypes.length; i++){
+			$scope.beaconTypes[i].tally = 0;
+		}
 	}
 }

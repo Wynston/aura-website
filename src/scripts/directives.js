@@ -15,5 +15,4 @@ auraCreate.directive('customOnChange', function() {
     }
   };
 });
-
 //-------------------------------------End of Custom Directives----------------------------------

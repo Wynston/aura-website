@@ -376,7 +376,30 @@ function initMap(){
           styles: darkThemedMap(),
           backgroundColor: '#333'
         });
+        var infoWindows = [];
+        var markers = [];
         for (var i = 0; i < beacons.length; i++ ) {
+        	//info window for beacon
+        	var idButton = "btn-" + beacons[i].beacon_id;
+        	var contentString = "<button id='"+idButton+"' class='btn btn-sm btn-info'>Beacon: " + beacons[i].beacon_name 
+        		+ "</button><h6>Type: " + beacons[i].beacon_type + "</h6><h6>Altitude: " + beacons[i].altitude +
+        		"</h6><h6>Latitude: " + beacons[i].latitude + "</h6><h6>Longitude: " + beacons[i].longitude + "</h6>";
+	        infoWindows[i] = new google.maps.InfoWindow({
+	          content: contentString,
+	          maxWidth: 300,
+	          beacon: beacons[i],
+	          id: idButton
+	        });
+
+	        //button for routing to an beacon
+	        google.maps.event.addListener(infoWindows[i], 'domready', function(){
+			    var link = $('#' + this.id)
+			    var beacon = this.beacon;
+			    google.maps.event.addDomListener(link[0], 'click', function(){
+			    	angular.element(document.getElementById('MAIN')).scope().displayBeacon(beacon);
+			    });
+			});
+
 		      var beaconCenter = new google.maps.LatLng(beacons[i].latitude, beacons[i].longitude);
 	          // Adds a 50m radius circle around each beacon
 	          var beaconCircle = new google.maps.Circle({
@@ -390,18 +413,19 @@ function initMap(){
 	            radius: 50,
 	            clickable: false
 	          });
-	          var marker = new google.maps.Marker({
+	          markers[i] = new google.maps.Marker({
 			      position: beaconCenter,
 			      map: map,
 			      draggable: false,
 		    	  animation: google.maps.Animation.DROP,
 		    	  beacon: beacons[i]
 			  });
-	    	  google.maps.event.addListener(marker, 'click', function(){
-	    	  	if(document.getElementById('googleMapsBeacons')){
-	    	  		angular.element(document.getElementById('MAIN')).scope().displayBeacon(this.beacon);
-	    	  	}
-	    	  });
+
+	    	  google.maps.event.addListener(markers[i], 'click', (function(marker, i) {
+			  return function() {
+			    infoWindows[i].open(map, markers[i]);
+			  }
+			})(markers[i], i));
         }
 	}
 	else if(sessionStorage.curView == "objectsList" && document.getElementById('googleMapsObjects')){
@@ -416,15 +440,26 @@ function initMap(){
         var markers = [];
         for (var i = 0; i < objects.length; i++ ) {
         	//info window for object
-        	var contentString = "<button class='btn btn-sm btn-info infoWindowButton' onclick='objectDisplayHelp(objects[i])'>Object: " + objects[i].name 
+        	var idButton = "btn-" + objects[i].arobj_id;
+        	var contentString = "<button id='"+idButton+"' class='btn btn-sm btn-info'>Object: " + objects[i].name 
         	+ "</button><h6>Description: " + objects[i].description
         	+ "</h6><h6>Altitude: " + objects[i].altitude +
         		"</h6><h6>Latitude: " + objects[i].latitude + "</h6><h6>Longitude: " + objects[i].longitude + "</h6>";
 	        infoWindows[i] = new google.maps.InfoWindow({
 	          content: contentString,
 	          maxWidth: 300,
-	          object: objects[i]
+	          object: objects[i],
+	          id: idButton
 	        });
+
+	        //button for routing to an object
+	        google.maps.event.addListener(infoWindows[i], 'domready', function(){
+			    var link = $('#' + this.id)
+			    var obj = this.object;
+			    google.maps.event.addDomListener(link[0], 'click', function(){
+			    	angular.element(document.getElementById('MAIN')).scope().displayObject(obj);
+			    });
+			});
 
 	        //marker for object
 			var objectCenter = new google.maps.LatLng(objects[i].latitude, objects[i].longitude);
@@ -637,15 +672,4 @@ function darkThemedMap(){
             }
           ];
 }
-
-//helper function for the infowindow to display a specific beacon
-function beaconDisplayHelp(beacon){
-	angular.element(document.getElementById('MAIN')).scope().displayBeacon(beacon);
-}
-
-//helper function for the infowindow to display a specific beacon
-function objectDisplayHelp(obj){
-	angular.element(document.getElementById('MAIN')).scope().displayObject(obj);
-}
-
 //-------------------------------------end of google maps handling-------------------------------

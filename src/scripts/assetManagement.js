@@ -51,8 +51,8 @@ auraCreate.assetManagement = function($scope, $http){
 
 					//Delete the asset by updating the object its associated with
 					$http({
-				        method: 'Put',
-				        url: $scope.objectsUrl + $scope.curOrg.organization_id + "/" +  $scope.curObj.arobj_id,
+				        method: 'Delete',
+				        url: $scope.objectById + $scope.curObj.arobj_id + "/contents/" + asset.content_id,
 				        headers: {
 				        	"X-Aura-API-Key": $scope.auraAPIKey
 						}

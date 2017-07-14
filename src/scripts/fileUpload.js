@@ -122,7 +122,7 @@ auraCreate.fileUpload = function($scope){
 			type = type.slice(0, type.length - 1);
 
 			//resize if its an image file then upload
-			if(type == "jpg" || type == "png"){
+			if(type == "jpg" || type == "png" || type == "gif"){
 				$scope.resizeAsset($scope.files[i], $scope.fileNames[i], "image");
 			}
 			//audio upload
@@ -261,8 +261,8 @@ auraCreate.fileUpload = function($scope){
 		    	$scope.uploadFBAsset(fileName, file, thumbnailURL, type);
 
 		    	// //clean up
-		    	// video.remove();
-		    	// canvas.remove();
+		    	video.remove();
+		    	canvas.remove();
 			}
 		}
 		reader.readAsDataURL(file);

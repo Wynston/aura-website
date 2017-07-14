@@ -5,9 +5,9 @@ auraCreate.viewController = function($scope){
 		$scope.curOrg = org;
 		switch(view){
 			case "dashboard":
-				$scope.loadBeacons();
+			    $scope.loadBeacons();
 				$scope.loadObjects();
-				$scope.initDashboard();
+				setTimeout(function(){ $scope.initDashboard(); }, 1000);
 				$scope.changeLiveTitle("Dashboard", false);
 				sessionStorage.curView = view;
 				$scope.curView = view;

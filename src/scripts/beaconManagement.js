@@ -89,7 +89,6 @@ auraCreate.beaconManagement = function($scope, $http){
 		  		$scope.tallyBeaconTypes($scope.beacon.beacon_type);
 		  	}
 		  	sessionStorage.beaconsArray = JSON.stringify($scope.beaconsArray);
-
 		    }, function myError(response) {
 		    	alertFailure("ERROR: failed to load beacons.");
 		  });
@@ -256,7 +255,7 @@ auraCreate.beaconManagement = function($scope, $http){
 	$scope.tallyBeaconTypes = function(type){
 		for(var i = 0; i < $scope.beaconTypes.length; i++){
 			if(type == $scope.beaconTypes[i].type){
-				$scope.beaconTypes.tally ++;
+				$scope.beaconTypes[i].tally ++;
 			}
 		}
 	}

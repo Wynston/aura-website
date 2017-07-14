@@ -10,6 +10,7 @@ auraCreate.config = function($scope){
 	$scope.beaconsUrl = "https://website-155919.appspot.com/api/v1.0/newbeacon?filter[organization_id]=";
 	$scope.beaconById = "https://website-155919.appspot.com/api/v1.0/newbeacon/";
 	$scope.objectsUrl = "https://website-155919.appspot.com/api/v1.0/arobj?filter[organization_id]=";
+	$scope.objectById = "https://website-155919.appspot.com/api/v1.0/arobj/";
 
 	//firebase bucket and gs urls
 	$scope.storageBucket = {
@@ -63,4 +64,40 @@ auraCreate.config = function($scope){
 		video: true,
 		threeD: true
 	}
+
+	//asset content types
+	$scope.assetTypes = ["Image", "Audio", "Video"];
+
+	$scope.pieChartOptions = {
+		width: '100%',
+    	height: '100%',
+        is3D: true,
+        colors: ['rgb(233, 39, 49)', 'rgb(248, 174, 71)', 'rgb(31, 177, 240)', 
+        		'rgb(112, 187, 77)', 'rgb(248, 236, 64)', 'rgb(22, 118, 183)',
+        		'rgb(104, 54, 144)', 'rgb(75, 0, 130)', 'rgb(185, 44, 98)',
+        		'rgb(0, 255, 0)'
+        ],
+        pieSliceText: 'label',
+        titleTextStyle: {
+        	fontSize: "50",
+  			bold: true,
+        },
+        tooltip: {
+        	ignoreBounds: true
+        },
+        backgroundColor: {
+        	fill: '#222',
+        	stroke: '#111',
+        	strokeWidth: '2'
+        },
+        titleTextStyle: {
+	    	color: '#FFFFFF'
+	    },
+	    legend: {
+	    	position: "bottom",
+	        textStyle: {
+	            color: '#FFFFFF'
+	        }
+	    }
+	};
 }

@@ -1,15 +1,28 @@
 //controls the content displayed on the dashboard
 auraCreate.dashboard = function($scope){
+	//load google charts once angular has loaded
+	google.charts.load('current', {'packages':['corechart', 'controls']});
+	$scope.chartsInitialized = false;
+
+
 	// Load google charts api before displaying anything
 	$scope.initDashboard = function(){
-		$(document).ready(function() {
-			google.charts.load('current', {'packages':['corechart', 'controls']});
-			google.charts.setOnLoadCallback($scope.drawCharts);
-		});
+		google.charts.setOnLoadCallback(setTimeout($scope.drawCharts, 1000));
 	}
 	
 	//draws all the pie charts for the dashboard
 	$scope.drawCharts = function(){
+		//initializes data if they do not exist
+		if(!($scope.chartsInitialized)){
+
+			//initializes the charts once angular and google charts has loaded
+			$scope.beaconsByTypeChart = new google.visualization.PieChart(document.getElementById('beaconsByTypeChart'));
+			$scope.objectsByBeaconChart = new google.visualization.PieChart(document.getElementById('objectsByBeaconChart'));
+			$scope.assetsByTypeChart = new google.visualization.PieChart(document.getElementById('assetsByTypeChart'));
+
+			$scope.chartsInitialized = true;
+		}
+
 		$scope.drawBeaconsByTypeChart();
 		$scope.drawObjectsByBeaconChart();
 		$scope.drawAssetsByTypeChart();
@@ -17,7 +30,8 @@ auraCreate.dashboard = function($scope){
 
 	//draws a pie chart displaying the number of beacons by each type
 	$scope.drawBeaconsByTypeChart = function(){
-		data = new google.visualization.DataTable();
+		var data = new google.visualization.DataTable();
+
         data.addColumn('string', 'Type');
         data.addColumn('number', 'Tally');
 		for(var i = 0; i < $scope.beaconTypes.length; i++){
@@ -25,15 +39,15 @@ auraCreate.dashboard = function($scope){
 		}
 
 		var options = $scope.pieChartOptions;
-		options.title = "Beacons Per Type"
+		options.title = "Beacons Per Type";
 
-        var chart = new google.visualization.PieChart(document.getElementById('beaconsByTypeChart'));
-        chart.draw(data, options);
+        $scope.beaconsByTypeChart.draw(data, options);
 	}
 
 	//draws a pie chart displaying the number of objects assocaited with each beacon
 	$scope.drawObjectsByBeaconChart = function(){
-		data = new google.visualization.DataTable();
+		var data = new google.visualization.DataTable();
+
         data.addColumn('string', 'Beacon');
         data.addColumn('number', 'numObjects');
 
@@ -45,17 +59,17 @@ auraCreate.dashboard = function($scope){
 		}
 
 		var options = $scope.pieChartOptions;
-		options.title = "Objects Per Beacon"
+		options.title = "Objects Per Beacon";
 
-        var chart = new google.visualization.PieChart(document.getElementById('objectsByBeaconChart'));
-        chart.draw(data, options);
+        $scope.objectsByBeaconChart.draw(data, options);
 	}
 
 	//draws a pie chart displaying the number of assets by file type
 	$scope.drawAssetsByTypeChart = function(){
-		data = new google.visualization.DataTable();
-        data.addColumn('string', 'Beacon');
-        data.addColumn('number', 'numObjects');
+		var data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'Type');
+        data.addColumn('number', 'Tally');
 
   		var assetTypeTally = $scope.tallyAssetsByType();
 
@@ -65,10 +79,9 @@ auraCreate.dashboard = function($scope){
 		}
 
 		var options = $scope.pieChartOptions;
-		options.title = "Assets Per Type"
+		options.title = "Assets Per Type";
 
-        var chart = new google.visualization.PieChart(document.getElementById('assetsByTypeChart'));
-        chart.draw(data, options);
+        $scope.assetsByTypeChart.draw(data, options);
 	}
 
 	//tallys each asset content type

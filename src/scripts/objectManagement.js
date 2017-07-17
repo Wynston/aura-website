@@ -6,7 +6,7 @@ auraCreate.objectManagement = function($scope, $http){
 		$scope.findClosestBeacon();
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
+        url: $scope.objectsUrl + $scope.curOrg.organization_id,
         data: {
         	name: name, 
         	desc: objDesc,
@@ -34,10 +34,10 @@ auraCreate.objectManagement = function($scope, $http){
     $scope.loadObjects = function(){
     	$http({
 		    method : "GET",
-		    url : "https://website-155919.appspot.com/api/v1.0/arobj",
+		    url : $scope.objectsUrl + $scope.curOrg.organization_id,
 		    headers: {
 		    	'Accept': 'application/json',
-        		"X-Aura-API-Key": 'dGhpc2lzYWRldmVsb3BlcmFwcA=='
+        		"X-Aura-API-Key": $scope.auraAPIKey
         	}
 		  }).then(function mySuccess(response) {
 		  	//loops over every AR object in the response and adds it to session storage
@@ -74,7 +74,7 @@ auraCreate.objectManagement = function($scope, $http){
 	$scope.updateObject = function(name, desc){
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
+        url: $scope.objectById + $scope.curObj.arobj_id,
         data: {
         	name: name, 
         	desc: desc,
@@ -103,7 +103,7 @@ auraCreate.objectManagement = function($scope, $http){
 	$scope.updateObjectLocation = function(){
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
+        url: $scope.objectById + $scope.curObj.arobj_id,
         data: {
         	name: $scope.curObj.name, 
         	desc: $scope.curObj.description,
@@ -133,7 +133,7 @@ auraCreate.objectManagement = function($scope, $http){
 	$scope.updateBeacForObject = function(beacon){
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
+        url: $scope.objectById + $scope.curObj.arobj_id,
         data: {
         	name: $scope.curObj.name, 
         	desc: $scope.curObj.description,
@@ -165,7 +165,7 @@ auraCreate.objectManagement = function($scope, $http){
 		$scope.curObj.description = description;
 		$http({
         method: 'PUT',
-        url: 'https://website-155919.appspot.com/api/v1.0/arobj',
+        url: $scope.objectById + $scope.curObj.arobj_id,
         data: {
         	name: $scope.curObj.name, 
         	desc: $scope.curObj.description,
@@ -217,7 +217,7 @@ auraCreate.objectManagement = function($scope, $http){
 					//Delete the object
 					$http({
 				        method: 'Delete',
-				        url: 'https://website-155919.appspot.com/api/v1.0/arobj/object.arobj_id',
+				        url: $scope.objectById + object.arobj_id,
 				        headers: {
 				        	"X-Aura-API-Key": $scope.auraAPIKey
 						}

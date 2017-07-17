@@ -17,7 +17,7 @@ auraCreate.organizationManagement = function($scope, $http){
 			  	for(var i = 0; i < jsonArray.length; i++){
 			  		$scope.organization = {
 			  			name: jsonArray[i].attributes.name,
-			  			id: jsonArray[i].attributes.organization_id,
+			  			organization_id: jsonArray[i].attributes.organization_id,
 			  			description: jsonArray[i].attributes.desc
 			  		};
 			  		$scope.organizationsArray[i] = $scope.organization;

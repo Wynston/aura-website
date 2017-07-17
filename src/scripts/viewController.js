@@ -2,12 +2,15 @@
 auraCreate.viewController = function($scope){
 	//controls which view is to be displayed as well as the title
 	$scope.changeView = function(view , org){
-		$scope.curOrg = org;
+		//only load data if the organization is changed
+		if(org != $scope.curOrg){
+			$scope.curOrg = org;
+			$scope.loadBeacons();
+			$scope.loadObjects();
+		}
 		switch(view){
 			case "dashboard":
-			    $scope.loadBeacons();
-				$scope.loadObjects();
-				setTimeout(function(){ $scope.initDashboard(); }, 1000);
+				$scope.initDashboard();
 				$scope.changeLiveTitle("Dashboard", false);
 				sessionStorage.curView = view;
 				$scope.curView = view;
@@ -21,7 +24,6 @@ auraCreate.viewController = function($scope){
 				$scope.changeLiveTitle("Beacons", true);
 				$scope.filterTitle="beaconsView";
 				$scope.changeViewType('List');
-				$scope.loadBeacons();
 				sessionStorage.curView = view;
 				$scope.curView = view;
 				break;
@@ -30,7 +32,6 @@ auraCreate.viewController = function($scope){
 				$scope.filterTitle = "objectsView";
 				$scope.changeViewType('List');
 				$scope.changeBeaconFilter('All');
-				$scope.loadObjects();
 				sessionStorage.curView = view;
 				$scope.curView = view;
 				break;

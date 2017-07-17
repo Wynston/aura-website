@@ -219,6 +219,7 @@ h6{
 		background-color: #252525;
 		color: #4D96E0;
 		border: black solid 1px;
+		border-top: none;
 		border-radius: 0 !important;
 	}
 
@@ -231,12 +232,13 @@ h6{
 		color: #4D96E0;
 		background-color: #111;
 		border: black solid 1px;
-		border-radius: 0 !important;
+		border-top: none;
 	}
 
 	.list-group-itemDark.active:hover{
 		background-color: #111;
 		border: black solid 1px;
+		border-top: none;
 	}
 
 	.margin0{
@@ -552,6 +554,7 @@ h6{
 		margin: 0 0 0 0;
 		border-radius: 0;
 		border-bottom: black solid 1px;
+		border-top: black solid 1px;
 		background-color: #292929;
 	}
 
@@ -577,7 +580,6 @@ h6{
 	}
 
 	#orgMenuTitle{
-		min-height: 
 		background-color: #232323;
 		color: #E3D8D8;
 	}

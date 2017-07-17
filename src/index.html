@@ -22,7 +22,7 @@
 						</a>
 					</div>
 					<ul class="nav navbar-nav">
-						<li class="active pointer" ng-click="changeView('dashboard', '')">
+						<li class="active pointer" ng-click="changeView('dashboard', curOrg)">
 							<a><span class="glyphicon glyphicon-dashboard"> Dashboard</span></a>
 						</li>
 						<li class="pointer" ng-click="changeView('beaconsList', curOrg)">
@@ -37,7 +37,7 @@
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li>
-							<a class="pointer" ng-click="changeView('profileSettings', '' )">
+							<a class="pointer" ng-click="changeView('profileSettings', curOrg )">
 				          		<span class="glyphicon glyphicon-user"></span>
 				          		<span class="hidden-sm">{{userName}}</span>
 				        	</a>	
@@ -47,7 +47,7 @@
 			</nav>
 		
 			<!-- Main Content -->
-			<div class="row borderRadius0 borderDark" id="mainContentContainer">
+			<div class="row borderRadius0" id="mainContentContainer">
 				<!-- User Organizations Menu -->
 			 	<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" id="orgMenu">
 			 		<div class="hidden-xs">
@@ -79,7 +79,7 @@
 									<h1><b>{{organization.name}}</b></h1>
 							    </div>
 
-							    <div class="caption" ng-init="curOrgSlide = 1"><h4><kbd>{{curOrgSlide}}/{{numOrganizations}}</kbd></h4></div>
+							    <div class="caption" ng-init="curOrgSlide = 1"><h4><kbd>{{curOrgSlide}}/{{organizationsArray.length}}</kbd></h4></div>
 
 							  </div>
 							  <!-- Left and right controls -->
@@ -1017,12 +1017,12 @@
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type='text/javascript'></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous" type='text/javascript'></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCq80g8ye8MQaNGW3BOVaj0VY3m7jpomoY&libraries=visualization" type='text/javascript'></script>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js" type='text/javascript'></script>
 		<script src="stats/willStats.js" type='text/javascript'></script>
 		<script src="scripts/bootbox.min.js" type='text/javascript'></script>
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCq80g8ye8MQaNGW3BOVaj0VY3m7jpomoY&libraries=visualization" type='text/javascript'></script>
-		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script src="scripts/auraCreateAppModule.js" type='text/javascript'></script>
 		<script src="scripts/config.js" type='text/javascript'></script>
 		<script src="scripts/mainController.js" type='text/javascript'></script>

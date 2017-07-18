@@ -23,13 +23,14 @@ auraCreate.dashboard = function($scope){
 			$scope.chartsInitialized = true;
 		}
 
-		$scope.drawBeaconsByTypeChart();
-		$scope.drawObjectsByBeaconChart();
-		$scope.drawAssetsByTypeChart();
+		//gets the data  and options before drawing the chart
+		$scope.getBeaconsByTypeData();
+		$scope.getObjectsPerBeaconData();
+		$scope.getAssetsByTypeData();
 	}
 
-	//draws a pie chart displaying the number of beacons by each type
-	$scope.drawBeaconsByTypeChart = function(){
+	//gathers data for beacons by type and then requests to draw it
+	$scope.getBeaconsByTypeData = function(){
 		var data = new google.visualization.DataTable();
 
         data.addColumn('string', 'Type');
@@ -41,62 +42,19 @@ auraCreate.dashboard = function($scope){
 		var options = $scope.pieChartOptions;
 		options.title = "Beacons Per Type";
 
+		$scope.beaconsByTypeData = data;
+		$scope.beaconsByTypeOptions = options;
+
+		$scope.drawBeaconsByTypeChart(data, options);
+	}
+
+	//draws a pie chart displaying the number of beacons by each type
+	$scope.drawBeaconsByTypeChart = function(data, options){
         $scope.beaconsByTypeChart.draw(data, options);
 	}
 
-	//draws a pie chart displaying the number of objects assocaited with each beacon
-	$scope.drawObjectsByBeaconChart = function(){
-		var data = new google.visualization.DataTable();
-
-        data.addColumn('string', 'Beacon');
-        data.addColumn('number', 'numObjects');
-
-  		var objPerBeacon = $scope.tallyObjectsPerBeacon();
-
-  		//adds the data to the chart one beacon at a time
-		for(var i = 0; i < $scope.beaconsArray.length; i++){
-			data.addRow([$scope.beaconsArray[i].beacon_name, objPerBeacon[i]]);
-		}
-
-		var options = $scope.pieChartOptions;
-		options.title = "Objects Per Beacon";
-
-        $scope.objectsByBeaconChart.draw(data, options);
-	}
-
-	//draws a pie chart displaying the number of assets by file type
-	$scope.drawAssetsByTypeChart = function(){
-		var data = new google.visualization.DataTable();
-
-        data.addColumn('string', 'Type');
-        data.addColumn('number', 'Tally');
-
-  		var assetTypeTally = $scope.tallyAssetsByType();
-
-  		//adds the data to the chart one beacon at a time
-		for(var i = 0; i < $scope.assetTypes.length; i++){
-			data.addRow([$scope.assetTypes[i], assetTypeTally[i]]);
-		}
-
-		var options = $scope.pieChartOptions;
-		options.title = "Assets Per Type";
-
-        $scope.assetsByTypeChart.draw(data, options);
-	}
-
-	//tallys each asset content type
-	$scope.tallyAssetsByType = function(){
-		var assetTypeTally = [0,0,0];
-		for(var i = 0; i < $scope.objectsArray.length; i++){
-			assetTypeTally[0] += $scope.objectsArray[i].numImage;
-			assetTypeTally[1] += $scope.objectsArray[i].numAudio;
-			assetTypeTally[2] += $scope.objectsArray[i].numVideo;
-		}
-		return assetTypeTally;
-	}
-
-	//returns an array of integers that tally the amount of objects per beacon
-	$scope.tallyObjectsPerBeacon = function(){
+	//calculates array of integers that tally the amount of objects per beacon, requests to be drawn
+	$scope.getObjectsPerBeaconData = function(){
 		//tallys the number of objects for each beacon
         var objPerBeacon = [];
 
@@ -117,6 +75,69 @@ auraCreate.dashboard = function($scope){
 
   			}
   		}
-		return objPerBeacon;
+
+		var data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'Beacon');
+        data.addColumn('number', 'numObjects');
+
+  		//adds the data to the chart one beacon at a time
+		for(var i = 0; i < $scope.beaconsArray.length; i++){
+			data.addRow([$scope.beaconsArray[i].beacon_name, objPerBeacon[i]]);
+		}
+
+		var options = $scope.pieChartOptions;
+		options.title = "Objects Per Beacon";
+
+		$scope.objectsPerBeaconData = data;
+		$scope.objectsPerBeaconOptions = options
+
+		$scope.drawObjectsByBeaconChart(data, options);
 	}
+
+	//draws a pie chart displaying the number of objects assocaited with each beacon
+	$scope.drawObjectsByBeaconChart = function(data, options){
+        $scope.objectsByBeaconChart.draw(data, options);
+	}
+
+	//tallys each asset content type
+	$scope.getAssetsByTypeData = function(){
+		var assetTypeTally = [0,0,0];
+		for(var i = 0; i < $scope.objectsArray.length; i++){
+			assetTypeTally[0] += $scope.objectsArray[i].numImage;
+			assetTypeTally[1] += $scope.objectsArray[i].numAudio;
+			assetTypeTally[2] += $scope.objectsArray[i].numVideo;
+		}
+
+		var data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'Type');
+        data.addColumn('number', 'Tally');
+
+  		//adds the data to the chart one beacon at a time
+		for(var i = 0; i < $scope.assetTypes.length; i++){
+			data.addRow([$scope.assetTypes[i], assetTypeTally[i]]);
+		}
+
+		var options = $scope.pieChartOptions;
+		options.title = "Assets Per Type";
+
+		$scope.assetsByTypeData = data;
+		$scope.assetsByTypeOptions = options;
+
+
+		$scope.drawAssetsByTypeChart(data, options);
+	}
+
+	//draws a pie chart displaying the number of assets by file type
+	$scope.drawAssetsByTypeChart = function(data, options){
+        $scope.assetsByTypeChart.draw(data, options);
+	}
+
+	//redraws the charts on window resize
+	$(window).resize(function(){
+		$scope.drawBeaconsByTypeChart($scope.beaconsByTypeData, $scope.beaconsByTypeOptions);
+		$scope.drawObjectsByBeaconChart($scope.objectsPerBeaconData, $scope.objectsPerBeaconOptions);
+	    $scope.drawAssetsByTypeChart($scope.assetsByTypeData, $scope.assetsByTypeOptions);
+	});
 }

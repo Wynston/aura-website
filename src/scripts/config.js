@@ -69,21 +69,17 @@ auraCreate.config = function($scope){
 	$scope.assetTypes = ["Image", "Audio", "Video"];
 
 	$scope.pieChartOptions = {
-		width: '100%',
-    	height: '100%',
         is3D: true,
         colors: ['rgb(233, 39, 49)', 'rgb(248, 174, 71)', 'rgb(31, 177, 240)', 
         		'rgb(112, 187, 77)', 'rgb(248, 236, 64)', 'rgb(22, 118, 183)',
         		'rgb(104, 54, 144)', 'rgb(75, 0, 130)', 'rgb(185, 44, 98)',
         		'rgb(0, 255, 0)'
         ],
-        pieSliceText: 'label',
-        titleTextStyle: {
-        	fontSize: "50",
-  			bold: true,
-        },
+        pieSliceText: 'none',
         tooltip: {
-        	ignoreBounds: true
+        	showColorCode: true,
+        	ignoreBounds: true,
+        	text: 'value'
         },
         backgroundColor: {
         	fill: '#222',
@@ -91,13 +87,16 @@ auraCreate.config = function($scope){
         	strokeWidth: '2'
         },
         titleTextStyle: {
-	    	color: '#FFFFFF'
+	    	color: '#FFFFFF',
+	    	bold: true,
+	    	fontSize: 18
 	    },
 	    legend: {
-	    	position: "bottom",
+	    	position: "labeled",
 	        textStyle: {
 	            color: '#FFFFFF'
 	        }
-	    }
+	    },
+	    chartArea:{left:25,top:50, right: 25, bottom: 10,width:'100%',height:'100%'}
 	};
 }

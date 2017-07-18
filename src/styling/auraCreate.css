@@ -305,14 +305,14 @@ h6{
 		background-color: #000919;
 	}
 
-	.pieChart{
-		position: relative;
-		height: 100;
-		width: 100%;
-	}
-
 	.pieChartContainer{
 		margin-bottom: 2em;
+	}
+
+	.pieChart{
+		position: relative;
+		height: 100%;
+		width: 100%;
 	}
 
 	.pointer{
@@ -645,7 +645,7 @@ h6{
 		height: auto;
 	}
 
-	#liveDisplay, #liveTitle, #mainContentContainer, .tableDiv{
+	#dyanmicSection, #liveDisplay, #liveTitle, #mainContentContainer, .tableDiv{
 		height: auto;
 		max-height: inherit;
 		overflow-y: visible;
@@ -702,7 +702,7 @@ h6{
 		height: auto;
 	}
 
-	#liveDisplay, #liveTitle, #mainContentContainer, .tableDiv{
+	#dyanmicSection, #liveDisplay, #liveTitle, #mainContentContainer, .tableDiv{
 		height: auto;
 		max-height: inherit;
 		overflow-y: visible;

@@ -3,11 +3,22 @@ auraCreate.viewController = function($scope){
 	//controls which view is to be displayed as well as the title
 	$scope.changeView = function(view , org){
 		//only load data if the organization is changed
+		//waits for the requests to finish before being called back,
+		//	then changes the fiew
 		if(org != $scope.curOrg){
 			$scope.curOrg = org;
-			$scope.loadBeacons();
-			$scope.loadObjects();
+			$scope.loadBeaconsAndObjects(function (){
+				$scope.switchView(view);
+			})
 		}
+		else{
+			$scope.switchView(view);
+		}
+	
+	}
+
+	//switches the view and title to the user requested display
+	$scope.switchView = function(view){
 		switch(view){
 			case "dashboard":
 				$scope.initDashboard();

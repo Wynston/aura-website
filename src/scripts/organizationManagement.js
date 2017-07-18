@@ -5,7 +5,7 @@ auraCreate.organizationManagement = function($scope, $http){
 	$scope.loadOrganizations = function(){
 		$http({
 		    method : "GET",
-		    url : $scope.organizationsUrl,
+		    url : $scope.queryOrgs,
 		    headers: {
         		'Accept': 'application/json',
         		"X-Aura-API-Key": $scope.auraAPIKey
@@ -33,7 +33,7 @@ auraCreate.organizationManagement = function($scope, $http){
 	$scope.addOrganization = function(name, desc){
 		$http({
         method: 'PUT',
-        url: $scope.organizationsUrl,
+        url: $scope.queryOrgs,
         data: {name: name, desc: desc},
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey
@@ -66,7 +66,7 @@ auraCreate.organizationManagement = function($scope, $http){
 		        	//Delete the organization and any beacon, object, and media associated
 					$http({
 				        method: 'Delete',
-				        url: 'https://website-155919.appspot.com/api/v1.0/orgnization/' + organization.organization_id,
+				        url: $scope.queryOrgs + "/" + organization.organization_id,
 				        headers: {
 				        	"X-Aura-API-Key": $scope.auraAPIKey
 						}

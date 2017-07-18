@@ -250,7 +250,10 @@
 			 			<div ng-switch-when="beaconsList">
 			 				<div ng-switch="viewType">
 			 					<div ng-switch-when="List" class="panel-body">
-					 				<table class="table table-hover table-striped table-condensed table-responsive">
+			 						<h3 ng-if="beaconsArray.length <= 0" class="text-center">
+			 							{{curOrg.name}} has no beacons.
+			 						</h3>
+					 				<table ng-if="beaconsArray.length > 0" class="table table-hover table-striped table-condensed table-responsive">
 						 				<thead>
 						 					<tr>
 						 						<th>Name</th>
@@ -323,7 +326,10 @@
 			 			<div ng-switch-when="objectsList">
 			 				<div ng-switch="viewType">
 				 				<div ng-switch-when="List" class="panel-body">
-					 				<table class="table table-hover table-striped table-condensed table-responsive">
+				 					<h3 ng-if="objectsArray.length <= 0" class="text-center">
+			 							{{curOrg.name}} has no objects.
+			 						</h3>
+					 				<table ng-if="objectsArray.length > 0" class="table table-hover table-striped table-condensed table-responsive">
 						 				<thead>
 						 					<tr>
 						 						<th></th>
@@ -552,7 +558,7 @@
 				            	<label>Type:</label>
 							    <select ng-model="addBeaconType" class="form-control input-sm" required>
 							    	<option value="" disabled selected hidden>Select beacon type</option>
-							    	<option ng-repeat="cur in beaconTypes" value={{cur.type}>{{cur.type}}</option>
+							    	<option ng-repeat="cur in beaconTypes" value={{cur.type}}>{{cur.type}}</option>
 							    </select>
 				            </div>
 				            <h4><label>Location:</label></h4> 

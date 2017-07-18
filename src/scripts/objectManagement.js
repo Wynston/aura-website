@@ -2,30 +2,30 @@
 auraCreate.objectManagement = function($scope, $http){
 	//adds a object for an organization onto the database
 	$scope.addObject = function(name, objDesc, objID){
-		$scope.closestBeaconID = $scope.randID();
-		$scope.findClosestBeacon();
-		$http({
-        method: 'PUT',
-        url: $scope.objectsUrl + $scope.curOrg.organization_id,
-        data: {
-        	name: name, 
-        	desc: objDesc,
-        	beacon_id: $scope.closestBeaconID, 
-        	arobj_id: objID, 
-        	organization_id: $scope.curOrg.id,
-        	altitude: $scope.newAlt, 
-        	latitude: $scope.newLat, 
-        	longitude: $scope.newLng,
-        	thumbnail: $scope.thumbnailURL
-        },
-        headers: {
-        	"X-Aura-API-Key": $scope.auraAPIKey
-		}
-		}).then(function mySuccess(response){
-			alertSuccess("SUCCESS: the object " + name + " has been successfully created!");
-			$scope.loadObjects();
-		}, function myError(response) {
-			alertFailure("ERROR: failed to create the object " + name + ".");
+		$scope.findClosestBeacon(function (beacon_id){
+			$http({
+	        method: 'PUT',
+	        url: $scope.queryObjects,
+	        data: {
+	        	name: name, 
+	        	desc: objDesc,
+	        	beacon_id: beacon_id, 
+	        	arobj_id: objID, 
+	        	organization_id: $scope.curOrg.organization_id,
+	        	altitude: $scope.newAlt, 
+	        	latitude: $scope.newLat, 
+	        	longitude: $scope.newLng,
+	        	thumbnail: $scope.thumbnailURL
+	        },
+	        headers: {
+	        	"X-Aura-API-Key": $scope.auraAPIKey
+			}
+			}).then(function mySuccess(response){
+				alertSuccess("SUCCESS: the object " + name + " has been successfully created!");
+				$scope.loadObjects();
+			}, function myError(response) {
+				alertFailure("ERROR: failed to create the object " + name + ".");
+			});
 		});
 	}
 
@@ -34,7 +34,7 @@ auraCreate.objectManagement = function($scope, $http){
     $scope.loadObjects = function(){
     	$http({
 		    method : "GET",
-		    url : $scope.objectsUrl + $scope.curOrg.organization_id,
+		    url : $scope.queryObjectsByOrg + $scope.curOrg.organization_id,
 		    headers: {
 		    	'Accept': 'application/json',
         		"X-Aura-API-Key": $scope.auraAPIKey
@@ -74,7 +74,7 @@ auraCreate.objectManagement = function($scope, $http){
 	$scope.updateObject = function(name, desc){
 		$http({
         method: 'PUT',
-        url: $scope.objectById + $scope.curObj.arobj_id,
+        url: $scope.queryObjects,
         data: {
         	name: name, 
         	desc: desc,
@@ -103,7 +103,7 @@ auraCreate.objectManagement = function($scope, $http){
 	$scope.updateObjectLocation = function(){
 		$http({
         method: 'PUT',
-        url: $scope.objectById + $scope.curObj.arobj_id,
+        url: $scope.queryObjects,
         data: {
         	name: $scope.curObj.name, 
         	desc: $scope.curObj.description,
@@ -133,7 +133,7 @@ auraCreate.objectManagement = function($scope, $http){
 	$scope.updateBeacForObject = function(beacon){
 		$http({
         method: 'PUT',
-        url: $scope.objectById + $scope.curObj.arobj_id,
+        url: $scope.queryObjects,
         data: {
         	name: $scope.curObj.name, 
         	desc: $scope.curObj.description,
@@ -165,7 +165,7 @@ auraCreate.objectManagement = function($scope, $http){
 		$scope.curObj.description = description;
 		$http({
         method: 'PUT',
-        url: $scope.objectById + $scope.curObj.arobj_id,
+        url: $scope.queryObjects,
         data: {
         	name: $scope.curObj.name, 
         	desc: $scope.curObj.description,
@@ -217,7 +217,7 @@ auraCreate.objectManagement = function($scope, $http){
 					//Delete the object
 					$http({
 				        method: 'Delete',
-				        url: $scope.objectById + object.arobj_id,
+				        url: $scope.queryObjects + "/" + object.arobj_id,
 				        headers: {
 				        	"X-Aura-API-Key": $scope.auraAPIKey
 						}
@@ -265,7 +265,7 @@ auraCreate.objectManagement = function($scope, $http){
     }
 
     //finds the nearest beacon for a newly created object
-    $scope.findClosestBeacon = function(){
+    $scope.findClosestBeacon = function(callback){
 	  	var closestBeacon = null;
 	  	var closest;
 	  	for(var i = 0; i < $scope.beaconsArray.length; i++){
@@ -282,7 +282,7 @@ auraCreate.objectManagement = function($scope, $http){
 	  		}
 	  	}
 	  	//no beacons within 50m of the objects location
-	  	if(closest > 50){
+	  	if(closest > 50 || closestBeacon == null){
 	  		$('#addObjectModal').modal('hide');
 	  		//prompt user to make a new beacon within range
 	  		bootbox.confirm({
@@ -300,15 +300,19 @@ auraCreate.objectManagement = function($scope, $http){
 			    },
 			    callback: function (result) {
 			       if(result){
-	  				$('#beaconForObjectModal').modal('show'); 
+			       		var id = $scope.randID();
+			       		$scope.closestBeaconID =  id;
+	  					$('#beaconForObjectModal').modal('show'); 
+	  					callback(id);
+	  				}
+	  				else{
+	  					callback(null);
+	  				} 			    
 	  			}
-	  			else{
-	  				$scope.closestBeaconID = null;
-	  			} 			    }
 			});
 	  	}
 	  	else{
-	  		$scope.closestBeaconID = closestBeacon.beacon_id;
+	  		callback(closestBeacon.beacon_id);
 	  	}
     }
 }

@@ -9,13 +9,13 @@ auraCreate.beaconManagement = function($scope, $http){
         	altitude: $scope.newAlt, 
         	latitude: $scope.newLat, 
         	longitude: $scope.newLng,
-        	organization_id: $scope.curOrg.id,
+        	organization_id: $scope.curOrg.organization_id,
         	associated: null
         }
 
 		$http({
         method: 'PUT',
-        url: $scope.beaconsUrl + $scope.curOrg.organization_id,
+        url: $scope.queryBeacons,
         data: $scope.newBeacon,
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey
@@ -37,14 +37,14 @@ auraCreate.beaconManagement = function($scope, $http){
         	altitude: $scope.newAlt, 
         	latitude: $scope.newLat, 
         	longitude: $scope.newLng,
-        	organization_id: $scope.curOrg.id,
+        	organization_id: $scope.curOrg.organization_id,
         	associated: null
         }
         $scope.closestBeacon = $scope.newBeacon;
 
 		$http({
         method: 'PUT',
-        url: $scope.beaconsUrl + $scope.curOrg.organization_id,
+        url: $scope.queryBeacons,
         data: $scope.newBeacon,
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey
@@ -61,7 +61,7 @@ auraCreate.beaconManagement = function($scope, $http){
     $scope.loadBeacons = function(){
 		$http({
 		    method : "GET",
-		    url : $scope.beaconsUrl + $scope.curOrg.organization_id,
+		    url : $scope.queryBeaconsByOrg + $scope.curOrg.organization_id,
 		    headers: {
         		'Accept': 'application/json',
         		"X-Aura-API-Key": $scope.auraAPIKey
@@ -126,7 +126,7 @@ auraCreate.beaconManagement = function($scope, $http){
         }
 		$http({
         method: 'PUT',
-        url: $scope.beaconsUrl + $scope.curOrg.organization_id,
+        url: $scope.queryBeacons,
         data: updatedBeacon,
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey
@@ -153,7 +153,7 @@ auraCreate.beaconManagement = function($scope, $http){
         }
 		$http({
         method: 'PUT',
-        url: $scope.beaconsUrl + $scope.curOrg.organization_id,
+        url: $scope.queryBeacons,
         data: updatedBeacon,
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey
@@ -181,7 +181,7 @@ auraCreate.beaconManagement = function($scope, $http){
 
 		$http({
         method: 'PUT',
-        url: $scope.beaconsUrl + $scope.curOrg.organization_id,
+        url: $scope.queryBeacons,
         data: updatedBeacon,
         headers: {
         	"X-Aura-API-Key": $scope.auraAPIKey
@@ -214,7 +214,7 @@ auraCreate.beaconManagement = function($scope, $http){
 		        	//Delete the beacon
 					$http({
 				        method: 'Delete',
-				        url: $scope.beaconById + beacon.beacon_id,
+				        url: $scope.queryBeacons + "/" + beacon.beacon_id,
 				        headers: {
 				        	"X-Aura-API-Key": $scope.auraAPIKey
 						}

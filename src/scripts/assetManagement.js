@@ -4,7 +4,7 @@ auraCreate.assetManagement = function($scope, $http){
 	$scope.addAssets = function(){
 		$http({
         method: 'PUT',
-        url: $scope.objectsUrl + $scope.curOrg.organization_id,
+        url: $scope.queryObjects,
         data: {
         	name: $scope.curObj.name, 
         	desc: $scope.curObj.description,
@@ -52,7 +52,7 @@ auraCreate.assetManagement = function($scope, $http){
 					//Delete the asset by updating the object its associated with
 					$http({
 				        method: 'Delete',
-				        url: $scope.objectById + $scope.curObj.arobj_id + "/contents/" + asset.content_id,
+				        url: $scope.queryObjects + "/" + $scope.curObj.arobj_id + "/contents/" + asset.content_id,
 				        headers: {
 				        	"X-Aura-API-Key": $scope.auraAPIKey
 						}

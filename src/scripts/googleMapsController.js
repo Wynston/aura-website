@@ -478,22 +478,6 @@ function initMap(){
 			})(markers[i], i));
         }
 	}
-	else if(sessionStorage.curView == "stats"  && document.getElementById('googleMapsStats')){
-		var stats = JSON.parse(sessionStorage.statsArray);
-		var map = new google.maps.Map(document.getElementById('googleMapsStats'), {
-          zoom: 11,
-          center: findDPCenter(stats),
-          styles: darkThemedMap(),
-          backgroundColor: '#333'
-        });
-        heatmap = new google.maps.visualization.HeatmapLayer({
-          data: getDataPoints(stats),
-          maxIntensity: 4,
-          opacity: 0.75,
-          radius: 10
-        });
-		heatmap.setMap(map);
-	}
 }
 
 //gathers the co-ordinates of all the elements of an array to display in a heat map

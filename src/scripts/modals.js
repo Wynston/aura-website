@@ -9,7 +9,20 @@ auraCreate.modals = function($scope){
 	    }, 0);
 	});
 
-//------------------------------------------Content modals------------------------------------
+//------------------------------------------User Modals------------------------------------------
+	$scope.displayProfileSettingsModal = function(){
+		$("#profileSettingsModal").modal();
+	}
+
+	$scope.displayHelpModal = function(){
+		$("#helpModal").modal();
+	}
+
+	$scope.displayWillsWebcamModal = function(){
+		$("#webcamModal").modal();
+	}
+
+//------------------------------------------Content modals---------------------------------------
 	//activates the modal with a given image
 	$scope.displaythumbNailModal = function(obj){
 		$scope.modalImgSrc = obj.thumbnail;

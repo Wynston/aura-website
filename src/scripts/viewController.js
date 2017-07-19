@@ -26,11 +26,6 @@ auraCreate.viewController = function($scope){
 				sessionStorage.curView = view;
 				$scope.curView = view;
 				break;
-			case "profileSettings":
-				$scope.changeLiveTitle("Profile Settings", false);
-				sessionStorage.curView = view;
-				$scope.curView = view;
-				break;
 			case "beaconsList":
 				$scope.changeLiveTitle("Beacons", true);
 				$scope.filterTitle="beaconsView";
@@ -46,12 +41,10 @@ auraCreate.viewController = function($scope){
 				sessionStorage.curView = view;
 				$scope.curView = view;
 				break;
-			case "stats":
-				$scope.changeLiveTitle("Stats", false);
+			case "orgSettings":
+				$scope.changeLiveTitle("Settings for " + $scope.curOrg.name, false);
 				sessionStorage.curView = view;
 				$scope.curView = view;
-				$scope.loadStats();
-				loadGoogleScript();
 				break;
 		}
 	}

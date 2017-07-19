@@ -1,6 +1,6 @@
 /*--------------------------------------- Structure ----------------------------------------*/
 html, body{
-	height: 100vh
+	height: 100vh;
 	margin: 0;
 	position:fixed;
     top:0;
@@ -9,7 +9,7 @@ html, body{
     right:0;
     overflow: auto; 
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1.2;
     background-color: #191818;
     color: #F4EBEB;
@@ -148,10 +148,13 @@ h6{
 		overflow: auto;
 		text-align: center;
 		max-height: 50vh;
+		background-color: #222;
+		border: #111 solid 1px;
 	}
 
 	.dropdown-menu li a {
 		white-space: normal;
+		color: #BDBDBD;
 	}
 
 	.dropdown-menu > li{
@@ -307,6 +310,7 @@ h6{
 
 	.pieChartContainer{
 		margin-bottom: 2em;
+
 	}
 
 	.pieChart{
@@ -507,7 +511,7 @@ h6{
 		width: 100%;
 	}
 
-	#googleMapsObjects, #googleMapsBeacons, #googleMapsStats{
+	#googleMapsObjects, #googleMapsBeacons{
 		margin-top: 1em;
 		height: 72vh;
 		width: 100%;

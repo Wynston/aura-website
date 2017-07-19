@@ -1,0 +1,42 @@
+html, body{
+	height: 100vh;
+	margin: 0;
+	position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    overflow: auto; 
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size: 15px;
+    line-height: 1.2;
+    background-color: #191818;
+    color: #F4EBEB;
+    background-image: url("../images/Aura_loginbackground.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+#logoTitle{
+    width: 50vw;
+}
+
+.footer{
+    height: 4vh;
+    font-size: 10px;
+}
+
+.footer > a{
+    color: #F4EBEB;
+}
+
+.formContainer {
+    width: 25vw;
+    padding-top: 1vh;
+}
+
+.mainContainer{
+    height: 95vh;
+    width: 50vw;
+    padding-top: 20vh;
+}

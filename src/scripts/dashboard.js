@@ -40,7 +40,7 @@ auraCreate.dashboard = function($scope){
 		}
 
 		var options = $scope.pieChartOptions;
-		options.title = "Beacons Per Type";
+		options.title = "Beacons By Type";
 
 		$scope.beaconsByTypeData = data;
 		$scope.beaconsByTypeOptions = options;
@@ -87,7 +87,7 @@ auraCreate.dashboard = function($scope){
 		}
 
 		var options = $scope.pieChartOptions;
-		options.title = "Objects Per Beacon";
+		options.title = "Objects By Beacon";
 
 		$scope.objectsPerBeaconData = data;
 		$scope.objectsPerBeaconOptions = options
@@ -120,7 +120,7 @@ auraCreate.dashboard = function($scope){
 		}
 
 		var options = $scope.pieChartOptions;
-		options.title = "Assets Per Type";
+		options.title = "Assets By Type";
 
 		$scope.assetsByTypeData = data;
 		$scope.assetsByTypeOptions = options;

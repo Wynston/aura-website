@@ -99,13 +99,11 @@ auraCreate.organizationManagement = function($scope, $http){
 			case "objectsList":
 				$scope.changeView('objectsList', org);
 				break;
-			case "stats":
-				$scope.changeView('stats', org);
+			case "orgSettings":
+				$scope.changeView('orgSettings', org);
 				break;
 			case "dashboard":
 				$scope.changeView('dashboard', org);
-				break;
-			case ("profileSettings"):
 				break;
 			default: 
 				break;

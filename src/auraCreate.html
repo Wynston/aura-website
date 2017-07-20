@@ -18,7 +18,7 @@
 				<div class="container-fluid">
 					<div class="navbar-header" style="padding-right: 1em;">
 						<a id="pageTitle" class="navbar-left">
-							<img class="img" ng-src="images/Aura_Create_rev1.jpg" alt="Aura Logo" style="height: 40px"/>
+							<img class="img" ng-src="images/Aura_Create_rev2.png" alt="Aura Logo" style="height: 40px"/>
 						</a>
 					</div>
 					<ul class="nav navbar-nav">
@@ -43,13 +43,16 @@
 									<a class="pointer" ng-click="displayProfileSettingsModal()">Profile Settings <span class="glyphicon glyphicon-cog"></span></a>
 								</li>
 								<li>
-									<a class="pointer">Sign Out <span class="glyphicon glyphicon-log-out"></a>
+									<a class="pointer" ng-click="signOut()">Sign Out <span class="glyphicon glyphicon-log-out"></a>
 								</li>
 								<li>
 									<a class="pointer" ng-click="displayHelpModal()">Help <span class="glyphicon glyphicon-question-sign"></span></a>
 								</li>
 								<li>
-									<a class="pointer" ng-click="displayWillsWebcamModal()">Will's Webcam <span class="glyphicon glyphicon-facetime-video"></a>
+									<a class="pointer" ng-click="displayAuraBoxWebcamModal()">AuraBox Webcam <span class="glyphicon glyphicon-facetime-video"></a>
+								</li>
+								<li>
+									<a class="pointer" ng-click="displayWillsWebcamModal()">AuraBox Upload <span class="glyphicon glyphicon-upload"></a>
 								</li>
 							</ul>
 						</li>
@@ -1017,14 +1020,15 @@
 				    </div>
 				</div>
 
-				<!-- Webcam Modal -->
-				<div class="modal fade" id="webcamModal" role="dialog" data-backdrop="true">
+				<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~AuraBox CONTENT ONLY~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+				<!-- AuraBox Webcam Modal -->
+				<div class="modal fade" id="AuraBoxWebcamModal" role="dialog" data-backdrop="true">
 				    <div class="modal-dialog modal-lg">
 				      <!-- Modal content-->
 				      <div class="modal-content">
 				        <div class="modal-header text-center text-primary modalPadding-1-1">
 				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
-				          <h2><b>Will's Webcam</b></h2>
+				          <h2><b>AuraBox Webcam</b></h2>
 				        </div>
 				        <div class="modal-body zeroPadding">
 			       			<div class="embed-responsive embed-responsive-16by9 modalPadding-1-2 center-block" id="webcamScreen">
@@ -1037,6 +1041,7 @@
 				      </div>
 				    </div>
 				</div> 
+				<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~AuraBox CONTENT ONLY~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
  			</div>
 
@@ -1072,6 +1077,7 @@
 		<script src="scripts/assetManagement.js" type='text/javascript'></script>
 		<script src="scripts/statManagement.js" type='text/javascript'></script>
 		<script src="scripts/dashboard.js" type='text/javascript'></script>
+		<script src="scripts/auraBox.js" type='text/javascript'></script>
 		<script src="scripts/firebaseManagement.js" type='text/javascript'></script>
 		<script src="scripts/locationCalculations.js" type='text/javascript'></script>
 		<script src="scripts/resetControls.js" type='text/javascript'></script>

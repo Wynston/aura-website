@@ -11,6 +11,7 @@ auraCreate.controller('mainController', function($scope, $http){
 		auraCreate.assetManagement($scope, $http);
 		auraCreate.statManagement($scope, $http);
 		auraCreate.dashboard($scope);
+		auraCreate.auraBox($scope, $http);
 		auraCreate.firebaseManagement($scope);
 		auraCreate.viewController($scope);
 		auraCreate.carouselControls($scope);
@@ -52,6 +53,11 @@ auraCreate.controller('mainController', function($scope, $http){
 		    	$scope.$apply();
 			}
 		}
+	}
+
+	//when the user requests to sign out, switch to log-in page
+	$scope.signOut = function(){
+		document.location.href = "index.html";
 	}
 
 	//loads in beacons and objects when an organization is changed, does so in callback fashion

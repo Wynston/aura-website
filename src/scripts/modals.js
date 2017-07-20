@@ -18,9 +18,6 @@ auraCreate.modals = function($scope){
 		$("#helpModal").modal();
 	}
 
-	$scope.displayWillsWebcamModal = function(){
-		$("#webcamModal").modal();
-	}
 
 //------------------------------------------Content modals---------------------------------------
 	//activates the modal with a given image

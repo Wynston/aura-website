@@ -244,6 +244,7 @@
 						 						<td class="hidden-sm hidden-xs">{{beacon.latitude | number: 3}}</td>
 						 						<td class="hidden-sm hidden-xs">{{beacon.longitude | number: 3}}</td>
 						 						<td class="iconCell">
+						 							<span class="glyphicon glyphicon-refresh syncIcon" ng-click="syncBeacon(beacon)"></span>
 						 							<span class="glyphicon glyphicon-plus addIcon" ng-click="displayAddObjectAtBeaconModal(beacon)"></span>
 						 							<span class="glyphicon glyphicon-pencil editIcon" ng-click="displayEditBeaconModal(beacon)"></span>
 						 							<span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeBeacon(beacon)"></span>
@@ -1041,6 +1042,48 @@
 				      </div>
 				    </div>
 				</div> 
+
+				<!-- AuraBox Creation Modal -->
+				<div class="modal fade" id="addAssetsModal" role="dialog">
+				    <div class="modal-dialog">
+				    
+				      <!-- Modal content-->
+				      <div class="modal-content">
+				        <div class="modal-header text-center modalPadding-1-2">
+				          <button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				          <h2 class="text-primary"><b>New Media Content for {{curObj.name}}</b></h2>
+				        </div>
+				        <div class="modal-body text-center modalPadding-2-3">
+				          <form role="form" class="form">
+				            <div class="form-group well well-sm bgDark333 borderDark">
+			            		<h4 class="text-primary">Import image, audio, video, or 3D files:</h4>
+			            		<label class="btn btn-info" for="assetFiles">
+								    <input id="assetFiles" type="file" style="display:none;" accept="image/*|audio/*|video*" custom-on-change="uploadFile" required multiple="true"></input>
+								    Browse
+								</label>
+				            </div>
+				            <div class="form-group well well-sm form-horizontal bgDark333 borderDark">
+				              <h4 class="text-primary">Enter a title for each file:</h4>
+				            	<ul class="list list-unstyled">
+				            		<li ng-if="files.length < 1" class='label label-warning float-left'>No files chosen.</li>
+				            		<li ng-repeat="file in files" style="margin-bottom: 1em;">
+				            			<label class="label label-warning" id="fileLabel">
+				            				{{file.name}}
+									        <span class="glyphicon glyphicon-remove pull-right cancelFile" ng-click="removeFile($index)"></span>
+				            			</label>
+				            			<input type="text" class="form-control input-sm" placeholder="Enter title" ng-model="fileNames[$index]" style="width:66%;" required></input>
+				            		</li>
+				            	</ul>
+				            </div>	
+				            <button type="submit" class="btn btn-success btn-block" ng-click="multiFileUpload()" data-dismiss="modal">Upload</button>
+				          </form>
+				        </div>
+				        <div class="modal-footer">
+				          <button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+				        </div>
+				      </div>
+				    </div>
+				</div>
 				<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~AuraBox CONTENT ONLY~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
  			</div>

@@ -335,6 +335,15 @@ h6{
 	    color: #FFFFFF;
 	 }
 
+	 .syncIcon{
+		color: #44DDEA;
+		cursor: pointer;
+	}
+
+	.syncIcon:hover{
+		color: #218B94;
+	}
+
 	.tooltip > .tooltip-inner{
 		background-color: #31b0d5;
 		color: #FFFFFF; 

@@ -20,7 +20,7 @@ auraCreate.auraBox = function($scope, $http){
 		$http({
         method: 'POST',
         url: "https://10.0.1.1/uploadmod",
-        data: assetsToSync
+        data: "THIS_IS_A_TEST.txt"
 		}).then(function mySuccess(response) {
 			alertSuccess("SUCCESS: the beacon " + beacon.beacon_name + " has been locally synced!");
 		}, function myError(response) {

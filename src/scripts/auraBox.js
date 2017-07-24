@@ -13,11 +13,11 @@ auraCreate.auraBox = function($scope, $http){
 		for(var i = 0; i < $scope.objectsArray[i].length; i++){
 			if(beacon.beacon_id == $scope.objectsArray[i].beacon_id){
 				for(var j = 0; j < $scope.objectsArray[i].assets[j]; j++){
-					assetData.append('asset', $scope.objectsArray[i].assets[j].value);
 					assetsToSync.push($scope.objectsArray[i].assets[j].value);
 				}
 			}
 		}
+		assetData.append('file', "THIS_IS_A_TEST.txt");
 
 		$http({
         method: 'POST',

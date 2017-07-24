@@ -56,7 +56,13 @@ auraCreate.controller('mainController', function($scope, $http){
 
 	//when the user requests to sign out, switch to log-in page
 	$scope.signOut = function(){
-		document.location.href = "index.html";
+		document.location.href = "http://10.0.1.1/index.html";
+
+		//sign out of google auth
+		var auth2 = gapi.auth2.getAuthInstance();
+		auth2.signOut().then(function () {
+	      console.log('User signed out.');
+	    });
 	}
 
 	//loads in beacons and objects when an organization is changed, does so in callback fashion

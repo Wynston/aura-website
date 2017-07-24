@@ -26,6 +26,10 @@ body{
     width: 50vw;
 }
 
+.abcRioButton{
+    width: auto !important;
+}
+
 .footer{
     height: 4vh;
     font-size: 10px;
@@ -35,9 +39,18 @@ body{
     color: #F4EBEB;
 }
 
-.formContainer {
+.formContainer{
     width: 25vw;
     padding-top: 1vh;
+    padding-bottom: 1vh;
+}
+
+.g-signin2{
+    width: 100%;
+}
+
+.g-signin2 > div{
+    margin: 0 auto;
 }
 
 .mainContainer{

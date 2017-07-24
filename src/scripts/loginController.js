@@ -1,6 +1,8 @@
 //-------------------------------Main Angular Controller---------------------------------------
 loginAppModule.controller('loginController', function($scope, $http){
+	//when angular finishes loading, pre-load any necessary controllers
 	$scope.init = function(){
+		loginAppModule.loginConfig($scope);
 	}
 
 	//authenticates a user's login info
@@ -10,12 +12,11 @@ loginAppModule.controller('loginController', function($scope, $http){
 
 	//directes the user to the Aura Create Web Application after a successful login
 	$scope.toAuraCreate = function(){
-		document.location.href = "https:://10.0.1.1/auraCreate.html";
+		document.location.href = "/auraCreate.html";
 	}
 
-	//GOOGLE oAuTH handling
+	//Google oAuTH handling
 	function googleAuth(googleUser) {
-		alert("hi");
         // Useful data for your client-side scripts:
         var profile = googleUser.getBasicProfile();
         console.log("ID: " + profile.getId()); // Don't send this directly to your server!
@@ -28,5 +29,8 @@ loginAppModule.controller('loginController', function($scope, $http){
         // The ID token you need to pass to your backend:
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
+
+        //direct user to Aura Create
+        $scope.toAuraCreate();
     }
 });

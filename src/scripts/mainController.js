@@ -2,7 +2,7 @@
 auraCreate.controller('mainController', function($scope, $http){
 	//initializer function when the window is loaded
 	$scope.init = function(){
-		//controllers
+		//controllers pre-loaded
 		auraCreate.config($scope);
 		auraCreate.userManagement($scope, $http);
 		auraCreate.organizationManagement($scope, $http);
@@ -56,7 +56,7 @@ auraCreate.controller('mainController', function($scope, $http){
 
 	//when the user requests to sign out, switch to log-in page
 	$scope.signOut = function(){
-		document.location.href = "http://10.0.1.1/index.html";
+		document.location.href = "index.html";
 
 		//sign out of google auth
 		var auth2 = gapi.auth2.getAuthInstance();

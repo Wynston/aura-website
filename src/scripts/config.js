@@ -1,5 +1,8 @@
 //config file that allows certain types and fields to be easily updated and changed
 auraCreate.config = function($scope){
+	//url for the web server hosting Aura Create
+	$scope.serverRoot = "localhost";
+
 	//Database url https://website-155919.appspot.com/api/v1.0/
 	//aura api key
 	$scope.auraAPIKey = "dGhpc2lzYWRldmVsb3BlcmFwcA==";

@@ -8,11 +8,11 @@ auraCreate.auraBox = function($scope, $http){
 
 	//syncs a beacon's object assets to local from firebase
 	$scope.syncBeacon = function(beacon){
-		var assetsToSync = [];
+		var assetsToSync = new FormData();
 		for(var i = 0; i < $scope.objectsArray[i].length; i++){
 			if(beacon.beacon_id == $scope.objectsArray[i].beacon_id){
 				for(var j = 0; j < $scope.objectsArray[i].assets[j]; j++){
-					assetsToSync.push($scope.objectsArray[i].assets[j].value);
+					assetsToSync.append('file', $scope.objectsArray[i].assets[j].value);
 				}
 			}
 		}

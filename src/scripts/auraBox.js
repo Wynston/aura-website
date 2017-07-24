@@ -9,9 +9,11 @@ auraCreate.auraBox = function($scope, $http){
 	//syncs a beacon's object assets to local from firebase
 	$scope.syncBeacon = function(beacon){
 		var assetsToSync = [];
+		var assetData = new FormData();
 		for(var i = 0; i < $scope.objectsArray[i].length; i++){
 			if(beacon.beacon_id == $scope.objectsArray[i].beacon_id){
 				for(var j = 0; j < $scope.objectsArray[i].assets[j]; j++){
+					assetData.append('asset', $scope.objectsArray[i].assets[j].value);
 					assetsToSync.push($scope.objectsArray[i].assets[j].value);
 				}
 			}
@@ -20,7 +22,7 @@ auraCreate.auraBox = function($scope, $http){
 		$http({
         method: 'POST',
         url: "https://10.0.1.1/uploadmod",
-        data: "THIS_IS_A_TEST.txt"
+        data: assetData
 		}).then(function mySuccess(response) {
 			alertSuccess("SUCCESS: the beacon " + beacon.beacon_name + " has been locally synced!");
 		}, function myError(response) {

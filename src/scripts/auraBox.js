@@ -18,12 +18,11 @@ auraCreate.auraBox = function($scope, $http){
 		}
 		$http({
         method: 'POST',
-        url: "http://127.0.0.1",
+        url: "http://10.0.1.1",
         data: assetsToSync
 		}).then(function mySuccess(response) {
 			alertSuccess("SUCCESS: the beacon " + beacon.beacon_name + " has been locally synced!");
 		}, function myError(response) {
 		    alertFailure("Error: failed to sync the beacon " + beacon.beacon_name + ".\n" + response.statusText);
-		});
 	}
 }

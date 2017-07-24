@@ -11,7 +11,6 @@ auraCreate.controller('mainController', function($scope, $http){
 		auraCreate.assetManagement($scope, $http);
 		auraCreate.statManagement($scope, $http);
 		auraCreate.dashboard($scope);
-		auraCreate.auraBox($scope, $http);
 		auraCreate.firebaseManagement($scope);
 		auraCreate.viewController($scope);
 		auraCreate.carouselControls($scope);

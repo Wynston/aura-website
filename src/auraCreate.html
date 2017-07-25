@@ -39,7 +39,7 @@
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown pointer"><a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
-				          		<span class="hidden-sm">{{userName}}</span> <span class="caret"></span></a>
+				          		<span class="hidden-sm">{{user.name}}</span> <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li>
 									<a class="pointer" ng-click="displayProfileSettingsModal()">Profile Settings <span class="glyphicon glyphicon-cog"></span></a>
@@ -909,8 +909,8 @@
 										<!-- Video -->
 										<div ng-if="asset.content_type == 'video'" align="center" class="embed-responsive embed-responsive-16by9">
 										    <video controls class="embed-responsive-item">
-										    	<source src="{{asset.value}}" type="video/mp4">
-  												<source src="{{asset.value}}" type="video/ogg">
+										    	<source ng-src="{{asset.value}}" type="video/mp4">
+  												<source ng-src="{{asset.value}}" type="video/ogg">
 										    </video>
 										</div>
 
@@ -1038,9 +1038,10 @@
 		<script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js" type='text/javascript'></script>
 		<script src="scripts/bootbox.min.js" type='text/javascript'></script>
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-		 <script src="https://apis.google.com/js/platform.js" async defer></script>
+		<script src="https://apis.google.com/js/platform.js?onload=onLoadGoogleAuth" async defer></script>
 		<script src="scripts/auraCreateAppModule.js" type='text/javascript'></script>
 		<script src="scripts/config.js" type='text/javascript'></script>
+		<script src="scripts/googleAuthentification.js" type='text/javascript'></script>
 		<script src="scripts/mainController.js" type='text/javascript'></script>
 		<script src="scripts/viewController.js" type='text/javascript'></script>
 		<script src="scripts/carouselControls.js" type='text/javascript'></script>

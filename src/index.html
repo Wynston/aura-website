@@ -12,9 +12,9 @@
     <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
   </head>
   <body>
-      <div class="container mainContainer" ng-app="loginAppModule" ng-controller="loginController" ng-init="init()" ng-cloak>
-        <div>
-          <img class="img img-responsive" ng-src="images/Aura_Create_rev2.png" alt="Aura Create" id="logoTitle">
+      <div class="container mainContainer" ng-app="loginAppModule" ng-controller="loginController" ng-init="init()" ng-cloak id="MAIN">
+        <div class="center-block" id="logoTitleContainer">
+          <img class="img img-responsive text-center" ng-src="images/Aura_Create_rev2.png" alt="Aura Create">
         </div>
         <div class="formContainer center-block">
           <form>
@@ -33,7 +33,7 @@
           </form>
         </div>
         <div class="formContainer center-block">
-          <div class="g-signin2 text-center" data-onsuccess="googleAuth" data-theme="dark" data-longtitle="true"></div>
+          <div class="g-signin2 text-center" data-onsuccess="onGoogleSignIn" data-theme="dark" data-longtitle="true"></div>
         </div>
       </div>
 
@@ -44,10 +44,11 @@
       </footer>
 
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type='text/javascript'></script>
-      <script src="https://apis.google.com/js/platform.js" async defer></script>
+      <script src="https://apis.google.com/js/platform.js?onload=onLoadGoogleAuth" async defer></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous" type='text/javascript'></script>
       <script src="scripts/loginAppModule.js" type='text/javascript'></script>
       <script src="scripts/loginConfig.js" type='text/javascript'></script>
       <script src="scripts/loginController.js" type='text/javascript'></script>
+      <script src="scripts/googleAuthentification.js" type='text/javascript'></script>
   </body>
 </html>

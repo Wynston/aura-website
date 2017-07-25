@@ -20,8 +20,7 @@ auraCreate.controller('mainController', function($scope, $http){
 		auraCreate.locationCalculations($scope);
 
 		//Initialize User and their organizations and displays the dashboard
-		$scope.userName = "Wynston Ramsay";
-		$scope.loadOrganizations();
+		$scope.loadUser();
 	}
 
 // -------------------------------------------------Global functions--------------------------------------------------------
@@ -52,17 +51,6 @@ auraCreate.controller('mainController', function($scope, $http){
 		    	$scope.$apply();
 			}
 		}
-	}
-
-	//when the user requests to sign out, switch to log-in page
-	$scope.signOut = function(){
-		document.location.href = "index.html";
-
-		//sign out of google auth
-		var auth2 = gapi.auth2.getAuthInstance();
-		auth2.signOut().then(function () {
-	      console.log('User signed out.');
-	    });
 	}
 
 	//loads in beacons and objects when an organization is changed, does so in callback fashion
@@ -140,4 +128,5 @@ auraCreate.controller('mainController', function($scope, $http){
 
 		  callback();
 	}	
+
 });

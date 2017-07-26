@@ -1,0 +1,145 @@
+<!-- Beacon Modals -->
+
+<!-- Modal for creating an beacon-->
+<div class="modal fade" id="addBeaconModal" role="dialog">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-primary text-center modalPadding-1-1">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2><b>Beacon creation for {{curOrg.name}}</b></h2>
+			</div>
+			<div class="modal-body text-center modalPadding-1-2">
+				<form role="form">
+					<div class="form-group">
+						<label>Name:</label>
+						<input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconName" required>
+					</div>
+					<div class="form-group form-group">
+						<label>Type:</label>
+						<select ng-model="addBeaconType" class="form-control input-sm" required>
+							<option value="" disabled selected hidden>Select beacon type</option>
+							<option ng-repeat="cur in beaconTypes" value={{cur.type}}>{{cur.type}}</option>
+						</select>
+					</div>
+					<h4><label>Location:</label></h4>
+					<div class="form-group panel panel-default text-center bgDark333 borderDark">
+						<div id="googleMapsAddBeacon" class="panel-body borderDark">
+						</div>
+						<h5 class="panel-body zeroPadding">Click a position on the map to the determine the beacon's location.</h5>
+						<h6 class="panel-body text-muted zeroPadding">Note: Blue circles indicates a beacon's maximum service range.</h6>
+					</div>
+					<button type="submit" class="btn btn-success btn-block" ng-click="addBeacon(addBeaconName, addBeaconType)" data-dismiss="modal">Create</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Beacon Editing Modal -->
+<div class="modal fade" id="editBeaconModal" role="dialog">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-primary text-center modalPadding-1-2">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2><b>Beacon editing for {{curBeacon.beacon_name}}</b></h2>
+			</div>
+			<div class="modal-body text-center modalPadding-1-2">
+				<form role="form">
+					<div class="form-group">
+						<label>Name:</label>
+						<input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="editBeacName" required>
+					</div>
+					<div class="form-group form-group">
+						<label>Type:</label>
+						<select ng-model="editBeacType" class="form-control input-sm" required>
+							<option value="" disabled selected hidden>Select beacon type</option>
+							<option ng-repeat="cur in beaconTypes" value={{cur.type}}>{{cur.type}}</option>
+						</select>
+					</div>
+					<h4><label>Location:</label></h4>
+					<div class="form-group panel panel-default text-center bgDark333 borderDark">
+						<div id="googleMapsEditBeacon" class="panel-body borderDark">
+						</div>
+						<h5 class="panel-body zeroPadding">Place the marker on the map to determine {{curBeacon.beacon_name}}'s updated location.</h5>
+						<h6 class="panel-body text-muted zeroPadding">Note: Blue circle indicates a beacon's maximum service range.</h6>
+					</div>
+					<button type="submit" class="btn btn-success btn-block" ng-click="updateBeacon(editBeacName, editBeacType)" data-dismiss="modal">Update</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal for editing a beacon's type-->
+<div class="modal fade" id="beaconTypeEditModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-primary text-center modalPadding-1-2">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2><b>Type Editing for {{curBeacon.beacon_name}}</b></h2>
+			</div>
+			<div class="modal-body modalPadding-1-2">
+				<form role="form">
+					<div class="form-group form-group">
+						<label>Type:</label>
+						<select ng-model="newBeaconType" class="form-control" required>
+							<option value="" disabled selected hidden>{{curBeacon.beacon_type}}</option>
+							<option ng-repeat="cur in beaconTypes" value={{cur.type}}>{{cur.type}}</option>
+						</select>
+					</div>
+					<button type="submit" class="btn btn-success btn-block" ng-click="updateBeaconType(newBeaconType)" data-dismiss="modal">Confirm</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal for creating a beacon for an object out of range of others -->
+<div class="modal fade" id="beaconForObjectModal" role="dialog">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-primary text-center modalPadding-1-1">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2><b>Beacon creation for {{curOrg.name}}</b></h2>
+			</div>
+			<div class="modal-body text-center modalPadding-1-2">
+				<form role="form">
+					<div class="form-group">
+						<label>Name</label>
+						<input type="text" class="form-control" placeholder="Enter beacon's name" ng-model="addBeaconForObjectName" required>
+					</div>
+					<div class="form-group">
+						<label>Type:</label>
+						<select ng-model="addBeaconForObjectType" class="form-control" required>
+							<option value="" disabled selected hidden>Select beacon type</option>
+							<option ng-repeat="cur in beaconTypes" value={{cur.type}}>{{cur.type}}</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label class="label label-warning">Location pre-determined from the new object's location.</label>
+					</div>
+					<button type="submit" class="btn btn-success btn-block" ng-click="addBeaconForObject(addBeaconForObjectName, addBeaconForObjectType)" data-dismiss="modal">Create</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

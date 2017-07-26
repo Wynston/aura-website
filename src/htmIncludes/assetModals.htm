@@ -1,0 +1,162 @@
+<!-- Asset Modals -->
+
+<!-- Asset Creation Modal -->
+<div class="modal fade" id="addAssetsModal" role="dialog">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-center modalPadding-1-2">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2 class="text-primary"><b>New Media Content for {{curObj.name}}</b></h2>
+			</div>
+			<div class="modal-body text-center modalPadding-2-3">
+				<form role="form" class="form">
+					<div class="form-group well well-sm bgDark333 borderDark">
+						<h4 class="text-primary">Import image, audio, video, or 3D files:</h4>
+						<label class="btn btn-info" for="assetFiles">
+							<input id="assetFiles" type="file" style="display:none;" accept="image/*|audio/*|video*" custom-on-change="uploadFile" required multiple="true"></input>
+							Browse
+						</label>
+					</div>
+					<div class="form-group well well-sm form-horizontal bgDark333 borderDark">
+						<h4 class="text-primary">Enter a title for each file:</h4>
+						<ul class="list list-unstyled">
+							<li ng-if="files.length < 1" class='label label-warning float-left'>No files chosen.</li>
+							<li ng-repeat="file in files" style="margin-bottom: 1em;">
+								<label class="label label-warning" id="fileLabel">
+									{{file.name}}
+									<span class="glyphicon glyphicon-remove pull-right cancelFile" ng-click="removeFile($index)"></span>
+								</label>
+								<input type="text" class="form-control input-sm" placeholder="Enter title" ng-model="fileNames[$index]" style="width:66%;" required></input>
+							</li>
+						</ul>
+					</div>
+					<button type="submit" class="btn btn-success btn-block" ng-click="multiFileUpload()" data-dismiss="modal">Upload</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Assets/Media Modal -->
+<div class="modal fade" id="assetsModal" role="dialog" data-backdrop="true">
+	<div class="modal-dialog modal-lg">
+		<!-- Assets/Media Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-primary text-center modalPadding-2-1">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2 class="modal-title"><b>{{curObj.name}} Media Gallery</b></h2>
+			</div>
+			<div class="modal-body" style="min-height: 25vh;max-height: 70vh;">
+				<!-- Media Content -->
+				<div class="row">
+					<div ng-repeat="asset in assets | filter: galleryMediaFilter" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<div class="thumbnail thumbnailGalleryContainer">
+							<span class="glyphicon glyphicon-remove deleteIcon pull-right" ng-click="removeAsset(asset)" style="margin-bottom: 0.5em;"></span>
+							<div class="thumbnailGalleryItem center-block" ng-click="displayAssetCarouselModal(asset)">
+								<img ng-if="asset.thumbnail == '' && asset.content_type == 'audio'" class="img-circle thumbnailGallerySrc center-block text-center" ng-src={{genericAudioThumbnail}} alt="{{asset.name}}">
+								<img ng-if="!(asset.thumbnail == '' && asset.content_type == 'audio')" class="img-circle thumbnailGallerySrc center-block text-center" ng-src={{asset.thumbnail}} alt="{{asset.name}}">
+								<div class="thumbnailGalleryOverlay">
+									<span ng-if="asset.content_type == 'image'" class="glyphicon glyphicon-picture"></span>
+									<span ng-if="asset.content_type == 'audio'" class="glyphicon glyphicon-music"></span>
+									<span ng-if="asset.content_type == 'video'" class="glyphicon glyphicon-film"></span>
+									<span ng-if="asset.content_type == 'threeD'" class="glyphicon glyphicon-picture">3D</span>
+								</div>
+							</div>
+							<h4 class="text-center text-primary ellipsisWrap">
+							{{asset.name}}
+							</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer container-fluid">
+				<form class="pull-left text-primary">
+					Filter:
+					<label class="checkbox-inline">
+						<input type="checkbox" ng-model="galleryFilter['image']">Image
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" ng-model="galleryFilter['audio']">Audio
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" ng-model="galleryFilter['video']">Video
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" ng-model="galleryFilter['threeD']">3D
+					</label>
+				</form>
+				<button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Asset Carousel Modal -->
+<div class="modal fade" id="assetCarouselModal" role="dialog" data-backdrop="true">
+	<div class="modal-dialog modal-lg">
+		<!-- Asset Carousel Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-primary text-center">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2 class="modal-title"><b>{{curObj.name}} Media Carousel</b></h2>
+			</div>
+			<div class="modal-body text-center zeroPadding">
+				<div id="galleryCarousel" class="carousel" data-ride="carousel" data-interval="false">
+					<!-- Wrapper for slides -->
+					<div class="carousel-inner">
+						<!-- Assets  -->
+						<div class="item media-wrap text-center center-block" ng-repeat="asset in assets track by asset.content_id" ng-class="{'active': $index == assetIndex}">
+							<!-- Image -->
+							<img ng-if="asset.content_type == 'image'" ng-src={{asset.value}} alt={{asset.name}} class="img-responsive">
+							<!-- Audio -->
+							<div ng-if="asset.content_type == 'audio'" class="center-block">
+								<audio controls id="audioAsset">
+									<source ng-src="{{asset.value}}" type="audio/mpeg" />
+									<source ng-src="{{asset.value}}" type="audio/ogg" />
+									<source ng-src="{{asset.value}}" type="audio/wav" />
+									<a href="{{asset.value}}">{{asset.name}}</a>
+								</audio>
+							</div>
+							<!-- Video -->
+							<div ng-if="asset.content_type == 'video'" align="center" class="embed-responsive embed-responsive-16by9">
+								<video controls class="embed-responsive-item">
+									<source ng-src="{{asset.value}}" type="video/mp4">
+									<source ng-src="{{asset.value}}" type="video/ogg">
+								</video>
+							</div>
+							<!-- 3D -->
+							<!-- 3D Placeholder -->
+							<!-- Caption for asset -->
+							<div class="carousel-caption">
+								<h3>
+								<b style="padding-left: 0.5em;">{{asset.name}}</b>
+								<span class="glyphicon glyphicon-remove deleteIcon float-right" ng-click="removeAsset(asset)"></span>
+								</h3>
+								<h4>
+								<kbd>{{curAssetSlide}}/{{assets.length}}</kbd>
+								</h4>
+							</div>
+						</div>
+					</div>
+					<!-- Left and right controls -->
+					<a class="left carousel-control pointer" data-target="#galleryCarousel" data-slide="prev" ng-click="assetSlideLeft()">
+						<span class="glyphicon glyphicon-chevron-left"></span>
+						<span class="sr-only">Previous</span>
+					</a>
+					<a ng-click="assetSlideRight()" class="right carousel-control pointer" data-target="#galleryCarousel" data-slide="next">
+						<span class="glyphicon glyphicon-chevron-right"></span>
+						<span class="sr-only">Next</span>
+					</a>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

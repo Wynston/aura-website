@@ -1,0 +1,42 @@
+<!-- Beacons List -->
+<div ng-switch-when="beaconsList">
+	<div ng-switch="viewType">
+		<div ng-switch-when="List" class="panel-body">
+			<h3 ng-if="beaconsArray.length <= 0" class="text-center">
+			{{curOrg.name}} has no beacons.
+			</h3>
+			<table ng-if="beaconsArray.length > 0" class="table table-hover table-striped table-condensed table-responsive">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Associated</th>
+						<th>Type</th>
+						<th class="hidden-sm hidden-xs">Altitude</th>
+						<th class="hidden-sm hidden-xs">Latitude</th>
+						<th class="hidden-sm hidden-xs">Longitude</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="beacon in beaconsArray | orderBy:'beacon_name'">
+						<td ng-click="displayBeacon(beacon)">{{beacon.beacon_name}}</td>
+						<td>{{beacon.associated}}</td>
+						<td>{{beacon.beacon_type}}</td>
+						<td class="hidden-sm hidden-xs">{{beacon.altitude | number: 3}}</td>
+						<td class="hidden-sm hidden-xs">{{beacon.latitude | number: 3}}</td>
+						<td class="hidden-sm hidden-xs">{{beacon.longitude | number: 3}}</td>
+						<td class="iconCell">
+							<span class="glyphicon glyphicon-plus addIcon" ng-click="displayAddObjectAtBeaconModal(beacon)"></span>
+							<span class="glyphicon glyphicon-pencil editIcon" ng-click="displayEditBeaconModal(beacon)"></span>
+							<span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeBeacon(beacon)"></span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- Google Maps API -->
+		<div ng-switch-when="Map" class="panel-body" style="padding-top: 0; padding-bottom: 0;">
+			<div id="googleMapsBeacons" class="panel borderDark"></div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,208 @@
+<!-- Object Modals -->
+
+<!-- Modal for creating an object-->
+<div class="modal fade" id="addObjectModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-primary text-center modalPadding-1-1">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2><b>Object creation for {{curOrg.name}}</b></h2>
+			</div>
+			<div class="modal-body text-center modalPadding-1-2">
+				<form role="form">
+					<div class="form-group">
+						<label>Name:</label>
+						<input type="text" class="form-control" placeholder="Enter object's name" ng-model="addObjectName" required>
+					</div>
+					<div class="form-group">
+						<label>Description:</label>
+						<textarea type="text" class="form-control" placeholder="Enter object's description" ng-model="addObjectDesc" rows=3 required style="resize: none;"></textarea>
+					</div>
+					<div class="form-group">
+						<label>Thumbnail:</label><br>
+						<div class="panel panel-default bgDark333 borderDark">
+							<label class="panel-body">
+								<label class="btn btn-info" for="thumbnailSelect">
+									<input id="thumbnailSelect" type="file" style="display:none;" custom-on-change="updateThumbnailLabel" accept="image/*" required>
+									Browse
+								</label>
+								<span class='label label-warning'>{{curThumbnail}}</span>
+							</label>
+						</div>
+					</div>
+					<h4><label>Location:</label></h4>
+					<div class="form-group panel panel-default text-center bgDark333 borderDark">
+						<div id="googleMapsAddObject" class="panel-body borderDark">
+						</div>
+						<h5 class="panel-body zeroPadding">Click a position on the map to the determine the object's location.</h5>
+						<h6 class="panel-body text-muted zeroPadding">Note: Blue circles indicates a beacon's maximum service range.</h6>
+					</div>
+					<button type="submit" class="btn btn-success btn-block" ng-click="thumbnailResize(addObjectName, addObjectDesc)" data-dismiss="modal">Create</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal for editing an object-->
+<div class="modal fade" id="editObjectModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-primary text-center modalPadding-1-1">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2><b>Object editing for {{curObj.name}}</b></h2>
+			</div>
+			<div class="modal-body text-center modalPadding-1-2">
+				<form role="form">
+					<div class="form-group">
+						<label>Name:</label>
+						<input type="text" class="form-control" placeholder="Enter object's name" ng-model="editObjName" required>
+					</div>
+					<div class="form-group">
+						<label>Description:</label>
+						<textarea type="text" class="form-control" placeholder="Enter object's description" ng-model="editObjDesc" rows=3 required style="resize: none;"></textarea>
+					</div>
+					<h4><label>Location:</label></h4>
+					<div class="form-group panel panel-default text-center bgDark333 borderDark">
+						<div id="googleMapsEditObject" class="panel-body borderDark">
+						</div>
+						<h5 class="panel-body zeroPadding">Place the marker on the map to determine the object's updated location.</h5>
+						<h6 class="panel-body text-muted zeroPadding">Note: Blue circles indicates a beacon's maximum service range.</h6>
+					</div>
+					<button type="submit" class="btn btn-success btn-block" ng-click="updateObject(editObjName, editObjDesc)" data-dismiss="modal">Update</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal for creating an object at a beacon -->
+<div class="modal fade" id="addObjectAtBeaconModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-primary text-center modalPadding-1-2">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2><b>Object creation within {{curBeacon.beacon_name}}'s service range</b></h2>
+			</div>
+			<div class="modal-body text-center modalPadding-1-2">
+				<form role="form">
+					<div class="form-group">
+						<label>Name:</label>
+						<input type="text" class="form-control" placeholder="Enter object's name" ng-model="addObjectName" required>
+					</div>
+					<div class="form-group">
+						<label>Description:</label>
+						<textarea type="text" class="form-control" placeholder="Enter object's description" ng-model="addObjectDesc" rows=3 required style="resize: none;"></textarea>
+					</div>
+					<div class="form-group">
+						<label>Thumbnail:</label><br>
+						<div class="panel panel-default bgDark333 borderDark">
+							<label class="panel-body">
+								<label class="btn btn-info" for="thumbnailSelect">
+									<input id="thumbnailSelect" type="file" style="display:none;" custom-on-change="updateThumbnailLabel" accept="image/*" required>
+									Browse
+								</label>
+								<span class='label label-warning'>{{curThumbnail}}</span>
+							</label>
+						</div>
+					</div>
+					<h4><label>Location:</label></h4>
+					<div class="form-group panel panel-default text-center bgDark333 borderDark">
+						
+						<div id="googleMapsAddObjectAtBeacon" class="panel-body borderDark">
+						</div>
+						<h5 class="panel-body zeroPadding">Click a position on the map to the determine the object's location.</h5>
+						<h6 class="panel-body text-muted zeroPadding">Note: Blue circle indicates a beacon's maximum service range.</h6>
+					</div>
+					<button type="submit" class="btn btn-success btn-block" ng-click="thumbnailResize(addObjectName, addObjectDesc)" data-dismiss="modal">Create</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Edit Beacon for Object Modal -->
+<div class="modal fade" id="editBeacForObjModal" role="dialog" data-backdrop="true">
+	<div class="modal-dialog">
+		<!-- Edit Beacon for Object Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-primary text-center modalPadding-1-1">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2 class="modal-title"><b>Change {{curObj.name}}'s service beacon</b></h2>
+			</div>
+			<div class="modal-body modalPadding-1-2">
+				<div class="panel panel-default text-center bgDark333 borderDark">
+					<div class="panel-body" id="googleMapsEditBeacForObj"></div>
+					<h5 class="panel-body zeroPadding">Click a marker to determine the object's new service beacon.</h5>
+					<h6 class="panel-body text-muted zeroPadding">Note: circles indicates a beacon's maximum service range.</h6>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Description Modal -->
+<div class="modal fade" id="descriptionModal" role="dialog" data-backdrop="true">
+	<div class="modal-dialog" >
+		<!-- Description Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-primary text-center modalPadding-1-2">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2 class="modal-title"><b>{{curObj.name}}</b></h2>
+			</div>
+			<div class="modal-body text-left modalPadding-1-2" style="line-height: 1.5;">
+				<form role="form" class="form">
+					<div class="form-group">
+						<textarea ng-hide="showObjDescEdit" rows="10" class="form-control" disabled style="cursor:default; resize: none; background-color: white;">{{curObj.description}}</textarea>
+						<textarea ng-show="showObjDescEdit" class="form-control" rows="10" style="resize: none;" ng-model="editObjDesc"></textarea>
+					</div>
+					<button ng-show="showObjDescEdit" type="button" class="btn btn-block btn-success" ng-click="updateObjectDescription(editObjDesc)">Update</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning pull-left" ng-click="toggleObjectDescriptionEdit()">Edit <span class="glyphicon glyphicon-pencil"></span></button>
+				<button type="button" class="btn btn-info pull-right" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Thumbnail Modal -->
+<div class="modal fade" id="thumbnailModal" role="dialog" data-backdrop="true">
+	<div class="modal-dialog">
+		<!-- Thumbnail Modal content-->
+		<div class="modal-content">
+			<div class="modal-header text-primary text-center">
+				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
+				<h2 class="modal-title"><b>{{modalHeader}}</b></h2>
+			</div>
+			<div class="modal-body text-center">
+				<img class="img-rounded thumbnail150x150" ng-src={{modalImgSrc}}>
+			</div>
+			<div class="modal-footer">
+				<ul class="list-inline pull-left d-inline">
+					<li>#Images: <span ng-click="displayFilteredAssets('image', curObj)" class="badge pointer">{{curObj.numImage}}</span></li>
+					<li>#Audio: <span ng-click="displayFilteredAssets('audio', curObj)" class="badge pointer">{{curObj.numAudio}}</span></li>
+					<li>#Video: <span ng-click="displayFilteredAssets('video', curObj)" class="badge pointer">{{curObj.numVideo}}</span></li>
+					<li>#3D: <span ng-click="displayFilteredAssets('3d', curObj)" class="badge pointer">{{curObj.num3D}}</span></li>
+				</ul>
+				<button type="button" class="btn btn-info pull-right d-inline" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,31 @@
+<!-- Beacon (Singular) -->
+<div ng-switch-when="beacon" style="height: inherit;">
+	<div class="text-center center-block panel-body" style="height: inherit; padding-bottom: 0;">
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary zeroPadding">
+					<button class="btn btn-sm btn-info" type="button" ng-click="displayBeaconObjects()">Objects Served</button>
+				</div>
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary zeroPadding">
+					<h5>Associated: {{curBeacon.associated}}</h5>
+				</div>
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right pull-right zeroPadding">
+					<div class="btn-group">
+						<button class="btn btn-sm fakeButton">Type: {{curBeacon.beacon_type}}</button>
+						<button class="btn btn-sm btn-warning" type="button" data-toggle="modal" data-target="#beaconTypeEditModal">
+							<span class="glyphicon glyphicon-edit"></span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel-body borderDark" id="googleMapsBeacon"></div>
+		<div class="panel-footer bgDark222 border0">
+			<div class="row">
+				<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curBeacon.altitude | number: 3}}</h4>
+				<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curBeacon.latitude | number: 3}}</h4>
+				<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right text-primary">Longitude: {{curBeacon.longitude | number: 3}}</h4>
+			</div>
+		</div>
+	</div>
+</div>

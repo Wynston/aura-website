@@ -14,7 +14,6 @@ auraCreate.viewController = function($scope){
 		else{
 			$scope.switchView(view);
 		}
-	
 	}
 
 	//switches the view and title to the user requested display
@@ -25,6 +24,10 @@ auraCreate.viewController = function($scope){
 				$scope.changeLiveTitle("Dashboard", false);
 				sessionStorage.curView = view;
 				$scope.curView = view;
+				$("#dashboardLink").addClass("active");
+				$("#beaconsLink").removeClass("active");
+				$("#objectsLink").removeClass("active");
+				$("#settingsLink").removeClass("active");
 				break;
 			case "beaconsList":
 				$scope.changeLiveTitle("Beacons", true);
@@ -32,6 +35,10 @@ auraCreate.viewController = function($scope){
 				$scope.changeViewType('List');
 				sessionStorage.curView = view;
 				$scope.curView = view;
+				$("#beaconsLink").addClass("active");
+				$("#dashboardLink").removeClass("active");
+				$("#objectsLink").removeClass("active");
+				$("#settingsLink").removeClass("active");
 				break;
 			case "objectsList":
 				$scope.changeLiveTitle("Objects", true);
@@ -40,11 +47,19 @@ auraCreate.viewController = function($scope){
 				$scope.changeBeaconFilter('All');
 				sessionStorage.curView = view;
 				$scope.curView = view;
+				$("#objectsLink").addClass("active");
+				$("#dashboardLink").removeClass("active");
+				$("#beaconsLink").removeClass("active");
+				$("#settingsLink").removeClass("active");
 				break;
 			case "orgSettings":
 				$scope.changeLiveTitle("Settings for " + $scope.curOrg.name, false);
 				sessionStorage.curView = view;
 				$scope.curView = view;
+				$("#settingsLink").addClass("active");
+				$("#dashboardLink").removeClass("active");
+				$("#beaconsLink").removeClass("active");
+				$("#objectsLink").removeClass("active");
 				break;
 		}
 	}
@@ -183,10 +198,4 @@ auraCreate.viewController = function($scope){
 				break;
 		}
 	}
-
-	//determines the active class of the navbar
-    $('.nav.navbar-nav > li').on('click', function(e) {
-	    $('.nav.navbar-nav > li').removeClass('active');
-	    $(this).addClass('active');
-	}); 
 }

@@ -1,0 +1,43 @@
+<!-- User Organizations Menu -->
+<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" id="orgMenu">
+	<div class="hidden-xs">
+		<div id="orgMenuTitle" class="text-center borderDark"><h3>Organizations</h3></div>
+		<div id="orgList" ng-repeat="organization in organizationsArray| orderBy: name" class="list-group margin0">
+			<!-- First organization (Base case) -->
+			<li id={{organization.name}} ng-if="$index == 0" class="active pointer list-group-item list-group-itemDark" ng-click="changeCurOrg(organization)">
+				<h4>{{organization.name}}</h4>
+			</li>
+			<!-- Rest of the organizations -->
+			<li id={{organization.name}} ng-if="$index != 0" class="pointer list-group-item list-group-itemDark" ng-click="changeCurOrg(organization)">
+				<h4>{{organization.name}}</h4>
+			</li>
+		</div>
+	</div>
+	<div class="container-fluid visible-xs text-center zeroPadding">
+		<div class="container-fluid" id="mobileOrgMenu">
+			Organizations
+		</div>
+		<!-- Carousel of organizations -->
+		<div id="orgsCarousel" class="carousel" data-ride="carousel" data-interval="false">
+			<!-- Organization -->
+			<div class="carousel-inner">
+				<div class="item active text-center text-primary">
+					<h1><b>{{organizationsArray[0].name}}</b></h1>
+				</div>
+				<div class="item text-center text-primary" ng-repeat="organization in organizationsArray | orderBy: name" ng-if="$index > 0">
+					<h1><b>{{organization.name}}</b></h1>
+				</div>
+				<div class="caption" ng-init="curOrgSlide = 1"><h4><kbd>{{curOrgSlide}}/{{organizationsArray.length}}</kbd></h4></div>
+			</div>
+			<!-- Left and right controls -->
+			<a class="left carousel-control pointer" data-target="#orgsCarousel" data-slide="prev" ng-click="carouselLeft()">
+				<span class="glyphicon glyphicon-chevron-left"></span>
+				<span class="sr-only">Previous</span>
+			</a>
+			<a class="right carousel-control pointer" data-target="#orgsCarousel" data-slide="next" ng-click="carouselRight()">
+				<span class="glyphicon glyphicon-chevron-right"></span>
+				<span class="sr-only">Next</span>
+			</a>
+		</div>
+	</div>
+</div>

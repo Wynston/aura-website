@@ -1,0 +1,36 @@
+<!-- Object (Singular) -->
+<div ng-switch-when="object" style="height: inherit;">
+	<div class="text-center center-block panel-body" style="height: inherit; padding-bottom: 0;">
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left zeroPadding">
+					<div class="btn-group">
+						<button class="btn btn-sm btn-info" type="button" ng-click="loadBeacon(curObj.beacon_name)">Beacon: {{curObj.beacon_name}}</button>
+						<button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editBeacForObjModal">
+						<span class="glyphicon glyphicon-edit"></span>
+					</div>
+				</div>
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center zeroPadding">
+					<div class="btn-group">
+						<button class="btn btn-sm btn-success" type="button" data-toggle="modal" ng-click="displayAddAssetsModal(curObj)">
+						<span class="glyphicon glyphicon-plus"></span>
+						</button>
+						<button class="btn btn-sm btn-info" type="button" ng-click="displayAssetsModal()">Media</button>
+					</div>
+				</div>
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right zeroPadding">
+					<button class="btn btn-sm btn-info" type="button" ng-click="displayDescriptionModal()">Description</button>
+				</div>
+			</div>
+		</div>
+		<!-- Google Maps API -->
+		<div class="panel-body borderDark" id="googleMapsObject"></div>
+		<div class="panel-footer bgDark222 border0">
+			<div class="row">
+				<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left text-primary">Altitude: {{curObj.altitude | number: 3}}</h4>
+				<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center text-primary">Latitude: {{curObj.latitude | number: 3}}</h4>
+				<h4 class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right text-primary">Longitude: {{curObj.longitude | number: 3}}</h4>
+			</div>
+		</div>
+	</div>
+</div>

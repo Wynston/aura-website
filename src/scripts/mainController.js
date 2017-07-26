@@ -128,5 +128,4 @@ auraCreate.controller('mainController', function($scope, $http){
 
 		  callback();
 	}	
-
 });

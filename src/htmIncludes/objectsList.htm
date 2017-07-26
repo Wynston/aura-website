@@ -1,0 +1,54 @@
+<!-- Objects List -->
+<div ng-switch-when="objectsList">
+	<div ng-switch="viewType">
+		<div ng-switch-when="List" class="panel-body">
+			<h3 ng-if="objectsArray.length <= 0" class="text-center">
+			{{curOrg.name}} has no objects.
+			</h3>
+			<table ng-if="objectsArray.length > 0" class="table table-hover table-striped table-condensed table-responsive">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Name</th>
+						<th>Beacon Name</th>
+						<th class="hidden-xs hidden-sm columnSm">#Images</th>
+						<th class="hidden-xs hidden-sm columnSm">#Audio</th>
+						<th class="hidden-xs hidden-sm columnSm">#Video</th>
+						<th class="hidden-xs hidden-sm columnSm">#3D</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="obj in objectsArray | filterByBeacon: beaconsFilter | orderBy: 'beacon_name'">
+						<td ng-click="displaythumbNailModal(obj)" style="height:3em; width: 3em;">
+							<img ng-src="{{obj.thumbnail}}" class="img-rounded pull-left" alt="{{obj.name}}" style="height:3em; width: 3em; margin: 0 auto;">
+						</td>
+						<td ng-click="displayObject(obj)">{{obj.name}}</td>
+						<td ng-click="loadBeacon(obj.beacon_name)">{{obj.beacon_name}}</td>
+						<td ng-click="displayFilteredAssets('image', obj)" class="hidden-xs hidden-sm columnSm text-center">
+							<span class="badge">{{obj.numImage}}</span>
+						</td>
+						<td ng-click="displayFilteredAssets('audio', obj)" class="hidden-xs hidden-sm columnSm text-center">
+							<span class="badge">{{obj.numAudio}}</span>
+						</td>
+						<td ng-click="displayFilteredAssets('video', obj)" class="hidden-xs hidden-sm columnSm text-center">
+							<span class="badge">{{obj.numVideo}}</span>
+						</td>
+						<td ng-click="displayFilteredAssets('3d', obj)" class="hidden-xs hidden-sm columnSm text-center">
+							<span class="badge">{{obj.num3D}}</span>
+						</td>
+						<td class="iconCell">
+							<span class="glyphicon glyphicon-plus addIcon" ng-click="displayAddAssetsModal(obj)"></span>
+							<span class="glyphicon glyphicon-pencil editIcon" ng-click="displayEditObjectModal(obj)"></span>
+							<span class="glyphicon glyphicon-remove deleteIcon" ng-click="removeObject(arObject)"></span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- Google Maps API -->
+		<div ng-switch-when="Map" class="panel-body" style="padding-top: 0; padding-bottom: 0;">
+			<div id="googleMapsObjects" class="panel borderDark"></div>
+		</div>
+	</div>
+</div>

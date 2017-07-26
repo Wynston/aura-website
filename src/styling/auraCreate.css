@@ -17,6 +17,10 @@ html, body{
 }
 
 body{
+    background-image: url("../images/Aura_loginbackground.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
 }
 
 h1{

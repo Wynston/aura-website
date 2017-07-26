@@ -20,6 +20,7 @@ auraCreate.controller('mainController', function($scope, $http){
 		auraCreate.locationCalculations($scope);
 
 		//initializes the website in a logged off state until the user is authorized for access
+		$scope.state="unauthorized";
 	}
 
 // -------------------------------------------------Global functions--------------------------------------------------------

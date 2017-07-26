@@ -17,6 +17,7 @@
 	<body>
 		<div class="container-fluid zeroPadding" ng-app="auraCreate" ng-controller="mainController" ng-init="init()" ng-cloak id="MAIN" ng-switch="state">
 			<!-- Unauthorized User -->
+			<div ng-switch-when="unauthorized" id="loginPage">
 				<!-- Login Form -->
 				<div class="center-block" id="logoTitleContainer">
 					<img class="img img-responsive text-center" ng-src="images/Aura_Create_rev2.png" alt="Aura Create">
@@ -38,6 +39,7 @@
 					</form>
 				</div>
 				<div class="formContainer center-block">
+					<google-sign-in-button class="g-signin2 text-center" data-onsuccess="onGoogleSignIn" data-theme="dark" data-longtitle="true"></<google-sign-in-button>
 				</div>
 			</div>
 

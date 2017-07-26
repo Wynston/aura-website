@@ -2,9 +2,6 @@
 auraCreate.userManagement = function($scope, $http){
 	//load in a specific user from the database with a token
 	$scope.loadUser = function(){
-		//Google oAuth token
-		$scope.userToken = localStorage.getItem("userToken");
-
 		$http({
 		    method : "GET",
 		    url : $scope.queryUser,
@@ -32,9 +29,23 @@ auraCreate.userManagement = function($scope, $http){
 		  });
 	}
 
+	//switches pages to AuraCreate once the user has been authentificated
+	$scope.signIn = function(){
+		$scope.state="authorized";
+
+		//Initialize User and their organizations and displays the dashboard
+		$scope.loadUser();
+
+		document.body.style.backgroundImage = "none";
+	}
+
 	//when the user requests to sign out, switch to log-in page
 	$scope.signOut = function(){
-		onGoogleSignOut(); //sign out of Google oAuth
-		document.location.href = "index.html";
+		$scope.state="unauthorized";
+		googleAuthSignOut();
+		document.body.style.backgroundImage = "url('../images/Aura_loginbackground.png')";
+		document.body.style.backgroundRepeat = 'no-repeat';
+		document.body.style.backgroundPosition = 'center center';
+		document.body.style.backgroundSize = 'cover';
 	}
 }

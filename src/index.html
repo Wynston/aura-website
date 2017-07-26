@@ -1,54 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Aura Create Login</title>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="styling/loginModule.css">
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="874745079376-3lncpmsgmn76vqsbrepp82j9qbpfi902.apps.googleusercontent.com">
-    <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-  </head>
-  <body>
-      <div class="container mainContainer" ng-app="loginAppModule" ng-controller="loginController" ng-init="init()" ng-cloak id="MAIN">
-        <div class="center-block" id="logoTitleContainer">
-          <img class="img img-responsive text-center" ng-src="images/Aura_Create_rev2.png" alt="Aura Create">
-        </div>
-        <div class="formContainer center-block">
-          <form>
-            <div class="form-group">
-              <label for="email">Email address:</label>
-              <input type="email" class="form-control" id="email">
-            </div>
-            <div class="form-group">
-              <label for="pwd">Password:</label>
-              <input type="password" class="form-control" id="pwd">
-            </div>
-            <div class="checkbox">
-              <label><input type="checkbox"> Remember me</label>
-            </div>
-            <button class="btn btn-block btn-success" ng-click="signIn()">Login</button>
-          </form>
-        </div>
-        <div class="formContainer center-block">
-          <div class="g-signin2 text-center" data-onsuccess="onGoogleSignIn" data-theme="dark" data-longtitle="true"></div>
-        </div>
-      </div>
+	<head>
+		<title>Aura Create</title>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="google-signin-scope" content="profile email">
+		<meta name="google-signin-client_id" content="874745079376-3lncpmsgmn76vqsbrepp82j9qbpfi902.apps.googleusercontent.com">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
+		<link rel="stylesheet" type="text/css" href="styling/auraCreate.css">
+		<link rel="stylesheet" type="text/css" href="styling/toggleSwitch.css">
+		<link rel="stylesheet" type="text/css" href="styling/modalPadding.css">
+		<link rel="stylesheet" type="text/css" href="styling/loading-bar.css">
+		<script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	</head>
+	<body>
+		<div class="container-fluid zeroPadding" ng-app="auraCreate" ng-controller="mainController" ng-init="init()" ng-cloak id="MAIN" ng-switch="state">
+			<!-- Unauthorized User -->
+				<!-- Login Form -->
+				<div class="center-block" id="logoTitleContainer">
+					<img class="img img-responsive text-center" ng-src="images/Aura_Create_rev2.png" alt="Aura Create">
+				</div>
+				<div class="formContainer center-block">
+					<form>
+						<div class="form-group">
+							<label for="email">Email address:</label>
+							<input type="email" class="form-control" id="email">
+						</div>
+						<div class="form-group">
+							<label for="pwd">Password:</label>
+							<input type="password" class="form-control" id="pwd">
+						</div>
+						<div class="checkbox">
+							<label><input type="checkbox"> Remember me</label>
+						</div>
+						<button class="btn btn-block btn-success" ng-click="signIn()">Login</button>
+					</form>
+				</div>
+				<div class="formContainer center-block">
+				</div>
+			</div>
 
-      <footer class="footer text-center">
-        © 2017 Aura Technologies Inc. 
-        <br>
-        <a href="http://www.auracr.io/" target="_blank">auracr.io</a>
-      </footer>
+			<!-- Authorized User -->
+			<div ng-switch-when="authorized">
+				<!-- Menu Navigation Bar -->
+				<ng-include src="'htmIncludes/navbar.htm'"></ng-include>
+				<!-- Main Content -->
+				<div class="row borderRadius0" id="mainContentContainer">
+					<!-- User Organizations Menu -->
+					<ng-include src="'htmIncludes/organizationMenu.htm'"></ng-include>
+					<!-- Dynamic Section -->
+					<div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 container-fluid zeroPadding" id=dynamicSection>
+						<!-- Dynamic Header -->
+						<ng-include src="'htmIncludes/dynamicHeader.htm'"></ng-include>
+						<!-- Live Display -->
+						<div ng-switch="curView" id="liveDisplay" class="container-fluid panel">
+							<!-- Dashboard -->
+							<ng-include src="'htmIncludes/dashboard.htm'"></ng-include>
+							<!-- Beacons List -->
+							<ng-include src="'htmIncludes/beaconsList.htm'"></ng-include>
+							<!-- Beacon (Singular) -->
+							<ng-include src="'htmIncludes/beacon.htm'"></ng-include>
+							<!-- Objects List -->
+							<ng-include src="'htmIncludes/objectsList.htm'"></ng-include>
+							<!-- Object (Singular) -->
+							<ng-include src="'htmIncludes/object.htm'"></ng-include>
+							<!-- Organization Settings -->
+							<ng-include src="'htmIncludes/organizationSettings.htm'"></ng-include>
+						</div>
+					</div>
+					<!-- Organization Modals -->
+					<ng-include src="'htmIncludes/organizationModals.htm'"></ng-include>
+					<!-- Beacon Modals -->
+					<ng-include src="'htmIncludes/beaconModals.htm'"></ng-include>
+					
+					<!-- Object Modals -->
+					<ng-include src="'htmIncludes/objectModals.htm'"></ng-include>
+					
+					<!-- Asset Modals -->
+					<ng-include src="'htmIncludes/assetModals.htm'"></ng-include>
+					<!-- User Modals -->
+					<ng-include src="'htmIncludes/userModals.htm'"></ng-include>
+				</div>
+			</div>
+			
+			<!-- Aura Footer -->
+			<footer class="footer">
+				© 2017 Aura Technologies Inc.
+				<br>
+				<a href="http://www.auracr.io/" target="_blank">auracr.io</a>
+			</footer>
 
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type='text/javascript'></script>
-      <script src="https://apis.google.com/js/platform.js?onload=onLoadGoogleAuth" async defer></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous" type='text/javascript'></script>
-      <script src="scripts/loginAppModule.js" type='text/javascript'></script>
-      <script src="scripts/loginConfig.js" type='text/javascript'></script>
-      <script src="scripts/loginController.js" type='text/javascript'></script>
-      <script src="scripts/googleAuthentification.js" type='text/javascript'></script>
-  </body>
+			<!-- Globals -->
+			<div id="alert"></div>
+			<div class="progress" ng-show="firebaseIsLoading">
+				<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+					{{progressPercent | number:0}}% Complete
+				</div>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type='text/javascript'></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous" type='text/javascript'></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCq80g8ye8MQaNGW3BOVaj0VY3m7jpomoY&libraries=visualization" type='text/javascript'></script>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js" type='text/javascript'></script>
+		<script src="scripts/bootbox.min.js" type='text/javascript'></script>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script src="https://apis.google.com/js/platform.js?onload=onLoadGoogleAuth" async defer></script>
+		<script src="scripts/auraCreateAppModule.js" type='text/javascript'></script>
+		<script src="scripts/config.js" type='text/javascript'></script>
+		<script src="scripts/googleAuthentification.js" type='text/javascript'></script>
+		<script src="scripts/mainController.js" type='text/javascript'></script>
+		<script src="scripts/viewController.js" type='text/javascript'></script>
+		<script src="scripts/carouselControls.js" type='text/javascript'></script>
+		<script src="scripts/userManagement.js" type='text/javascript'></script>
+		<script src="scripts/organizationManagement.js" type='text/javascript'></script>
+		<script src="scripts/beaconManagement.js" type='text/javascript'></script>
+		<script src="scripts/objectManagement.js" type='text/javascript'></script>
+		<script src="scripts/assetManagement.js" type='text/javascript'></script>
+		<script src="scripts/statManagement.js" type='text/javascript'></script>
+		<script src="scripts/dashboard.js" type='text/javascript'></script>
+		<script src="scripts/firebaseManagement.js" type='text/javascript'></script>
+		<script src="scripts/locationCalculations.js" type='text/javascript'></script>
+		<script src="scripts/resetControls.js" type='text/javascript'></script>
+		<script src="scripts/modals.js" type='text/javascript'></script>
+		<script src="scripts/fileUpload.js" type='text/javascript'></script>
+		<script src="scripts/directives.js" type='text/javascript'></script>
+		<script src="scripts/filters.js" type='text/javascript'></script>
+		<script src="scripts/customAlerts.js" type='text/javascript'></script>
+		<script src="scripts/loading-bar.js" type='text/javascript'></script>
+		<script src="scripts/googleMapsController.js" type='text/javascript'></script>
+	</body>
 </html>

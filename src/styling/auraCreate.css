@@ -1,6 +1,7 @@
 /*--------------------------------------- Structure ----------------------------------------*/
 html, body{
 	height: 100vh;
+	width: 100vw;
 	margin: 0;
 	position:fixed;
     top:0;
@@ -13,6 +14,9 @@ html, body{
     line-height: 1.2;
     background-color: #191818;
     color: #F4EBEB;
+}
+
+body{
 }
 
 h1{
@@ -41,6 +45,10 @@ h6{
 
 /* ----------------------------Large desktops and laptops (DEFAULT)----------------------------- */
 	/*--------------------------------------------Classes--------------------------------------------*/
+	.abcRioButton{
+	    width: auto !important;
+	}
+
 	.addIcon{
 		color: #449d44;
 		cursor: pointer;
@@ -198,6 +206,12 @@ h6{
 	  padding: 1.5vh;
 	  font-size: 0.70rem;
 	  text-align: center;
+	  color: #F4EBEB;
+	  opacity: 0.75;
+	}
+
+	.footer > a{
+	    color: #F4EBEB;
 	}
 
 	.fontDark{	
@@ -206,6 +220,20 @@ h6{
 
 	.fontLight{
 		color: #F4EBEB;
+	}
+
+	.formContainer{
+	    width: 25vw;
+	    padding-top: 1vh;
+	    padding-bottom: 1vh;
+	}
+
+	.g-signin2{
+	    width: 100%;
+	}
+
+	.g-signin2 > div{
+	    margin: 0 auto;
 	}
 
 	.gm-style-iw{
@@ -523,8 +551,13 @@ h6{
 		margin: 0;
 	}
 
+	#loginPage{
+		padding-top: 20vh;
+	}
+
 	#MAIN{
 		height: 100vh;
+		width: 100vw;
 		margin: 0;
 	}
 
@@ -559,6 +592,10 @@ h6{
 		border-bottom: black solid 1px;
 		border-top: black solid 1px;
 		background-color: #292929;
+	}
+
+	#logoTitleContainer{
+	    width: 50vw;
 	}
 
 	#orgsCarousel{
@@ -620,9 +657,17 @@ h6{
 		font-size: 12px;
 	}
 
+	.formContainer{
+        width: 40vw;
+    }
+
 	#fileLabel{
 		margin-top: 0.75em;
 	}
+
+	#logoTitleContainer{
+        width: 60vw;
+    }  
 }	
 
 /* --------------------------------Landscape phones and portrait tablets------------------------- */
@@ -635,6 +680,10 @@ h6{
 		font-size: 0.85em;
 		padding: 0.75em;
 	}
+
+    .formContainer{
+        width: 50vw;
+    }
 
 	#fileLabel{
 		margin-top: 0.75em;
@@ -658,6 +707,10 @@ h6{
 		padding-left: 0;
 		padding-right: 0;
 	}
+
+	#logoTitleContainer{
+        width: 65vw;
+    }
 
 	#orgMenu{
 		height: auto;
@@ -693,6 +746,10 @@ h6{
 		padding: 0.75em;
 	}
 
+    .formContainer{
+        width: 50vw;
+    }
+
 	#fileLabel{
 		margin-top: 1em;
 	}
@@ -715,6 +772,10 @@ h6{
 		padding-left: 0;
 		padding-right: 0;
 	}
+
+	#logoTitleContainer{
+        width: 65vw;
+    }
 
 	#orgMenu{
 		height: auto;

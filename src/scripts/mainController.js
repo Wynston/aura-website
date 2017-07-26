@@ -19,8 +19,7 @@ auraCreate.controller('mainController', function($scope, $http){
 		auraCreate.modals($scope);
 		auraCreate.locationCalculations($scope);
 
-		//Initialize User and their organizations and displays the dashboard
-		$scope.loadUser();
+		//initializes the website in a logged off state until the user is authorized for access
 	}
 
 // -------------------------------------------------Global functions--------------------------------------------------------

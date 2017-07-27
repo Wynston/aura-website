@@ -1,5 +1,4 @@
 <!-- User Modals -->
-
 <!-- Profile Settings Modal -->
 <div class="modal fade" id="profileSettingsModal" role="dialog" data-backdrop="true">
 	<div class="modal-dialog">
@@ -22,7 +21,6 @@
 		</div>
 	</div>
 </div>
-
 <!-- Help Modal -->
 <div class="modal fade" id="helpModal" role="dialog" data-backdrop="true">
 	<div class="modal-dialog">
@@ -30,9 +28,80 @@
 		<div class="modal-content">
 			<div class="modal-header modalPadding-1-1 text-primary text-center">
 				<button type="button" class="close deleteIcon" data-dismiss="modal">&times;</button>
-				<h2>Help Guide</h2>
+				<h2>Administrator Guide</h2>
 			</div>
 			<div class="modal-body modalPadding-1-2 text-center">
+				<div class="panel-group fontDark" id="accordion">
+					<!-- Summary -->
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a class="blockLink" data-toggle="collapse" data-parent="#accordion" href="#collapse1">Summary</a>
+							</h4>
+						</div>
+						<div id="collapse1" class="panel-collapse collapse in">
+							<div class="panel-body text-left">
+								<p><code>Aura Create</code> serves as an administrative web application for Aura's technology. It offers the ability to manage and observe data from multiple <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">organization's</a>.</p>
+								<p><b>Navigation:</b> An important thing to remember when navigating throughout the web-app is to consider which <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">organization</a> is currently selected. The selected organization is highlighted in the list of all organizations; text indicating the organization is also shown under the user icon in the top right corner of the web page. <p>With a selected organization, their respective <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">dashboard</a>, <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">beacons</a>, <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">objects</a>, and <a data-toggle="collapse" data-parent="#accordion" href="#collapse6">settings</a> can be brought into focus through the navigation bar at the top of the application.</p></p>
+							</div>
+						</div>
+					</div>
+					<!-- Organizations -->
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a class="blockLink" data-toggle="collapse" data-parent="#accordion" href="#collapse2">Organizations</a>
+							</h4>
+						</div>
+						<div id="collapse2" class="panel-collapse collapse">
+							<div class="panel-body text-left"></div>
+						</div>
+					</div>
+					<!-- Dashboard -->
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a class="blockLink" data-toggle="collapse" data-parent="#accordion" href="#collapse3">Dashboard</a>
+							</h4>
+						</div>
+						<div id="collapse3" class="panel-collapse collapse">
+							<div class="panel-body text-left"></div>
+						</div>
+					</div>
+					<!-- Beacons -->
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a class="blockLink" data-toggle="collapse" data-parent="#accordion" href="#collapse4">Beacons</a>
+							</h4>
+						</div>
+						<div id="collapse4" class="panel-collapse collapse">
+							<div class="panel-body text-left"></div>
+						</div>
+					</div>
+					<!-- Objects -->
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a class="blockLink" data-toggle="collapse" data-parent="#accordion" href="#collapse5">Objects</a>
+							</h4>
+						</div>
+						<div id="collapse5" class="panel-collapse collapse">
+							<div class="panel-body text-left"></div>
+						</div>
+					</div>
+					<!-- Settings -->
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a class="blockLink" data-toggle="collapse" data-parent="#accordion" href="#collapse6">Settings</a>
+							</h4>
+						</div>
+						<div id="collapse6" class="panel-collapse collapse">
+							<div class="panel-body text-left"></div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-info pull-right d-inline" data-dismiss="modal">Close</button>
